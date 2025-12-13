@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/t-z/workspace/obsidian-notes/08_個人開発/**)",
+      "mcp__figma-desktop__get_design_context",
+      "mcp__figma-desktop__get_screenshot"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
