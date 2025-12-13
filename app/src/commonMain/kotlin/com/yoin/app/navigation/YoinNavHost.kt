@@ -11,7 +11,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.yoin.feature.onboarding.ui.OnboardingScreen
 import com.yoin.feature.onboarding.ui.SplashScreen
+import com.yoin.feature.onboarding.viewmodel.OnboardingViewModel
 import com.yoin.feature.onboarding.viewmodel.SplashViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -20,6 +22,7 @@ import org.koin.compose.viewmodel.koinViewModel
  *
  * 画面構成:
  * - splash: スプラッシュ画面（初期画面）
+ * - onboarding: オンボーディング画面
  * - main: メイン画面（仮実装）
  */
 @Composable
@@ -36,8 +39,21 @@ fun YoinNavHost() {
             SplashScreen(
                 viewModel = viewModel,
                 onNavigateToMain = {
-                    navController.navigate("main") {
+                    navController.navigate("onboarding") {
                         popUpTo("splash") { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        // オンボーディング画面
+        composable("onboarding") {
+            val viewModel: OnboardingViewModel = koinViewModel()
+            OnboardingScreen(
+                viewModel = viewModel,
+                onNavigateToLogin = {
+                    navController.navigate("main") {
+                        popUpTo("onboarding") { inclusive = true }
                     }
                 }
             )
