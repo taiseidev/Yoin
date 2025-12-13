@@ -47,6 +47,9 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.composeViewModel)
 
+            // Navigation Compose
+            implementation(libs.androidx.navigation.compose)
+
             // Coil3 - Image Loading
             implementation(libs.coil.compose)
             implementation(libs.coil.network)
