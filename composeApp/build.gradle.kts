@@ -39,6 +39,17 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // Shared module
+            implementation(projects.shared)
+
+            // Koin for Compose
+            implementation(libs.koin.compose)
+            implementation(libs.koin.composeViewModel)
+
+            // Coil3 - Image Loading
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
