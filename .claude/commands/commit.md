@@ -35,6 +35,7 @@ description: 実装差分からコミットを作成
   EOF
   )"
   ```
+- **重要**: コミットメッセージには「🤖 Generated with [Claude Code]」や「Co-Authored-By: Claude」などの署名を含めない
 
 ### 5. 確認
 - コミット完了後に `git status` で成功を確認
