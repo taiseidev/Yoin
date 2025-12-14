@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import com.yoin.app.navigation.YoinNavHost
 import com.yoin.core.design.theme.YoinTheme
 import com.yoin.data.local.di.localDataModule
+import com.yoin.feature.auth.di.authModule
 import com.yoin.feature.onboarding.di.onboardingModule
 import org.koin.compose.KoinApplication
 
@@ -13,7 +14,7 @@ import org.koin.compose.KoinApplication
  * 責務:
  * - Koinによる依存性注入の初期化
  * - MaterialThemeの適用
- * - ナビゲーションホストの統合
+ * - Voyagerナビゲーションホストの統合
  */
 @Composable
 fun App() {
@@ -26,6 +27,7 @@ fun App() {
 
                 // フィーチャー層
                 onboardingModule,
+                authModule,
             )
         }
     ) {

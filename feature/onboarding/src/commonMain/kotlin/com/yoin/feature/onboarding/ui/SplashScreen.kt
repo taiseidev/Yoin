@@ -29,7 +29,6 @@ import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.domain.common.model.InitializationState
 import com.yoin.feature.onboarding.viewmodel.SplashContract
 import com.yoin.feature.onboarding.viewmodel.SplashViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * スプラッシュ画面
@@ -54,6 +53,7 @@ fun SplashScreen(
                 is SplashContract.Effect.NavigateToMain -> {
                     onNavigateToMain()
                 }
+
                 is SplashContract.Effect.ShowError -> {
                     // エラー表示（実装は後で追加可能）
                 }

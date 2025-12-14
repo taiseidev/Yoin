@@ -18,7 +18,7 @@ kotlin {
             baseName = "YoinApp"
             isStatic = true
 
-            // Export all feature modules
+            // Export feature modules for iOS framework
             export(project(":feature:onboarding"))
             export(project(":feature:auth"))
             export(project(":feature:home"))
@@ -28,6 +28,11 @@ kotlin {
             export(project(":feature:map"))
             export(project(":feature:profile"))
             export(project(":feature:settings"))
+
+            // Export core modules that features depend on
+            export(project(":core:ui"))
+            export(project(":core:design"))
+            export(project(":core:common"))
         }
     }
 
@@ -70,8 +75,10 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
-            // Navigation
-            implementation(libs.androidx.navigation.compose)
+            // Voyager Navigation
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.koin)
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodelCompose)
@@ -87,6 +94,28 @@ kotlin {
             // Android specific dependencies
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+
+            // UI Tooling for Android Studio Preview
+            implementation(compose.uiTooling)
+        }
+
+        iosMain.dependencies {
+            // iOS specific dependencies
+            // Export all feature modules for iOS framework
+            api(project(":feature:onboarding"))
+            api(project(":feature:auth"))
+            api(project(":feature:home"))
+            api(project(":feature:room"))
+            api(project(":feature:camera"))
+            api(project(":feature:timeline"))
+            api(project(":feature:map"))
+            api(project(":feature:profile"))
+            api(project(":feature:settings"))
+
+            // Export core modules for iOS framework
+            api(project(":core:ui"))
+            api(project(":core:design"))
+            api(project(":core:common"))
         }
 
         commonTest.dependencies {

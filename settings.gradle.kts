@@ -67,6 +67,3 @@ include(":feature:map")
 include(":feature:profile")
 include(":feature:settings")
 
-// Legacy modules (to be removed after migration)
-include(":composeApp")
-include(":shared")

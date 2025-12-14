@@ -10,15 +10,9 @@ plugins {
 kotlin {
     androidTarget()
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "FeatureSettings"
-            isStatic = true
-        }
-    }
+    // iOS targets (no framework declaration - will be included in app module)
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
         commonMain.dependencies {
@@ -38,7 +32,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             // Navigation
-            implementation(libs.androidx.navigation.compose)
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodelCompose)

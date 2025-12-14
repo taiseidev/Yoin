@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -10,15 +8,9 @@ plugins {
 kotlin {
     androidTarget()
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "FeatureCamera"
-            isStatic = true
-        }
-    }
+    // iOS targets (no framework declaration - will be included in app module)
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
         commonMain.dependencies {
@@ -37,9 +29,6 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-
-            // Navigation
-            implementation(libs.androidx.navigation.compose)
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodelCompose)
