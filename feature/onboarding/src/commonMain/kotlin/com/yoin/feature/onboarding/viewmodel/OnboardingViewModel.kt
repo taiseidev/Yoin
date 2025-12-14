@@ -1,7 +1,7 @@
 package com.yoin.feature.onboarding.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.yoin.domain.common.model.OnboardingPages
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * オンボーディング画面のViewModel
+ * オンボーディング画面のScreenModel
  */
-class OnboardingViewModel : ViewModel() {
+class OnboardingViewModel : ScreenModel {
 
     private val _state = MutableStateFlow(
         OnboardingContract.State(
@@ -74,7 +74,7 @@ class OnboardingViewModel : ViewModel() {
     }
 
     private fun navigateToLogin() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             _effect.send(OnboardingContract.Effect.NavigateToLogin)
         }
     }

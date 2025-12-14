@@ -10,15 +10,9 @@ plugins {
 kotlin {
     androidTarget()
 
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "FeatureOnboarding"
-            isStatic = true
-        }
-    }
+    // iOS targets (no framework declaration - will be included in app module)
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
         commonMain.dependencies {
@@ -40,17 +34,24 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
-            // Navigation
-            implementation(libs.androidx.navigation.compose)
-
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            // Voyager Navigation
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.koin)
 
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeViewModel)
+        }
+
+        androidMain.dependencies {
+            // UI Tooling for Android Studio Preview
+            implementation(compose.uiTooling)
         }
 
         commonTest.dependencies {

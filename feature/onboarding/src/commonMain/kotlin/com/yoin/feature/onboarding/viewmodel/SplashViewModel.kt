@@ -1,7 +1,7 @@
 package com.yoin.feature.onboarding.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.yoin.domain.common.model.InitializationState
 import com.yoin.domain.common.usecase.InitializeAppUseCase
 import kotlinx.coroutines.channels.Channel
@@ -13,11 +13,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * スプラッシュ画面のViewModel
+ * スプラッシュ画面のScreenModel
  */
 class SplashViewModel(
     private val initializeAppUseCase: InitializeAppUseCase
-) : ViewModel() {
+) : ScreenModel {
 
     private val _state = MutableStateFlow(SplashContract.State())
     val state: StateFlow<SplashContract.State> = _state.asStateFlow()
@@ -42,7 +42,7 @@ class SplashViewModel(
      * 初期化状態を監視する
      */
     private fun observeInitializationState() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             initializeAppUseCase.observeState().collect { initState ->
                 _state.update { it.copy(initializationState = initState) }
 
@@ -66,7 +66,7 @@ class SplashViewModel(
      * 初期化を開始する
      */
     private fun startInitialization() {
-        viewModelScope.launch {
+        screenModelScope.launch {
             initializeAppUseCase()
         }
     }
