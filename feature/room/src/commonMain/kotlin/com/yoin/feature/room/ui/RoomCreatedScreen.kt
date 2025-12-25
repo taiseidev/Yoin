@@ -1,0 +1,441 @@
+package com.yoin.feature.room.ui
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.yoin.core.design.theme.YoinColors
+import com.yoin.feature.room.viewmodel.RoomCreatedContract
+import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
+import kotlinx.coroutines.flow.collectLatest
+
+/**
+ * ルーム作成完了画面
+ *
+ * 機能:
+ * - ルーム作成成功メッセージの表示
+ * - 招待リンク/QRコードの表示
+ * - リンクコピー機能
+ * - ルーム詳細画面への遷移
+ *
+ * @param roomId 作成されたルームID
+ * @param viewModel RoomCreatedViewModel
+ * @param onNavigateToRoomDetail ルーム詳細画面への遷移コールバック
+ * @param onNavigateToHome ホーム画面への遷移コールバック
+ */
+@Composable
+fun RoomCreatedScreen(
+    roomId: String,
+    viewModel: RoomCreatedViewModel,
+    onNavigateToRoomDetail: (String) -> Unit = {},
+    onNavigateToHome: () -> Unit = {}
+) {
+    val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    // Effectの監視
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                is RoomCreatedContract.Effect.ShowError -> {
+                    snackbarHostState.showSnackbar(effect.message)
+                }
+                is RoomCreatedContract.Effect.ShowSuccess -> {
+                    snackbarHostState.showSnackbar(effect.message)
+                }
+                is RoomCreatedContract.Effect.NavigateToRoomDetail -> {
+                    onNavigateToRoomDetail(effect.roomId)
+                }
+                is RoomCreatedContract.Effect.NavigateToHome -> {
+                    onNavigateToHome()
+                }
+                is RoomCreatedContract.Effect.ShareInviteLink -> {
+                    // TODO: プラットフォーム固有の共有機能を実装
+                    snackbarHostState.showSnackbar("共有機能は今後実装予定です")
+                }
+            }
+        }
+    }
+
+    // 画面表示時の初期化
+    LaunchedEffect(roomId) {
+        viewModel.onIntent(RoomCreatedContract.Intent.OnScreenDisplayed(roomId))
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(YoinColors.Surface)
+    ) {
+        if (state.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                color = YoinColors.Primary
+            )
+        } else {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // ヘッダー
+                RoomCreatedHeader()
+
+                // コンテンツ
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 20.dp, vertical = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    // 成功アイコン
+                    Text(
+                        text = "✅",
+                        fontSize = 80.sp
+                    )
+
+                    // 成功メッセージ
+                    Text(
+                        text = "ルームを作成しました！",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = YoinColors.TextPrimary,
+                        textAlign = TextAlign.Center
+                    )
+
+                    state.roomInfo?.let { roomInfo ->
+                        // ルーム情報カード
+                        RoomInfoCard(roomInfo)
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // 招待セクション
+                        InvitationSection(
+                            inviteLink = state.inviteLink,
+                            onCopyLink = {
+                                viewModel.onIntent(RoomCreatedContract.Intent.OnCopyLinkPressed)
+                            },
+                            onShareQR = {
+                                viewModel.onIntent(RoomCreatedContract.Intent.OnShareQRPressed)
+                            }
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // ルームに移動ボタン
+                        Button(
+                            onClick = {
+                                viewModel.onIntent(RoomCreatedContract.Intent.OnGoToRoomPressed)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = YoinColors.Primary
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                        ) {
+                            Text(
+                                text = "ルームを見る",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = YoinColors.OnPrimary
+                            )
+                        }
+
+                        // ホームに戻るボタン
+                        TextButton(
+                            onClick = {
+                                viewModel.onIntent(RoomCreatedContract.Intent.OnBackToHomePressed)
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "ホームに戻る",
+                                fontSize = 14.sp,
+                                color = YoinColors.TextSecondary
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // スナックバー
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+    }
+}
+
+/**
+ * ルーム作成完了ヘッダー
+ */
+@Composable
+private fun RoomCreatedHeader() {
+    Surface(
+        color = YoinColors.OnPrimary,
+        shadowElevation = 1.dp
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // ステータスバー領域
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "9:41",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Italic,
+                    color = YoinColors.TextPrimary
+                )
+            }
+
+            // ヘッダーコンテンツ
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "作成完了",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = YoinColors.TextPrimary
+                )
+            }
+
+            HorizontalDivider(
+                color = YoinColors.SurfaceVariant,
+                thickness = 0.65.dp
+            )
+        }
+    }
+}
+
+/**
+ * ルーム情報カード
+ */
+@Composable
+private fun RoomInfoCard(roomInfo: RoomCreatedContract.RoomInfo) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = YoinColors.Background),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = roomInfo.emoji,
+                fontSize = 48.sp
+            )
+
+            Text(
+                text = roomInfo.title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = YoinColors.TextPrimary
+            )
+
+            Text(
+                text = roomInfo.dateRange,
+                fontSize = 14.sp,
+                color = YoinColors.TextSecondary
+            )
+
+            Text(
+                text = "📍 ${roomInfo.destination}",
+                fontSize = 14.sp,
+                color = YoinColors.TextSecondary
+            )
+        }
+    }
+}
+
+/**
+ * 招待セクション
+ */
+@Composable
+private fun InvitationSection(
+    inviteLink: String,
+    onCopyLink: () -> Unit,
+    onShareQR: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // セクションタイトル
+        Text(
+            text = "メンバーを招待",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = YoinColors.TextPrimary
+        )
+
+        // 招待リンク
+        InviteLinkCard(
+            link = inviteLink,
+            onCopyClick = onCopyLink
+        )
+
+        // QRコード
+        QRCodeCard(
+            onShareClick = onShareQR
+        )
+    }
+}
+
+/**
+ * 招待リンクカード
+ */
+@Composable
+private fun InviteLinkCard(
+    link: String,
+    onCopyClick: () -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = "招待リンク",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = YoinColors.TextPrimary
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(YoinColors.Background, RoundedCornerShape(8.dp))
+                .border(1.dp, YoinColors.SurfaceVariant, RoundedCornerShape(8.dp))
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = link,
+                fontSize = 12.sp,
+                color = YoinColors.TextSecondary,
+                modifier = Modifier.weight(1f)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            TextButton(
+                onClick = onCopyClick,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = YoinColors.Primary
+                )
+            ) {
+                Text(
+                    text = "コピー",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+/**
+ * QRコードカード
+ */
+@Composable
+private fun QRCodeCard(
+    onShareClick: () -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = "QRコード",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = YoinColors.TextPrimary
+        )
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = YoinColors.Surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // QRコードプレースホルダー
+                Box(
+                    modifier = Modifier
+                        .size(200.dp)
+                        .background(YoinColors.Background, RoundedCornerShape(8.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "◼◻◼",
+                            fontSize = 48.sp,
+                            color = YoinColors.TextSecondary
+                        )
+                        Text(
+                            text = "QRコード",
+                            fontSize = 14.sp,
+                            color = YoinColors.TextSecondary
+                        )
+                    }
+                }
+
+                // 共有ボタン
+                OutlinedButton(
+                    onClick = onShareClick,
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = YoinColors.Primary
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, YoinColors.Primary),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "QRコードを共有",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+    }
+}

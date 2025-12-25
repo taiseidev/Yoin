@@ -29,9 +29,74 @@ class LoginViewModel : ScreenModel {
      */
     fun handleIntent(intent: LoginContract.Intent) {
         when (intent) {
+            is LoginContract.Intent.OnEmailChanged -> onEmailChanged(intent.email)
+            is LoginContract.Intent.OnPasswordChanged -> onPasswordChanged(intent.password)
+            is LoginContract.Intent.OnPasswordVisibilityToggled -> onPasswordVisibilityToggled()
+            is LoginContract.Intent.OnLoginPressed -> onLoginPressed()
+            is LoginContract.Intent.OnForgotPasswordPressed -> onForgotPasswordPressed()
+            is LoginContract.Intent.OnRegisterPressed -> onRegisterPressed()
             is LoginContract.Intent.SignInWithApple -> onSignInWithApple()
             is LoginContract.Intent.SignInWithGoogle -> onSignInWithGoogle()
             is LoginContract.Intent.SignInAsGuest -> onSignInAsGuest()
+        }
+    }
+
+    private fun onEmailChanged(email: String) {
+        _state.update { it.copy(email = email, emailError = null) }
+    }
+
+    private fun onPasswordChanged(password: String) {
+        _state.update { it.copy(password = password, passwordError = null) }
+    }
+
+    private fun onPasswordVisibilityToggled() {
+        _state.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
+    }
+
+    private fun onLoginPressed() {
+        screenModelScope.launch {
+            val currentState = _state.value
+
+            // バリデーション
+            var hasError = false
+
+            if (currentState.email.isBlank()) {
+                _state.update { it.copy(emailError = "メールアドレスを入力してください") }
+                hasError = true
+            } else if (!currentState.email.contains("@")) {
+                _state.update { it.copy(emailError = "有効なメールアドレスを入力してください") }
+                hasError = true
+            }
+
+            if (currentState.password.isBlank()) {
+                _state.update { it.copy(passwordError = "パスワードを入力してください") }
+                hasError = true
+            } else if (currentState.password.length < 6) {
+                _state.update { it.copy(passwordError = "パスワードは6文字以上で入力してください") }
+                hasError = true
+            }
+
+            if (hasError) return@launch
+
+            _state.update { it.copy(isLoading = true, error = null) }
+
+            // TODO: メール/パスワードログイン実装
+            // 現在は仮実装として、そのままホーム画面に遷移
+            _effect.send(LoginContract.Effect.NavigateToHome)
+
+            _state.update { it.copy(isLoading = false) }
+        }
+    }
+
+    private fun onForgotPasswordPressed() {
+        screenModelScope.launch {
+            _effect.send(LoginContract.Effect.NavigateToForgotPassword)
+        }
+    }
+
+    private fun onRegisterPressed() {
+        screenModelScope.launch {
+            _effect.send(LoginContract.Effect.NavigateToRegister)
         }
     }
 

@@ -15,9 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -28,8 +29,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.domain.common.model.OnboardingPage
 import com.yoin.feature.onboarding.viewmodel.OnboardingContract
@@ -38,6 +44,12 @@ import kotlinx.coroutines.launch
 
 /**
  * オンボーディング画面
+ *
+ * Yoinの特徴を4ページで紹介:
+ * 1. 見えない状態で撮影
+ * 2. 仲間とシェア
+ * 3. 翌朝9時に現像
+ * 4. フィルムカメラ体験
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,24 +76,47 @@ fun OnboardingScreen(
         viewModel.handleIntent(OnboardingContract.Intent.PageChanged(pagerState.currentPage))
     }
 
-    Scaffold { paddingValues ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(YoinColors.Background)
+    ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // ステータスバー風の時刻表示
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(YoinColors.Surface)
+                    .padding(top = 24.dp, bottom = 8.dp)
+            ) {
+                Text(
+                    text = "9:41",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Italic,
+                    color = YoinColors.TextPrimary,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
             // スキップボタン
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
                     onClick = { viewModel.handleIntent(OnboardingContract.Intent.Skip) }
                 ) {
-                    Text("スキップ")
+                    Text(
+                        text = "スキップ",
+                        fontSize = 14.sp,
+                        color = YoinColors.TextSecondary
+                    )
                 }
             }
 
@@ -92,13 +127,14 @@ fun OnboardingScreen(
             ) { page ->
                 OnboardingPageContent(
                     page = state.pages[page],
+                    pageIndex = page,
                     modifier = Modifier.fillMaxSize()
                 )
             }
 
             // ページインジケーター
             Row(
-                modifier = Modifier.padding(vertical = 16.dp),
+                modifier = Modifier.padding(vertical = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 repeat(state.pages.size) { index ->
@@ -109,9 +145,9 @@ fun OnboardingScreen(
                             .clip(CircleShape)
                             .background(
                                 if (isSelected) {
-                                    MaterialTheme.colorScheme.primary
+                                    YoinColors.Primary
                                 } else {
-                                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                                    YoinColors.SurfaceVariant
                                 }
                             )
                     )
@@ -119,27 +155,51 @@ fun OnboardingScreen(
             }
 
             // ボタン
-            if (state.isLastPage) {
-                Button(
-                    onClick = { viewModel.handleIntent(OnboardingContract.Intent.GetStarted) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp)
-                ) {
-                    Text("はじめる")
-                }
-            } else {
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(state.currentPage + 1)
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp)
-                ) {
-                    Text("次へ")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 32.dp)
+            ) {
+                if (state.isLastPage) {
+                    Button(
+                        onClick = { viewModel.handleIntent(OnboardingContract.Intent.GetStarted) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = YoinColors.Primary,
+                            contentColor = YoinColors.OnPrimary
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = "はじめる",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(state.currentPage + 1)
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = YoinColors.Primary,
+                            contentColor = YoinColors.OnPrimary
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = "次へ",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
@@ -152,26 +212,43 @@ fun OnboardingScreen(
 @Composable
 private fun OnboardingPageContent(
     page: OnboardingPage,
+    pageIndex: Int,
     modifier: Modifier = Modifier,
 ) {
+    // 各ページの絵文字を定義
+    val emoji = when (pageIndex) {
+        0 -> "📷" // 見えない状態で撮影
+        1 -> "👥" // 仲間とシェア
+        2 -> "⏰" // 翌朝9時に現像
+        3 -> "🎞️" // フィルムカメラ体験
+        else -> "📸"
+    }
+
+    // 各ページの背景色を定義
+    val backgroundColor = when (pageIndex) {
+        0 -> YoinColors.Background // ベージュ
+        1 -> Color(0xFFE8F5E8) // 薄い緑
+        2 -> Color(0xFFFFF4E6) // 薄いオレンジ
+        3 -> YoinColors.AccentLight // 茶色がかったベージュ
+        else -> YoinColors.Background
+    }
+
     Column(
         modifier = modifier.padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // TODO: 実際の画像を表示
-        // 現在はプレースホルダーとしてBoxを表示
+        // 絵文字アイコンを表示
         Box(
             modifier = Modifier
                 .size(200.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.primaryContainer),
+                .clip(RoundedCornerShape(24.dp))
+                .background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = page.imageResName,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                text = emoji,
+                fontSize = 80.sp
             )
         }
 
@@ -179,17 +256,21 @@ private fun OnboardingPageContent(
 
         Text(
             text = page.title,
-            style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = YoinColors.TextPrimary,
+            lineHeight = 32.sp
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = page.description,
-            style = MaterialTheme.typography.bodyLarge,
+            fontSize = 16.sp,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = YoinColors.TextSecondary,
+            lineHeight = 24.sp
         )
     }
 }
@@ -200,10 +281,8 @@ private fun OnboardingPageContent(
 @PhonePreview
 @Composable
 private fun OnboardingScreenPreview() {
-    MaterialTheme {
-        OnboardingScreen(
-            viewModel = OnboardingViewModel(),
-            onNavigateToLogin = {}
-        )
-    }
+    OnboardingScreen(
+        viewModel = OnboardingViewModel(),
+        onNavigateToLogin = {}
+    )
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.ui.preview.ComprehensivePreview
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.domain.common.model.InitializationState
@@ -94,7 +95,7 @@ private fun SplashContent(
                 modifier = Modifier
                     .size(120.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(Color.White),
+                    .background(YoinColors.Surface),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
