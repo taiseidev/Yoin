@@ -7,21 +7,21 @@ import androidx.compose.ui.unit.dp
 /**
  * Yoinアプリのシェイプ（角丸）設定
  *
- * Material 3のシェイプシステムに基づく
+ * sassyアプリのデザインに基づく、より丸みのあるシェイプ
  */
 val YoinShapes = Shapes(
-    // Extra small components (e.g., chips, buttons)
-    extraSmall = RoundedCornerShape(4.dp),
+    // Extra small components (e.g., chips, small buttons)
+    extraSmall = RoundedCornerShape(8.dp),
 
     // Small components (e.g., cards, buttons)
-    small = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
 
     // Medium components (e.g., dialogs, modals)
-    medium = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
 
     // Large components (e.g., bottom sheets, large cards)
-    large = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp),
 
     // Extra large components (e.g., full-screen dialogs)
-    extraLarge = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(32.dp),
 )
