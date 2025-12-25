@@ -576,7 +576,6 @@ private fun UserProfileCardPreview() {
         ) {
             UserProfileCard(
                 profile = SettingsContract.UserProfile(
-                    id = "1",
                     name = "山田太郎",
                     email = "yamada@example.com",
                     initial = "山"
@@ -600,7 +599,8 @@ private fun PlanCardPreview() {
             PlanCard(
                 plan = SettingsContract.PlanInfo(
                     name = "プレミアムプラン",
-                    description = "無制限に写真を撮影できます"
+                    description = "無制限に写真を撮影できます",
+                    isPremium = true
                 ),
                 onPlanPressed = {}
             )
