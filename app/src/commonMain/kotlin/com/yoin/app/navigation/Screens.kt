@@ -19,9 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinNavigatorScreenModel
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.koin.compose.koinInject
 import com.yoin.feature.auth.ui.LoginScreen
 import com.yoin.feature.auth.ui.PasswordResetScreen
 import com.yoin.feature.auth.ui.RegisterScreen
@@ -835,7 +837,7 @@ data class OrderDetailScreenVoyager(val orderId: String) : Screen {
                 navigator.push(ContactFormScreenVoyager())
             },
             onNavigateToShopOrder = { productId ->
-                navigator.push(ShopOrderScreenVoyager())
+                navigator.push(ShopOrderScreenVoyager(productId = productId))
             }
         )
     }
