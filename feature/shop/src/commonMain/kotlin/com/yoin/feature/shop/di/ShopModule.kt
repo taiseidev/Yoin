@@ -3,6 +3,7 @@ package com.yoin.feature.shop.di
 import com.yoin.feature.shop.viewmodel.DeliveryTrackingViewModel
 import com.yoin.feature.shop.viewmodel.OrderCompleteViewModel
 import com.yoin.feature.shop.viewmodel.OrderConfirmationViewModel
+import com.yoin.feature.shop.viewmodel.OrderDetailViewModel
 import com.yoin.feature.shop.viewmodel.OrderHistoryViewModel
 import com.yoin.feature.shop.viewmodel.ShippingAddressViewModel
 import com.yoin.feature.shop.viewmodel.ShopViewModel
@@ -31,6 +32,9 @@ val shopModule = module {
     }
     factory { (orderId: String) ->
         DeliveryTrackingViewModel(orderId)
+    }
+    factory { (orderId: String) ->
+        OrderDetailViewModel(orderId)
     }
     factory { OrderHistoryViewModel() }
 }

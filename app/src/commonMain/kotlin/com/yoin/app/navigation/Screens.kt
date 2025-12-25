@@ -67,12 +67,14 @@ import com.yoin.feature.settings.viewmodel.PremiumPlanViewModel
 import com.yoin.feature.shop.ui.DeliveryTrackingScreen
 import com.yoin.feature.shop.ui.OrderCompleteScreen
 import com.yoin.feature.shop.ui.OrderConfirmationScreen
+import com.yoin.feature.shop.ui.OrderDetailScreen
 import com.yoin.feature.shop.ui.OrderHistoryScreen
 import com.yoin.feature.shop.ui.ShippingAddressScreen
 import com.yoin.feature.shop.ui.ShopOrderScreen
 import com.yoin.feature.shop.viewmodel.DeliveryTrackingViewModel
 import com.yoin.feature.shop.viewmodel.OrderCompleteViewModel
 import com.yoin.feature.shop.viewmodel.OrderConfirmationViewModel
+import com.yoin.feature.shop.viewmodel.OrderDetailViewModel
 import com.yoin.feature.shop.viewmodel.OrderHistoryViewModel
 import com.yoin.feature.shop.viewmodel.ShippingAddressViewModel
 import com.yoin.feature.shop.viewmodel.ShopOrderViewModel
@@ -815,15 +817,26 @@ data class DeliveryTrackingScreenVoyager(val orderId: String) : Screen {
 }
 
 /**
- * 注文詳細画面（プレースホルダー）
+ * 注文詳細画面
  */
 data class OrderDetailScreenVoyager(val orderId: String) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "注文詳細",
-            onNavigateBack = { navigator.pop() }
+        val viewModel: OrderDetailViewModel = koinInject(parameters = { parametersOf(orderId) })
+
+        OrderDetailScreen(
+            viewModel = viewModel,
+            onNavigateBack = { navigator.pop() },
+            onNavigateToDeliveryTracking = { orderId ->
+                navigator.push(DeliveryTrackingScreenVoyager(orderId))
+            },
+            onNavigateToContactSupport = { orderId ->
+                navigator.push(ContactFormScreenVoyager())
+            },
+            onNavigateToShopOrder = { productId ->
+                navigator.push(ShopOrderScreenVoyager())
+            }
         )
     }
 }
