@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.ui.component.YoinAppBar
 import com.yoin.feature.shop.viewmodel.ShopOrderContract
 import com.yoin.feature.shop.viewmodel.ShopOrderViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -84,9 +85,18 @@ fun ShopOrderScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             // ヘッダー
-            ShopOrderHeader(
-                onBackClick = {
-                    viewModel.onIntent(ShopOrderContract.Intent.OnBackPressed)
+            YoinAppBar(
+                title = "注文内容確認",
+                navigationIcon = {
+                    IconButton(onClick = {
+                        viewModel.onIntent(ShopOrderContract.Intent.OnBackPressed)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = YoinColors.TextPrimary
+                        )
+                    }
                 }
             )
 
@@ -175,54 +185,6 @@ fun ShopOrderScreen(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
-    }
-}
-
-/**
- * ヘッダー
- */
-@Composable
-private fun ShopOrderHeader(
-    onBackClick: () -> Unit
-) {
-    Surface(
-        color = Color.White,
-        shadowElevation = 1.dp
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
-            // ヘッダーコンテンツ
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // 戻るボタン
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = YoinColors.TextPrimary
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(4.dp))
-
-                // タイトル
-                Text(
-                    text = "注文内容確認",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
-            HorizontalDivider(color = YoinColors.SurfaceVariant)
-        }
     }
 }
 

@@ -17,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.component.YoinAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.settings.viewmodel.NotificationSettingsContract
 import com.yoin.feature.settings.viewmodel.NotificationSettingsViewModel
@@ -64,42 +66,20 @@ fun NotificationSettingsScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.height(56.dp))
-
-            // ナビゲーションバー
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // 戻るボタン
-                IconButton(
-                    onClick = { viewModel.handleIntent(NotificationSettingsContract.Intent.OnBackPressed) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = YoinColors.TextPrimary
-                    )
+            // ヘッダー
+            YoinAppBar(
+                title = "通知設定",
+                navigationIcon = {
+                    IconButton(
+                        onClick = { viewModel.handleIntent(NotificationSettingsContract.Intent.OnBackPressed) }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = YoinColors.TextPrimary
+                        )
+                    }
                 }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                // タイトル
-                Text(
-                    text = "通知設定",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            HorizontalDivider(
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
             )
 
             // 設定リスト

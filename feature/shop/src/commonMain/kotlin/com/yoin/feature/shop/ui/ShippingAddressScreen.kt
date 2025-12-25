@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.component.YoinAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.shop.viewmodel.ShippingAddressContract
 import com.yoin.feature.shop.viewmodel.ShippingAddressViewModel
@@ -85,12 +87,25 @@ fun ShippingAddressScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             // ヘッダー
-            ShippingAddressHeader(
-                currentStep = state.currentStep,
-                totalSteps = state.totalSteps,
-                onBackPressed = {
-                    viewModel.onIntent(ShippingAddressContract.Intent.OnBackPressed)
+            YoinAppBar(
+                title = "配送先入力",
+                navigationIcon = {
+                    IconButton(onClick = {
+                        viewModel.onIntent(ShippingAddressContract.Intent.OnBackPressed)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = YoinColors.TextPrimary
+                        )
+                    }
                 }
+            )
+
+            // プログレスバー
+            ShippingProgressIndicator(
+                currentStep = state.currentStep,
+                totalSteps = state.totalSteps
             )
 
             // フォームコンテンツ
@@ -383,88 +398,47 @@ fun ShippingAddressScreen(
 }
 
 /**
- * 配送先住所入力ヘッダー
+ * プログレスインジケーター
  */
 @Composable
-private fun ShippingAddressHeader(
+private fun ShippingProgressIndicator(
     currentStep: Int,
-    totalSteps: Int,
-    onBackPressed: () -> Unit
+    totalSteps: Int
 ) {
     Surface(
         color = YoinColors.Surface,
         shadowElevation = 1.dp
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md)
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
-            // タイトルと戻るボタン
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // 戻るボタン
-                IconButton(onClick = onBackPressed) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = YoinColors.TextPrimary
+                repeat(totalSteps) { index ->
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(4.dp)
+                            .background(
+                                color = if (index < currentStep) YoinColors.Primary else YoinColors.SurfaceVariant,
+                                shape = RoundedCornerShape(2.dp)
+                            )
                     )
                 }
-
-                Spacer(modifier = Modifier.width(4.dp))
-
-                // タイトル
-                Text(
-                    text = "配送先入力",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            // プログレスバー
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    repeat(totalSteps) { index ->
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(4.dp)
-                                .background(
-                                    color = if (index < currentStep) YoinColors.Primary else YoinColors.SurfaceVariant,
-                                    shape = RoundedCornerShape(2.dp)
-                                )
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "$currentStep/$totalSteps",
-                    fontSize = 12.sp,
-                    color = YoinColors.TextSecondary,
-                    modifier = Modifier.align(Alignment.End)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            HorizontalDivider(color = YoinColors.SurfaceVariant)
+            Text(
+                text = "$currentStep/$totalSteps",
+                fontSize = 12.sp,
+                color = YoinColors.TextSecondary,
+                modifier = Modifier.align(Alignment.End)
+            )
         }
     }
 }

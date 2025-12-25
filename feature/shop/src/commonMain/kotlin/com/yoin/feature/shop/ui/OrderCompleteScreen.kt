@@ -23,6 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.component.YoinSimpleAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.shop.viewmodel.OrderCompleteContract
 import com.yoin.feature.shop.viewmodel.OrderCompleteViewModel
@@ -83,8 +85,8 @@ fun OrderCompleteScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // ステータスバー
-            OrderCompleteStatusBar()
+            // ヘッダー
+            YoinSimpleAppBar(title = "注文完了")
 
             // コンテンツ
             Column(
@@ -201,14 +203,6 @@ fun OrderCompleteScreen(
             modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
-}
-
-/**
- * ステータスバー
- */
-@Composable
-private fun OrderCompleteStatusBar() {
-    Spacer(modifier = Modifier.height(40.dp))
 }
 
 /**
