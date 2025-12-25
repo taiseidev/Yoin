@@ -28,6 +28,7 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.timeline.viewmodel.RoomDetailAfterContract
 import com.yoin.feature.timeline.viewmodel.RoomDetailAfterViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -519,5 +520,37 @@ private fun MapPlaceholder() {
                 color = YoinColors.TextSecondary
             )
         }
+    }
+}
+
+/**
+ * プレビュー: ビューモード切り替え
+ */
+@PhonePreview
+@Composable
+private fun ViewModeTogglePreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            ViewModeToggle(
+                currentMode = RoomDetailAfterContract.ViewMode.TIMELINE,
+                onModeChanged = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: マッププレースホルダー
+ */
+@PhonePreview
+@Composable
+private fun MapPlaceholderPreview() {
+    MaterialTheme {
+        MapPlaceholder()
     }
 }

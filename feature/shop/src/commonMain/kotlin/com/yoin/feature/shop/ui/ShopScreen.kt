@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.component.YoinSimpleAppBar
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.shop.viewmodel.ShopContract
 import com.yoin.feature.shop.viewmodel.ShopViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -428,6 +429,48 @@ private fun ProductCard(
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+ * プレビュー: キャンペーンバナー
+ */
+@PhonePreview
+@Composable
+private fun CampaignBannerPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            CampaignBanner(
+                campaign = ShopContract.Campaign(
+                    title = "新春キャンペーン",
+                    description = "全品10%オフ",
+                    emoji = "🎉"
+                )
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: セクションヘッダー
+ */
+@PhonePreview
+@Composable
+private fun SectionHeaderPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            SectionHeader(title = "商品を選ぶ")
         }
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.room.viewmodel.JoinConfirmContract
 import com.yoin.feature.room.viewmodel.JoinConfirmViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -437,6 +438,85 @@ private fun NicknameField(
                 fontSize = 12.sp,
                 color = YoinColors.Error
             )
+        }
+    }
+}
+
+/**
+ * プレビュー: ルーム情報行
+ */
+@PhonePreview
+@Composable
+private fun RoomInfoRowPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                RoomInfoRow(icon = "📅", label = "期間", value = "12/25 - 12/28")
+                RoomInfoRow(icon = "📍", label = "目的地", value = "沖縄県")
+                RoomInfoRow(icon = "📸", label = "現像予定", value = "1/1 10:00", valueColor = YoinColors.Primary)
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: ルーム情報カード
+ */
+@PhonePreview
+@Composable
+private fun RoomInfoCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            RoomInfoCard(
+                roomInfo = JoinConfirmContract.RoomInfo(
+                    id = "room123",
+                    title = "沖縄旅行",
+                    emoji = "🏝️",
+                    dateRange = "12/25 - 12/28",
+                    destination = "沖縄県",
+                    memberCount = 3,
+                    developmentDateTime = "1/1 10:00"
+                )
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: ニックネーム入力フィールド
+ */
+@PhonePreview
+@Composable
+private fun NicknameFieldPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                NicknameField(
+                    nickname = "太郎",
+                    error = null,
+                    onNicknameChanged = {}
+                )
+                NicknameField(
+                    nickname = "",
+                    error = "ニックネームを入力してください",
+                    onNicknameChanged = {}
+                )
+            }
         }
     }
 }

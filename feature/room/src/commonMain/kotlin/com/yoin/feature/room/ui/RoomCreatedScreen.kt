@@ -23,6 +23,7 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.room.viewmodel.RoomCreatedContract
 import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -438,6 +439,73 @@ private fun QRCodeCard(
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+ * プレビュー: ルーム情報カード
+ */
+@PhonePreview
+@Composable
+private fun RoomInfoCardCreatedPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            RoomInfoCard(
+                roomInfo = RoomCreatedContract.RoomInfo(
+                    id = "room123",
+                    title = "沖縄旅行",
+                    emoji = "🏝️",
+                    dateRange = "12/25 - 12/28",
+                    destination = "沖縄県"
+                )
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 招待リンクカード
+ */
+@PhonePreview
+@Composable
+private fun InviteLinkCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            InviteLinkCard(
+                link = "https://yoin.app/room/abc123",
+                onCopyClick = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: QRコードカード
+ */
+@PhonePreview
+@Composable
+private fun QRCodeCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            QRCodeCard(
+                onShareClick = {}
+            )
         }
     }
 }

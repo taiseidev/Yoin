@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.profile.viewmodel.ProfileEditContract
 import com.yoin.feature.profile.viewmodel.ProfileEditViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -575,6 +576,49 @@ private fun AccountMenuItem(
                 imageVector = Icons.Filled.ChevronRight,
                 contentDescription = "Navigate",
                 tint = textColor
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: プロフィール画像セクション
+ */
+@PhonePreview
+@Composable
+private fun ProfileImageSectionPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            ProfileImageSection(
+                emoji = "👤",
+                onImageClick = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: アカウントセクション
+ */
+@PhonePreview
+@Composable
+private fun AccountSectionPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            AccountSection(
+                onChangePasswordClick = {},
+                onDeleteAccountClick = {}
             )
         }
     }

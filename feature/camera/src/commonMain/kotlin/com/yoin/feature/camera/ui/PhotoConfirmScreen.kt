@@ -26,6 +26,7 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.camera.viewmodel.PhotoConfirmContract
 import com.yoin.feature.camera.viewmodel.PhotoConfirmViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -416,5 +417,115 @@ private fun WarningMessage() {
                 .height(YoinSpacing.xs)
                 .background(Color(0xFF374151), RoundedCornerShape(100.dp))
         )
+    }
+}
+
+/**
+ * プレビュー: 写真確認ヘッダー
+ */
+@PhonePreview
+@Composable
+private fun PhotoConfirmHeaderPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+        ) {
+            PhotoConfirmHeader(
+                onCloseClick = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 写真プレビュー
+ */
+@PhonePreview
+@Composable
+private fun PhotoPreviewPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+                .padding(16.dp)
+        ) {
+            PhotoPreview(
+                photoPath = "/path/to/photo.jpg"
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 写真情報
+ */
+@PhonePreview
+@Composable
+private fun PhotoInfoPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+        ) {
+            Column {
+                PhotoInfo(
+                    location = "東京都渋谷区",
+                    timestamp = "2025-12-25 14:30"
+                )
+                PhotoInfo(
+                    location = null,
+                    timestamp = "2025-12-25 14:30"
+                )
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: アクションボタン
+ */
+@PhonePreview
+@Composable
+private fun PhotoActionsPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                PhotoActions(
+                    isSaving = false,
+                    onSaveClick = {},
+                    onDeleteClick = {}
+                )
+                PhotoActions(
+                    isSaving = true,
+                    onSaveClick = {},
+                    onDeleteClick = {}
+                )
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: 警告メッセージ
+ */
+@PhonePreview
+@Composable
+private fun WarningMessagePreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+        ) {
+            WarningMessage()
+        }
     }
 }

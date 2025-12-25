@@ -29,6 +29,7 @@ import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.home.viewmodel.HomeContract
 import com.yoin.feature.home.viewmodel.HomeViewModel
+import com.yoin.core.ui.preview.PhonePreview
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -451,6 +452,115 @@ private fun MemberAvatars(
                     fontWeight = FontWeight.Normal
                 )
             }
+        }
+    }
+}
+
+/**
+ * プレビュー: ホームヘッダー
+ */
+@PhonePreview
+@Composable
+private fun HomeHeaderPreview() {
+    MaterialTheme {
+        HomeHeader(
+            hasNotification = true,
+            onNotificationClick = {}
+        )
+    }
+}
+
+/**
+ * プレビュー: メンバーアバター
+ */
+@PhonePreview
+@Composable
+private fun MemberAvatarsPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            MemberAvatars(
+                avatars = listOf("", "", ""),
+                additionalCount = 3
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 旅行カード
+ */
+@PhonePreview
+@Composable
+private fun TripCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            TripCard(
+                trip = HomeContract.TripItem(
+                    id = "1",
+                    title = "沖縄旅行",
+                    emoji = "🏝️",
+                    dateRange = "12/25 - 12/28",
+                    location = "沖縄県",
+                    progress = 0.6f,
+                    daysUntilDevelopment = 3,
+                    memberAvatars = listOf("", ""),
+                    additionalMemberCount = 2
+                ),
+                onClick = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 旅行セクション
+ */
+@PhonePreview
+@Composable
+private fun TripSectionPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            TripSection(
+                title = "進行中の旅",
+                trips = listOf(
+                    HomeContract.TripItem(
+                        id = "1",
+                        title = "沖縄旅行",
+                        emoji = "🏝️",
+                        dateRange = "12/25 - 12/28",
+                        location = "沖縄県",
+                        progress = 0.6f,
+                        daysUntilDevelopment = 3,
+                        memberAvatars = listOf("", ""),
+                        additionalMemberCount = 2
+                    ),
+                    HomeContract.TripItem(
+                        id = "2",
+                        title = "京都散策",
+                        emoji = "🍁",
+                        dateRange = "11/15 - 11/17",
+                        location = "京都府",
+                        photoCount = 42
+                    )
+                ),
+                onViewAllClick = {},
+                onTripClick = {}
+            )
         }
     }
 }

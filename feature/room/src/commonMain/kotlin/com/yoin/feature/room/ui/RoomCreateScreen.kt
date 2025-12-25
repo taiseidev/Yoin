@@ -26,6 +26,7 @@ import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.room.viewmodel.RoomCreateContract
 import com.yoin.feature.room.viewmodel.RoomCreateViewModel
+import com.yoin.core.ui.preview.PhonePreview
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -547,4 +548,89 @@ private fun SimpleDatePickerDialog(
             }
         }
     )
+}
+
+/**
+ * プレビュー: 絵文字セレクター
+ */
+@PhonePreview
+@Composable
+private fun EmojiSelectorPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            EmojiSelector(
+                selectedEmoji = "🏝️",
+                onEmojiClick = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: フォーム入力フィールド
+ */
+@PhonePreview
+@Composable
+private fun FormFieldPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                FormField(
+                    label = "旅行名",
+                    value = "北海道旅行",
+                    onValueChange = {},
+                    placeholder = "例: 北海道旅行"
+                )
+                FormField(
+                    label = "目的地",
+                    value = "",
+                    onValueChange = {},
+                    placeholder = "例: 札幌・小樽",
+                    error = "目的地を入力してください"
+                )
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: 日付フィールド
+ */
+@PhonePreview
+@Composable
+private fun DateFieldPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                DateField(
+                    label = "開始日",
+                    value = "2024/12/25",
+                    onClick = {},
+                    modifier = Modifier.weight(1f)
+                )
+                DateField(
+                    label = "終了日",
+                    value = "",
+                    onClick = {},
+                    error = "終了日を選択してください",
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
 }

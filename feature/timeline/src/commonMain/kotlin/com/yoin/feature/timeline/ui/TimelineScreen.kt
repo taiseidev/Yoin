@@ -48,6 +48,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -70,6 +71,7 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.timeline.viewmodel.TimelineContract
 import com.yoin.feature.timeline.viewmodel.TimelineViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -660,3 +662,60 @@ private fun EmptyState(selectedTab: TimelineContract.AlbumTab) {
 //    val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
 //    return sdf.format(Date(timestamp))
 //}
+
+/**
+ * プレビュー: アルバムヘッダー
+ */
+@PhonePreview
+@Composable
+private fun AlbumHeaderPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+        ) {
+            AlbumHeader(
+                searchQuery = "",
+                onSearchChange = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: アルバムタブ
+ */
+@PhonePreview
+@Composable
+private fun AlbumTabsPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+        ) {
+            AlbumTabs(
+                selectedTab = TimelineContract.AlbumTab.ALL,
+                onTabChange = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 空の状態
+ */
+@PhonePreview
+@Composable
+private fun EmptyStatePreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+        ) {
+            EmptyState(selectedTab = TimelineContract.AlbumTab.ALL)
+        }
+    }
+}

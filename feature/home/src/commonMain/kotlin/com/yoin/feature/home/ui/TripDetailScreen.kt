@@ -26,6 +26,7 @@ import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.home.viewmodel.TripDetailContract
 import com.yoin.feature.home.viewmodel.TripDetailViewModel
+import com.yoin.core.ui.preview.PhonePreview
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -558,4 +559,114 @@ private fun CameraButton(
         label = "撮影",
         onClick = onClick
     )
+}
+
+/**
+ * プレビュー: メンバーチップ
+ */
+@PhonePreview
+@Composable
+private fun MemberChipPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                MemberChip(name = "太郎", isSelected = true)
+                MemberChip(name = "花子", isSelected = false)
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: メンバーセクション
+ */
+@PhonePreview
+@Composable
+private fun MembersSectionPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+        ) {
+            MembersSection(
+                members = listOf(
+                    TripDetailContract.Member(id = "1", name = "太郎", isCurrentUser = true),
+                    TripDetailContract.Member(id = "2", name = "花子", isCurrentUser = false),
+                    TripDetailContract.Member(id = "3", name = "次郎", isCurrentUser = false)
+                ),
+                onMembersClick = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: カウントダウンセクション
+ */
+@PhonePreview
+@Composable
+private fun CountdownSectionPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp)
+        ) {
+            CountdownSection(
+                daysUntil = 5,
+                developmentDateTime = "2024/01/01 10:00"
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 今日の撮影セクション
+ */
+@PhonePreview
+@Composable
+private fun TodayPhotosSectionPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+        ) {
+            TodayPhotosSection(
+                currentPhotos = 8,
+                maxPhotos = 10,
+                progress = 0.8f,
+                remainingPhotos = 2
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: アクションボタン
+ */
+@PhonePreview
+@Composable
+private fun ActionButtonPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Surface)
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                ActionButton(icon = "🗺", label = "地図", onClick = {})
+                CameraButton(onClick = {})
+            }
+        }
+    }
 }

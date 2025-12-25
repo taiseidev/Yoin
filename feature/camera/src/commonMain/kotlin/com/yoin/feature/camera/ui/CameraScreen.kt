@@ -25,6 +25,7 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.camera.viewmodel.CameraContract
 import com.yoin.feature.camera.viewmodel.CameraViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -396,5 +397,92 @@ private fun WarningMessage() {
                 .height(YoinSpacing.xs)
                 .background(Color(0xFF374151), RoundedCornerShape(100.dp))
         )
+    }
+}
+
+/**
+ * プレビュー: カメラヘッダー
+ */
+@PhonePreview
+@Composable
+private fun CameraHeaderPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+        ) {
+            CameraHeader(
+                remainingPhotos = 5,
+                onCloseClick = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 位置情報セクション
+ */
+@PhonePreview
+@Composable
+private fun LocationSectionPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+        ) {
+            Column {
+                LocationSection(
+                    location = "東京都渋谷区",
+                    isLoading = false
+                )
+                LocationSection(
+                    location = null,
+                    isLoading = true
+                )
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: シャッターボタン
+ */
+@PhonePreview
+@Composable
+private fun ShutterButtonPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            ShutterButton(onClick = {})
+        }
+    }
+}
+
+/**
+ * プレビュー: カメラコントロール
+ */
+@PhonePreview
+@Composable
+private fun CameraControlsPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF1F2937))
+        ) {
+            CameraControls(
+                flashMode = CameraContract.FlashMode.AUTO,
+                onFlashClick = {},
+                onShutterClick = {},
+                onSwitchClick = {}
+            )
+        }
     }
 }

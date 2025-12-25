@@ -25,6 +25,7 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.timeline.viewmodel.PhotoDetailContract
 import com.yoin.feature.timeline.viewmodel.PhotoDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -404,6 +405,102 @@ private fun PhotoInfoBottomSheet(
                     .height(5.dp)
                     .background(Color.Black, RoundedCornerShape(100.dp))
                     .align(Alignment.CenterHorizontally)
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 写真情報ボトムシート
+ */
+@PhonePreview
+@Composable
+private fun PhotoInfoBottomSheetPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+        ) {
+            PhotoInfoBottomSheet(
+                photo = PhotoDetailContract.PhotoDetail(
+                    id = "photo1",
+                    imageUrl = "",
+                    photographerName = "山田太郎",
+                    photographerInitial = "Y",
+                    dateTime = "2025年12月25日 14:30",
+                    dateWatermark = "2025-12-25",
+                    location = "東京都渋谷区",
+                    subLocation = "渋谷駅周辺"
+                ),
+                currentIndex = 1,
+                totalPhotos = 5,
+                onPreviousPressed = {},
+                onNextPressed = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 写真情報ボトムシート（最初の写真）
+ */
+@PhonePreview
+@Composable
+private fun PhotoInfoBottomSheetFirstPhotoPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+        ) {
+            PhotoInfoBottomSheet(
+                photo = PhotoDetailContract.PhotoDetail(
+                    id = "photo1",
+                    imageUrl = "",
+                    photographerName = "田中花子",
+                    photographerInitial = "T",
+                    dateTime = "2025年12月24日 10:00",
+                    dateWatermark = "2025-12-24",
+                    location = "大阪府大阪市",
+                    subLocation = "梅田駅周辺"
+                ),
+                currentIndex = 0,
+                totalPhotos = 3,
+                onPreviousPressed = {},
+                onNextPressed = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 写真情報ボトムシート（最後の写真）
+ */
+@PhonePreview
+@Composable
+private fun PhotoInfoBottomSheetLastPhotoPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+        ) {
+            PhotoInfoBottomSheet(
+                photo = PhotoDetailContract.PhotoDetail(
+                    id = "photo3",
+                    imageUrl = "",
+                    photographerName = "佐藤健",
+                    photographerInitial = "S",
+                    dateTime = "2025年12月26日 18:00",
+                    dateWatermark = "2025-12-26",
+                    location = "京都府京都市",
+                    subLocation = "河原町周辺"
+                ),
+                currentIndex = 2,
+                totalPhotos = 3,
+                onPreviousPressed = {},
+                onNextPressed = {}
             )
         }
     }

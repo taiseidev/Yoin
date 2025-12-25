@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.ui.component.YoinAppBar
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.shop.viewmodel.ShopOrderContract
 import com.yoin.feature.shop.viewmodel.ShopOrderViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -618,6 +619,145 @@ private fun OrderButton(
                         fontWeight = FontWeight.Bold
                     )
                 }
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: 商品情報カード
+ */
+@PhonePreview
+@Composable
+private fun ProductInfoCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            ProductInfoCard(
+                product = ShopOrderContract.ProductDetail(
+                    id = "1",
+                    name = "フォトブック",
+                    emoji = "📕",
+                    description = "A5サイズ・20ページ",
+                    basePrice = 2980,
+                    pricePerUnit = 1980,
+                    isPopular = true
+                )
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 旅行選択カード
+ */
+@PhonePreview
+@Composable
+private fun TripSelectionCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                TripSelectionCard(
+                    selectedTrip = ShopOrderContract.TripInfo(
+                        id = "trip1",
+                        name = "沖縄旅行",
+                        emoji = "🏝️",
+                        photoCount = 24
+                    ),
+                    onTripClick = {}
+                )
+                TripSelectionCard(
+                    selectedTrip = null,
+                    onTripClick = {}
+                )
+            }
+        }
+    }
+}
+
+/**
+ * プレビュー: 数量選択カード
+ */
+@PhonePreview
+@Composable
+private fun QuantitySelectionCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            QuantitySelectionCard(
+                quantity = 2,
+                onQuantityChanged = {}
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 価格カード
+ */
+@PhonePreview
+@Composable
+private fun PriceCardPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(16.dp)
+        ) {
+            PriceCard(
+                product = ShopOrderContract.ProductDetail(
+                    id = "1",
+                    name = "フォトブック",
+                    emoji = "📕",
+                    description = "A5サイズ・20ページ",
+                    basePrice = 2980,
+                    pricePerUnit = 1980,
+                    isPopular = true
+                ),
+                quantity = 3,
+                totalPrice = 6940
+            )
+        }
+    }
+}
+
+/**
+ * プレビュー: 注文ボタン
+ */
+@PhonePreview
+@Composable
+private fun OrderButtonPreview() {
+    MaterialTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                OrderButton(
+                    totalPrice = 6940,
+                    isLoading = false,
+                    onOrderClick = {}
+                )
+                OrderButton(
+                    totalPrice = 6940,
+                    isLoading = true,
+                    onOrderClick = {}
+                )
             }
         }
     }

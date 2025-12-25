@@ -41,7 +41,9 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.design.theme.YoinTheme
 import com.yoin.core.ui.component.YoinSimpleAppBar
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.settings.viewmodel.SettingsContract
 import com.yoin.feature.settings.viewmodel.SettingsViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -557,5 +559,90 @@ private fun SettingItem(
             tint = YoinColors.TextSecondary,
             modifier = Modifier.size(YoinSizes.iconSmall)
         )
+    }
+}
+
+// Previews
+
+@PhonePreview
+@Composable
+private fun UserProfileCardPreview() {
+    YoinTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(YoinSpacing.lg)
+        ) {
+            UserProfileCard(
+                profile = SettingsContract.UserProfile(
+                    id = "1",
+                    name = "山田太郎",
+                    email = "yamada@example.com",
+                    initial = "山"
+                ),
+                onProfilePressed = {}
+            )
+        }
+    }
+}
+
+@PhonePreview
+@Composable
+private fun PlanCardPreview() {
+    YoinTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(YoinSpacing.lg)
+        ) {
+            PlanCard(
+                plan = SettingsContract.PlanInfo(
+                    name = "プレミアムプラン",
+                    description = "無制限に写真を撮影できます"
+                ),
+                onPlanPressed = {}
+            )
+        }
+    }
+}
+
+@PhonePreview
+@Composable
+private fun GeneralSettingsCardPreview() {
+    YoinTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(YoinSpacing.lg)
+        ) {
+            GeneralSettingsCard(
+                isDarkModeEnabled = false,
+                onNotificationPressed = {},
+                onDarkModeToggled = {}
+            )
+        }
+    }
+}
+
+@PhonePreview
+@Composable
+private fun SupportCardPreview() {
+    YoinTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(YoinColors.Background)
+                .padding(YoinSpacing.lg)
+        ) {
+            SupportCard(
+                onHelpPressed = {},
+                onContactPressed = {},
+                onTermsPressed = {},
+                onPrivacyPolicyPressed = {}
+            )
+        }
     }
 }
