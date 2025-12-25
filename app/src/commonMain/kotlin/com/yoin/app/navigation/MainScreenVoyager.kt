@@ -11,7 +11,6 @@ import com.yoin.core.ui.navigation.BottomNavigationItem
 import com.yoin.core.ui.navigation.YoinBottomNavigationBar
 import com.yoin.feature.home.ui.HomeScreen
 import com.yoin.feature.home.viewmodel.HomeViewModel
-import com.yoin.feature.profile.ui.ProfileScreen
 import com.yoin.feature.shop.ui.ShopScreen
 import com.yoin.feature.shop.viewmodel.ShopViewModel
 import com.yoin.feature.settings.ui.SettingsScreen
