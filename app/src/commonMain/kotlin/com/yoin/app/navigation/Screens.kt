@@ -64,11 +64,13 @@ import com.yoin.feature.settings.viewmodel.DeleteAccountViewModel
 import com.yoin.feature.settings.viewmodel.HelpFaqViewModel
 import com.yoin.feature.settings.viewmodel.NotificationSettingsViewModel
 import com.yoin.feature.settings.viewmodel.PremiumPlanViewModel
+import com.yoin.feature.shop.ui.DeliveryTrackingScreen
 import com.yoin.feature.shop.ui.OrderCompleteScreen
 import com.yoin.feature.shop.ui.OrderConfirmationScreen
 import com.yoin.feature.shop.ui.OrderHistoryScreen
 import com.yoin.feature.shop.ui.ShippingAddressScreen
 import com.yoin.feature.shop.ui.ShopOrderScreen
+import com.yoin.feature.shop.viewmodel.DeliveryTrackingViewModel
 import com.yoin.feature.shop.viewmodel.OrderCompleteViewModel
 import com.yoin.feature.shop.viewmodel.OrderConfirmationViewModel
 import com.yoin.feature.shop.viewmodel.OrderHistoryViewModel
@@ -797,14 +799,16 @@ data class OrderConfirmationScreenVoyager(
 }
 
 /**
- * 配送追跡画面（プレースホルダー）
+ * 配送追跡画面
  */
 data class DeliveryTrackingScreenVoyager(val orderId: String) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "配送追跡",
+        val viewModel: DeliveryTrackingViewModel = koinInject(parameters = { parametersOf(orderId) })
+
+        DeliveryTrackingScreen(
+            viewModel = viewModel,
             onNavigateBack = { navigator.pop() }
         )
     }

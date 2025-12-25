@@ -1,5 +1,6 @@
 package com.yoin.feature.shop.di
 
+import com.yoin.feature.shop.viewmodel.DeliveryTrackingViewModel
 import com.yoin.feature.shop.viewmodel.OrderCompleteViewModel
 import com.yoin.feature.shop.viewmodel.OrderConfirmationViewModel
 import com.yoin.feature.shop.viewmodel.OrderHistoryViewModel
@@ -27,6 +28,9 @@ val shopModule = module {
     }
     factory { (orderId: String, productName: String, deliveryAddress: String, deliveryDateRange: String, email: String) ->
         OrderCompleteViewModel(orderId, productName, deliveryAddress, deliveryDateRange, email)
+    }
+    factory { (orderId: String) ->
+        DeliveryTrackingViewModel(orderId)
     }
     factory { OrderHistoryViewModel() }
 }
