@@ -19,6 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.timeline.viewmodel.RoomDetailAfterContract
 import com.yoin.feature.timeline.viewmodel.RoomDetailAfterViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -153,12 +156,12 @@ private fun RoomDetailAfterHeader(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(24.dp),
+                    .height(YoinSpacing.xxl),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = YoinColors.TextPrimary,
@@ -170,45 +173,45 @@ private fun RoomDetailAfterHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
                 Text(
                     text = "←",
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.clickable(onClick = onBackPressed)
                 )
 
                 // タイトルと情報
                 Column(
-                    modifier = Modifier.weight(1f).padding(start = 16.dp)
+                    modifier = Modifier.weight(1f).padding(start = YoinSpacing.lg)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
                     ) {
                         Text(
                             text = roomInfo.emoji,
-                            fontSize = 18.sp
+                            fontSize = YoinFontSizes.headingSmall.value.sp
                         )
                         Text(
                             text = roomInfo.title,
-                            fontSize = 18.sp,
+                            fontSize = YoinFontSizes.headingSmall.value.sp,
                             fontWeight = FontWeight.Bold,
                             color = YoinColors.TextPrimary
                         )
                     }
                     Text(
                         text = "${roomInfo.dateRange} • ${roomInfo.location}",
-                        fontSize = 12.sp,
+                        fontSize = YoinFontSizes.labelSmall.value.sp,
                         color = YoinColors.TextSecondary
                     )
                     Text(
                         text = "${roomInfo.photoCount}枚 • ${roomInfo.memberCount}人",
-                        fontSize = 11.sp,
+                        fontSize = YoinFontSizes.caption.value.sp,
                         color = YoinColors.TextSecondary
                     )
                 }
@@ -219,13 +222,13 @@ private fun RoomDetailAfterHeader(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = YoinColors.Primary
                     ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
+                    shape = RoundedCornerShape(YoinSpacing.sm),
+                    modifier = Modifier.height(YoinSizes.iconLarge),
+                    contentPadding = PaddingValues(horizontal = YoinSpacing.lg, vertical = YoinSpacing.xs + 2.dp)
                 ) {
                     Text(
                         text = "⬇ 全保存",
-                        fontSize = 12.sp,
+                        fontSize = YoinFontSizes.labelSmall.value.sp,
                         fontWeight = FontWeight.Bold,
                         color = YoinColors.Surface
                     )
@@ -252,8 +255,8 @@ private fun ViewModeToggle(
         modifier = Modifier
             .fillMaxWidth()
             .background(YoinColors.Background)
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(YoinSpacing.lg),
+        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md)
     ) {
         ViewModeButton(
             text = "タイムライン",
@@ -286,15 +289,15 @@ private fun ViewModeButton(
 
     Box(
         modifier = modifier
-            .height(40.dp)
-            .background(backgroundColor, RoundedCornerShape(8.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+            .height(YoinSizes.buttonHeightSmall)
+            .background(backgroundColor, RoundedCornerShape(YoinSpacing.sm))
+            .border(1.dp, borderColor, RoundedCornerShape(YoinSpacing.sm))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = text,
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
             color = textColor
         )
@@ -317,7 +320,7 @@ private fun PhotoTimeline(
         ) {
             Text(
                 text = "まだ写真がありません",
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 color = YoinColors.TextSecondary
             )
         }
@@ -326,8 +329,8 @@ private fun PhotoTimeline(
             modifier = Modifier
                 .fillMaxSize()
                 .background(YoinColors.Background),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            contentPadding = PaddingValues(YoinSpacing.lg),
+            verticalArrangement = Arrangement.spacedBy(YoinSpacing.lg)
         ) {
             items(photos) { photo ->
                 PhotoCard(
@@ -353,12 +356,12 @@ private fun PhotoCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onPhotoClicked),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(YoinSpacing.md),
         colors = CardDefaults.cardColors(containerColor = YoinColors.Surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.padding(YoinSpacing.md)
         ) {
             // 撮影者情報
             Row(
@@ -368,18 +371,18 @@ private fun PhotoCard(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
                 ) {
                     // アバター
                     Box(
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(YoinSizes.iconLarge)
                             .background(YoinColors.AccentPeach, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = photo.photographerName.take(1),
-                            fontSize = 14.sp,
+                            fontSize = YoinFontSizes.labelLarge.value.sp,
                             fontWeight = FontWeight.Bold,
                             color = YoinColors.TextPrimary
                         )
@@ -388,13 +391,13 @@ private fun PhotoCard(
                     Column {
                         Text(
                             text = "📷 ${photo.photographerName}",
-                            fontSize = 14.sp,
+                            fontSize = YoinFontSizes.labelLarge.value.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = YoinColors.TextPrimary
                         )
                         Text(
                             text = photo.timestamp,
-                            fontSize = 11.sp,
+                            fontSize = YoinFontSizes.caption.value.sp,
                             color = YoinColors.TextSecondary
                         )
                     }
@@ -403,29 +406,29 @@ private fun PhotoCard(
                 // ダウンロードボタン
                 IconButton(
                     onClick = onDownloadClicked,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(YoinSizes.iconLarge)
                 ) {
                     Text(
                         text = if (photo.isDownloaded) "✓" else "⬇",
-                        fontSize = 16.sp,
+                        fontSize = YoinFontSizes.bodyMedium.value.sp,
                         color = if (photo.isDownloaded) YoinColors.AccentCoral else YoinColors.Primary
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.md))
 
             // 写真プレースホルダー
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(4f / 3f)
-                    .background(YoinColors.SurfaceVariant, RoundedCornerShape(8.dp)),
+                    .background(YoinColors.SurfaceVariant, RoundedCornerShape(YoinSpacing.sm)),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
                 ) {
                     Text(
                         text = "📸",
@@ -433,26 +436,26 @@ private fun PhotoCard(
                     )
                     Text(
                         text = "Photo #${photo.id}",
-                        fontSize = 12.sp,
+                        fontSize = YoinFontSizes.labelSmall.value.sp,
                         color = YoinColors.TextSecondary
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.md))
 
             // 撮影場所
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
             ) {
                 Text(
                     text = "📍",
-                    fontSize = 14.sp
+                    fontSize = YoinFontSizes.labelLarge.value.sp
                 )
                 Text(
                     text = photo.location,
-                    fontSize = 13.sp,
+                    fontSize = YoinFontSizes.labelMedium.value.sp,
                     color = YoinColors.TextSecondary
                 )
             }
@@ -473,7 +476,7 @@ private fun MapPlaceholder() {
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
         ) {
             Text(
                 text = "🗺️",
@@ -481,19 +484,19 @@ private fun MapPlaceholder() {
             )
             Text(
                 text = "マップビュー",
-                fontSize = 18.sp,
+                fontSize = YoinFontSizes.headingSmall.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.TextPrimary
             )
             Text(
                 text = "写真の撮影場所を地図上に表示します",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = YoinColors.TextSecondary
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
             Text(
                 text = "（次のバージョンで実装予定）",
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.TextSecondary
             )
         }

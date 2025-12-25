@@ -18,6 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.camera.viewmodel.PhotoConfirmContract
 import com.yoin.feature.camera.viewmodel.PhotoConfirmViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -122,7 +125,7 @@ fun PhotoConfirmScreen(
                 // 警告メッセージ
                 WarningMessage()
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.sm))
             }
         }
 
@@ -144,7 +147,7 @@ private fun PhotoConfirmHeader(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -158,7 +161,7 @@ private fun PhotoConfirmHeader(
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = Color.White
@@ -169,7 +172,7 @@ private fun PhotoConfirmHeader(
         // 閉じるボタン（左）
         Surface(
             modifier = Modifier
-                .size(40.dp)
+                .size(YoinSizes.buttonHeightSmall)
                 .align(Alignment.CenterStart),
             color = Color(0xFF374151),
             shape = CircleShape
@@ -182,7 +185,7 @@ private fun PhotoConfirmHeader(
             ) {
                 Text(
                     text = "✕",
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     color = Color.White
                 )
             }
@@ -192,14 +195,14 @@ private fun PhotoConfirmHeader(
         Surface(
             modifier = Modifier.align(Alignment.CenterEnd),
             color = Color(0xFF374151),
-            shape = RoundedCornerShape(20.dp)
+            shape = RoundedCornerShape(YoinSpacing.xl)
         ) {
             Text(
                 text = "確認",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = YoinSpacing.md, vertical = YoinSpacing.sm)
             )
         }
     }
@@ -215,34 +218,34 @@ private fun PhotoPreview(
 ) {
     Box(
         modifier = modifier
-            .padding(16.dp)
+            .padding(YoinSpacing.lg)
             .border(
                 width = 2.dp,
                 color = Color(0xFF6B7280),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(YoinSpacing.md)
             )
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(RoundedCornerShape(YoinSpacing.md)),
         contentAlignment = Alignment.Center
     ) {
         // プレースホルダー
         // TODO: 実際の写真を表示する実装を追加
         Surface(
             color = Color(0xFF374151),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.padding(16.dp)
+            shape = RoundedCornerShape(YoinSpacing.sm),
+            modifier = Modifier.padding(YoinSpacing.lg)
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                modifier = Modifier.padding(horizontal = YoinSpacing.xxl, vertical = YoinSpacing.md),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
             ) {
                 Text(
                     text = "📷",
-                    fontSize = 48.sp
+                    fontSize = YoinSpacing.massive.value.sp
                 )
                 Text(
                     text = "撮影した写真",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = Color.White.copy(alpha = 0.5f)
                 )
             }
@@ -262,21 +265,21 @@ private fun PhotoInfo(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF111827))
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         // 位置情報
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
         ) {
             Text(
                 text = "📍",
-                fontSize = 16.sp
+                fontSize = YoinFontSizes.bodyMedium.value.sp
             )
             Text(
                 text = location ?: "位置情報なし",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = Color.White
             )
         }
@@ -284,15 +287,15 @@ private fun PhotoInfo(
         // 撮影時刻
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
         ) {
             Text(
                 text = "🕐",
-                fontSize = 16.sp
+                fontSize = YoinFontSizes.bodyMedium.value.sp
             )
             Text(
                 text = timestamp,
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = Color.White
             )
         }
@@ -312,25 +315,25 @@ private fun PhotoActions(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF111827))
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.lg),
+        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md)
     ) {
         // 削除ボタン
         OutlinedButton(
             onClick = onDeleteClick,
             modifier = Modifier
                 .weight(1f)
-                .height(56.dp),
+                .height(YoinSizes.buttonHeightLarge),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = Color(0xFFEF4444)
             ),
             border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFEF4444)),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             enabled = !isSaving
         ) {
             Text(
                 text = "削除",
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -340,23 +343,23 @@ private fun PhotoActions(
             onClick = onSaveClick,
             modifier = Modifier
                 .weight(1f)
-                .height(56.dp),
+                .height(YoinSizes.buttonHeightLarge),
             colors = ButtonDefaults.buttonColors(
                 containerColor = YoinColors.Primary,
                 contentColor = Color.White
             ),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             enabled = !isSaving
         ) {
             if (isSaving) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(YoinSizes.iconMedium),
                     color = Color.White
                 )
             } else {
                 Text(
                     text = "保存",
-                    fontSize = 16.sp,
+                    fontSize = YoinFontSizes.bodyMedium.value.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -373,38 +376,38 @@ private fun WarningMessage() {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF111827))
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalDivider(
             color = Color(0xFF374151),
             thickness = 1.dp,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = YoinSpacing.md)
         )
 
         Text(
             text = "⚠️ 保存後は削除できません",
-            fontSize = 12.sp,
+            fontSize = YoinFontSizes.labelSmall.value.sp,
             color = Color(0xFF9CA3AF),
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.xs))
 
         Text(
             text = "よく確認してから保存しましょう",
-            fontSize = 12.sp,
+            fontSize = YoinFontSizes.labelSmall.value.sp,
             color = Color(0xFF6B7280),
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
         // ホームインジケーター
         Box(
             modifier = Modifier
                 .width(134.dp)
-                .height(4.dp)
+                .height(YoinSpacing.xs)
                 .background(Color(0xFF374151), RoundedCornerShape(100.dp))
         )
     }

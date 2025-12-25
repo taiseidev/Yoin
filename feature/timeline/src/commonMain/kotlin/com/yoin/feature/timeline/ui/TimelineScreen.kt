@@ -66,6 +66,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.timeline.viewmodel.TimelineContract
 import com.yoin.feature.timeline.viewmodel.TimelineViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -166,7 +169,7 @@ fun TimelineScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(32.dp),
+                            .padding(YoinSpacing.xxxl),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(color = YoinColors.Primary)
@@ -201,16 +204,16 @@ private fun AlbumHeader(
         modifier = Modifier
             .fillMaxWidth()
             .background(YoinColors.Surface)
-            .padding(16.dp)
+            .padding(YoinSpacing.lg)
     ) {
         Text(
             text = "アルバム",
-            fontSize = 28.sp,
+            fontSize = YoinFontSizes.displaySmall.value.sp,
             fontWeight = FontWeight.Bold,
             color = YoinColors.TextPrimary
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.md))
 
         OutlinedTextField(
             value = searchQuery,
@@ -225,7 +228,7 @@ private fun AlbumHeader(
             },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = YoinColors.Background,
                 unfocusedContainerColor = YoinColors.Background,
@@ -295,7 +298,7 @@ private fun FilterSortBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(YoinColors.Surface)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -303,12 +306,12 @@ private fun FilterSortBar(
         FilterChip(
             selected = showFavoritesOnly,
             onClick = onToggleFavoritesFilter,
-            label = { Text("お気に入りのみ", fontSize = 13.sp) },
+            label = { Text("お気に入りのみ", fontSize = YoinFontSizes.labelMedium.value.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = if (showFavoritesOnly) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "お気に入り",
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(YoinSizes.iconMedium)
                 )
             },
             colors = FilterChipDefaults.filterChipColors(
@@ -326,12 +329,12 @@ private fun FilterSortBar(
                 Text(
                     text = sortOption.displayName,
                     color = YoinColors.Primary,
-                    fontSize = 13.sp
+                    fontSize = YoinFontSizes.labelMedium.value.sp
                 )
                 Text(
                     text = " ▼",
                     color = YoinColors.Primary,
-                    fontSize = 10.sp
+                    fontSize = YoinFontSizes.caption.value.sp
                 )
             }
 
@@ -366,19 +369,19 @@ private fun TripList(
         modifier = Modifier
             .fillMaxWidth()
             .background(YoinColors.Background)
-            .padding(vertical = 8.dp)
+            .padding(vertical = YoinSpacing.sm)
     ) {
         Text(
             text = "旅行を選択",
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = FontWeight.Bold,
             color = YoinColors.TextPrimary,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.xs)
         )
 
         LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            contentPadding = PaddingValues(horizontal = YoinSpacing.lg),
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md)
         ) {
             // すべて表示
             item {
@@ -418,9 +421,9 @@ private fun TripCard(
             containerColor = if (isSelected) YoinColors.Primary.copy(alpha = 0.1f) else YoinColors.Surface
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isSelected) 4.dp else 1.dp
+            defaultElevation = if (isSelected) YoinSpacing.xs else 1.dp
         ),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(YoinSpacing.md)
     ) {
         if (trip == null) {
             // すべて表示カード
@@ -435,12 +438,12 @@ private fun TripCard(
                         imageVector = Icons.Default.Star,
                         contentDescription = "すべて",
                         tint = if (isSelected) YoinColors.Primary else YoinColors.TextSecondary,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(YoinSizes.iconLarge)
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(YoinSpacing.xs))
                     Text(
                         text = "すべて",
-                        fontSize = 14.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
                         fontWeight = FontWeight.Bold,
                         color = if (isSelected) YoinColors.Primary else YoinColors.TextPrimary
                     )
@@ -448,27 +451,27 @@ private fun TripCard(
             }
         } else {
             Column(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(YoinSpacing.sm)
             ) {
                 Text(
                     text = trip.name,
-                    fontSize = 13.sp,
+                    fontSize = YoinFontSizes.labelMedium.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = if (isSelected) YoinColors.Primary else YoinColors.TextPrimary,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.xs))
                 Text(
                     text = "${trip.photoCount}枚",
-                    fontSize = 11.sp,
+                    fontSize = YoinFontSizes.caption.value.sp,
                     color = YoinColors.TextSecondary
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.xs))
                 Text(
 //                    text = formatDate(trip.startDate),
                     text = "2025/06/12",
-                    fontSize = 10.sp,
+                    fontSize = YoinFontSizes.caption.value.sp,
                     color = YoinColors.TextSecondary
                 )
             }
@@ -487,9 +490,9 @@ private fun PhotoGrid(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        contentPadding = PaddingValues(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
+        contentPadding = PaddingValues(YoinSpacing.xs),
         modifier = Modifier
             .fillMaxSize()
             .background(YoinColors.Background)
@@ -516,7 +519,7 @@ private fun PhotoItem(
     Box(
         modifier = Modifier
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(YoinSpacing.sm))
             .background(YoinColors.SurfaceVariant)
             .clickable(onClick = onPhotoClick)
     ) {
@@ -528,7 +531,7 @@ private fun PhotoItem(
         ) {
             Text(
                 text = "📷",
-                fontSize = 32.sp
+                fontSize = YoinFontSizes.displayMedium.value.sp
             )
         }
 //        when (painter.state) {
@@ -570,7 +573,7 @@ private fun PhotoItem(
         Surface(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(4.dp),
+                .padding(YoinSpacing.xs),
             color = Color.Black.copy(alpha = 0.5f),
             shape = CircleShape
         ) {
@@ -582,7 +585,7 @@ private fun PhotoItem(
                     imageVector = if (photo.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "お気に入り",
                     tint = if (photo.isFavorite) Color(0xFFFF6B6B) else Color.White,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(YoinSpacing.lg)
                 )
             }
         }
@@ -591,15 +594,15 @@ private fun PhotoItem(
         Surface(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(4.dp),
+                .padding(YoinSpacing.xs),
             color = Color.Black.copy(alpha = 0.6f),
-            shape = RoundedCornerShape(4.dp)
+            shape = RoundedCornerShape(YoinSpacing.xs)
         ) {
             Text(
                 text = photo.location,
-                fontSize = 10.sp,
+                fontSize = YoinFontSizes.caption.value.sp,
                 color = Color.White,
-                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                modifier = Modifier.padding(horizontal = YoinSpacing.xs + 2.dp, vertical = 2.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -615,12 +618,12 @@ private fun EmptyState(selectedTab: TimelineContract.AlbumTab) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(YoinSpacing.xxxl),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
         ) {
             Text(
                 text = "📸",
@@ -632,13 +635,13 @@ private fun EmptyState(selectedTab: TimelineContract.AlbumTab) {
                     TimelineContract.AlbumTab.BY_TRIP -> "この旅行の写真がありません"
                     TimelineContract.AlbumTab.FAVORITES -> "お気に入りの写真がありません"
                 },
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.TextPrimary
             )
             Text(
                 text = "写真を撮影してアルバムに追加しましょう",
-                fontSize = 13.sp,
+                fontSize = YoinFontSizes.labelMedium.value.sp,
                 color = YoinColors.TextSecondary
             )
         }

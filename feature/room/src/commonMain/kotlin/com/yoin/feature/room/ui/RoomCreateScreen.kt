@@ -20,6 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.room.viewmodel.RoomCreateContract
 import com.yoin.feature.room.viewmodel.RoomCreateViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -105,13 +108,13 @@ fun RoomCreateScreen(
                     .fillMaxSize()
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 20.dp, vertical = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                    .padding(horizontal = YoinSpacing.xl, vertical = YoinSpacing.xxl),
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.xxl)
             ) {
                 // タイトルセクション
                 Text(
                     text = "新しい旅行を作成",
-                    fontSize = 24.sp,
+                    fontSize = YoinFontSizes.headingMedium.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
@@ -138,7 +141,7 @@ fun RoomCreateScreen(
                 // 期間入力
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md)
                 ) {
                     DateField(
                         label = "開始日",
@@ -171,7 +174,7 @@ fun RoomCreateScreen(
                     error = state.destinationError
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
                 // 作成ボタン
                 Button(
@@ -183,20 +186,20 @@ fun RoomCreateScreen(
                         containerColor = YoinColors.Primary,
                         disabledContainerColor = YoinColors.SurfaceVariant
                     ),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(YoinSpacing.md),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .height(YoinSizes.buttonHeightLarge)
                 ) {
                     if (state.isLoading) {
                         CircularProgressIndicator(
                             color = YoinColors.OnPrimary,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(YoinSizes.iconMedium)
                         )
                     } else {
                         Text(
                             text = "ルームを作成",
-                            fontSize = 16.sp,
+                            fontSize = YoinFontSizes.bodyMedium.value.sp,
                             fontWeight = FontWeight.Bold,
                             color = if (state.isFormValid) Color.White else YoinColors.TextSecondary
                         )
@@ -270,12 +273,12 @@ private fun RoomCreateHeader(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(24.dp),
+                    .height(YoinSpacing.xxl),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = YoinColors.TextPrimary
@@ -286,14 +289,14 @@ private fun RoomCreateHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
                 Text(
                     text = "←",
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.clickable(onClick = onBackPressed)
                 )
@@ -301,13 +304,13 @@ private fun RoomCreateHeader(
                 // タイトル
                 Text(
                     text = "ルーム作成",
-                    fontSize = 18.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
 
                 // 右側スペーサー
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(YoinSpacing.xl))
             }
 
             HorizontalDivider(
@@ -327,26 +330,26 @@ private fun EmojiSelector(
     onEmojiClick: () -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         Text(
             text = "絵文字",
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = FontWeight.SemiBold,
             color = YoinColors.TextPrimary
         )
 
         Box(
             modifier = Modifier
-                .size(80.dp)
-                .background(YoinColors.Background, RoundedCornerShape(12.dp))
-                .border(1.dp, YoinColors.SurfaceVariant, RoundedCornerShape(12.dp))
+                .size(YoinSizes.logoSmall)
+                .background(YoinColors.Background, RoundedCornerShape(YoinSpacing.md))
+                .border(1.dp, YoinColors.SurfaceVariant, RoundedCornerShape(YoinSpacing.md))
                 .clickable(onClick = onEmojiClick),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = selectedEmoji,
-                fontSize = 48.sp
+                fontSize = YoinSpacing.massive.value.sp
             )
         }
     }
@@ -364,11 +367,11 @@ private fun FormField(
     error: String? = null
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         Text(
             text = label,
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = FontWeight.SemiBold,
             color = YoinColors.TextPrimary
         )
@@ -380,7 +383,7 @@ private fun FormField(
                 Text(
                     text = placeholder,
                     color = YoinColors.TextSecondary,
-                    fontSize = 14.sp
+                    fontSize = YoinFontSizes.labelLarge.value.sp
                 )
             },
             isError = error != null,
@@ -389,14 +392,14 @@ private fun FormField(
                 unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.SurfaceVariant,
                 errorBorderColor = YoinColors.Error
             ),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             modifier = Modifier.fillMaxWidth()
         )
 
         if (error != null) {
             Text(
                 text = error,
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.Error
             )
         }
@@ -416,11 +419,11 @@ private fun DateField(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         Text(
             text = label,
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = FontWeight.SemiBold,
             color = YoinColors.TextPrimary
         )
@@ -428,20 +431,20 @@ private fun DateField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .background(Color.White, RoundedCornerShape(12.dp))
+                .height(YoinSizes.buttonHeightLarge)
+                .background(Color.White, RoundedCornerShape(YoinSpacing.md))
                 .border(
                     width = 1.dp,
                     color = if (error != null) YoinColors.Error else YoinColors.SurfaceVariant,
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(YoinSpacing.md)
                 )
                 .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = YoinSpacing.lg),
             contentAlignment = Alignment.CenterStart
         ) {
             Text(
                 text = value.ifBlank { "選択してください" },
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = if (value.isBlank()) YoinColors.TextSecondary else YoinColors.TextPrimary
             )
         }
@@ -449,7 +452,7 @@ private fun DateField(
         if (error != null) {
             Text(
                 text = error,
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.Error
             )
         }
@@ -474,20 +477,20 @@ private fun EmojiPickerDialog(
         },
         text = {
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(vertical = 8.dp)
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm),
+                contentPadding = PaddingValues(vertical = YoinSpacing.sm)
             ) {
                 items(RoomCreateContract.POPULAR_EMOJIS) { emoji ->
                     Box(
                         modifier = Modifier
-                            .size(60.dp)
+                            .size(YoinSizes.iconXLarge + YoinSpacing.md)
                             .background(YoinColors.Background, CircleShape)
                             .clickable { onEmojiSelected(emoji) },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = emoji,
-                            fontSize = 32.sp
+                            fontSize = YoinFontSizes.displayMedium.value.sp
                         )
                     }
                 }
@@ -521,11 +524,11 @@ private fun SimpleDatePickerDialog(
         },
         text = {
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
             ) {
                 Text(
                     text = "形式: YYYY/MM/DD",
-                    fontSize = 12.sp,
+                    fontSize = YoinFontSizes.labelSmall.value.sp,
                     color = YoinColors.TextSecondary
                 )
                 OutlinedTextField(

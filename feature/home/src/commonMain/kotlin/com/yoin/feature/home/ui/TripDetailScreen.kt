@@ -21,6 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.home.viewmodel.TripDetailContract
 import com.yoin.feature.home.viewmodel.TripDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -124,7 +127,7 @@ fun TripDetailScreen(
                             }
                         )
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
                         // カウントダウンセクション
                         CountdownSection(
@@ -132,7 +135,7 @@ fun TripDetailScreen(
                             developmentDateTime = trip.developmentDateTime
                         )
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
                         // 今日の撮影セクション
                         TodayPhotosSection(
@@ -142,7 +145,7 @@ fun TripDetailScreen(
                             remainingPhotos = trip.remainingPhotos
                         )
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
                         // 撮影ボタンと地図ボタン
                         Row(
@@ -159,7 +162,7 @@ fun TripDetailScreen(
                                 }
                             )
 
-                            Spacer(modifier = Modifier.width(32.dp))
+                            Spacer(modifier = Modifier.width(YoinSpacing.xxxl))
 
                             // 撮影ボタン
                             CameraButton(
@@ -169,7 +172,7 @@ fun TripDetailScreen(
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
                     }
                 }
             }
@@ -204,12 +207,12 @@ private fun TripDetailHeader(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(24.dp),
+                    .height(YoinSpacing.xxl),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = YoinColors.TextPrimary
@@ -220,31 +223,31 @@ private fun TripDetailHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
                 Text(
                     text = "←",
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.clickable(onClick = onBackPressed)
                 )
 
                 // タイトルと日付
                 Column(
-                    modifier = Modifier.weight(1f).padding(start = 16.dp)
+                    modifier = Modifier.weight(1f).padding(start = YoinSpacing.lg)
                 ) {
                     Text(
                         text = trip.title,
-                        fontSize = 18.sp,
+                        fontSize = YoinFontSizes.headingSmall.value.sp,
                         fontWeight = FontWeight.Bold,
                         color = YoinColors.TextPrimary
                     )
                     Text(
                         text = "${trip.dateRange} • ${trip.location}",
-                        fontSize = 12.sp,
+                        fontSize = YoinFontSizes.labelSmall.value.sp,
                         color = YoinColors.TextSecondary
                     )
                 }
@@ -252,11 +255,11 @@ private fun TripDetailHeader(
                 // 設定ボタン
                 Text(
                     text = "⚙",
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier
                         .clickable(onClick = onSettingsPressed)
-                        .padding(end = 12.dp)
+                        .padding(end = YoinSpacing.md)
                 )
 
                 // 招待ボタン
@@ -265,13 +268,13 @@ private fun TripDetailHeader(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = YoinColors.Primary
                     ),
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.height(32.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
+                    shape = RoundedCornerShape(YoinSpacing.sm),
+                    modifier = Modifier.height(YoinSizes.iconLarge),
+                    contentPadding = PaddingValues(horizontal = YoinSpacing.lg, vertical = YoinSpacing.xs + 2.dp)
                 ) {
                     Text(
                         text = "招待",
-                        fontSize = 12.sp,
+                        fontSize = YoinFontSizes.labelSmall.value.sp,
                         fontWeight = FontWeight.Bold,
                         color = YoinColors.OnPrimary
                     )
@@ -298,19 +301,19 @@ private fun MembersSection(
         modifier = Modifier
             .fillMaxWidth()
             .background(YoinColors.Background)
-            .padding(vertical = 12.dp)
+            .padding(vertical = YoinSpacing.md)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(onClick = onMembersClick)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = YoinSpacing.lg),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             LazyRow(
                 modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
             ) {
                 items(members.take(5)) { member ->
                     MemberChip(
@@ -332,9 +335,9 @@ private fun MembersSection(
 
             Text(
                 text = "›",
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 color = YoinColors.TextSecondary,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = YoinSpacing.sm)
             )
         }
     }
@@ -354,11 +357,11 @@ private fun MemberChip(
     Box(
         modifier = Modifier
             .background(backgroundColor, CircleShape)
-            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .padding(horizontal = YoinSpacing.md, vertical = YoinSpacing.xs + 2.dp)
     ) {
         Text(
             text = name,
-            fontSize = 10.sp,
+            fontSize = YoinFontSizes.caption.value.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
             color = textColor
         )
@@ -376,7 +379,7 @@ private fun CountdownSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = YoinSpacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // フィルムアイコン
@@ -385,16 +388,16 @@ private fun CountdownSection(
             fontSize = 64.sp
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
         // 現像まであと
         Text(
             text = "現像まであと",
-            fontSize = 16.sp,
+            fontSize = YoinFontSizes.bodyMedium.value.sp,
             color = YoinColors.TextSecondary
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.xs))
 
         // 日数表示
         Text(
@@ -405,12 +408,12 @@ private fun CountdownSection(
             color = YoinColors.Primary
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
         // 現像日時
         Text(
             text = developmentDateTime,
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             color = YoinColors.TextSecondary
         )
     }
@@ -429,47 +432,47 @@ private fun TodayPhotosSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = YoinSpacing.lg)
     ) {
         HorizontalDivider(
             color = YoinColors.SurfaceVariant,
             thickness = 0.65.dp
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
         // セクションタイトル
         Text(
             text = "今日の撮影",
-            fontSize = 18.sp,
+            fontSize = YoinFontSizes.headingSmall.value.sp,
             fontWeight = FontWeight.Bold,
             color = YoinColors.TextPrimary
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
         // 撮影枚数カード
         Surface(
             color = YoinColors.Surface,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             border = androidx.compose.foundation.BorderStroke(1.dp, YoinColors.SurfaceVariant),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(YoinSpacing.lg)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
                 ) {
                     Text(
                         text = "📸",
-                        fontSize = 24.sp
+                        fontSize = YoinFontSizes.displaySmall.value.sp
                     )
 
                     Text(
                         text = currentPhotos.toString(),
-                        fontSize = 20.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Italic,
                         color = YoinColors.TextPrimary
@@ -477,29 +480,29 @@ private fun TodayPhotosSection(
 
                     Text(
                         text = "/ $maxPhotos 枚",
-                        fontSize = 14.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
                         color = YoinColors.TextSecondary
                     )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.md))
 
                 // プログレスバー
                 LinearProgressIndicator(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(8.dp)
+                        .height(YoinSizes.indicatorSmall)
                         .clip(RoundedCornerShape(100.dp)),
                     color = YoinColors.Primary,
                     trackColor = YoinColors.SurfaceVariant
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
                 Text(
                     text = "残り${remainingPhotos}枚撮影できます",
-                    fontSize = 12.sp,
+                    fontSize = YoinFontSizes.labelSmall.value.sp,
                     color = YoinColors.TextSecondary
                 )
             }
@@ -523,7 +526,7 @@ private fun ActionButton(
         ),
         shape = CircleShape,
         modifier = Modifier.size(80.dp),
-        contentPadding = PaddingValues(0.dp)
+        contentPadding = PaddingValues(YoinSpacing.none)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -531,11 +534,11 @@ private fun ActionButton(
         ) {
             Text(
                 text = icon,
-                fontSize = 20.sp
+                fontSize = YoinFontSizes.labelLarge.value.sp
             )
             Text(
                 text = label,
-                fontSize = 10.sp,
+                fontSize = YoinFontSizes.caption.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.OnPrimary
             )

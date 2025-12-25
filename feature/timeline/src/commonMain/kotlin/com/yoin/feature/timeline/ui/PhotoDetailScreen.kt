@@ -16,6 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.timeline.viewmodel.PhotoDetailContract
 import com.yoin.feature.timeline.viewmodel.PhotoDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -143,11 +146,11 @@ private fun ColumnScope.PhotoContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Black.copy(alpha = 0.3f))
-                    .padding(top = 16.dp, bottom = 8.dp)
+                    .padding(top = YoinSpacing.lg, bottom = YoinSpacing.sm)
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = YoinColors.Surface,
@@ -161,14 +164,14 @@ private fun ColumnScope.PhotoContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Black.copy(alpha = 0.3f))
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                    .padding(horizontal = YoinSpacing.md, vertical = YoinSpacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(YoinSizes.buttonHeightSmall)
                         .clip(CircleShape)
                         .background(YoinColors.Surface.copy(alpha = 0.2f))
                         .clickable(onClick = onBackPressed),
@@ -176,7 +179,7 @@ private fun ColumnScope.PhotoContent(
                 ) {
                     Text(
                         text = "←",
-                        fontSize = 20.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
                         color = YoinColors.Surface
                     )
                 }
@@ -184,7 +187,7 @@ private fun ColumnScope.PhotoContent(
                 // ダウンロードボタン
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(YoinSizes.buttonHeightSmall)
                         .clip(CircleShape)
                         .background(YoinColors.Surface.copy(alpha = 0.2f))
                         .clickable(onClick = onDownloadPressed),
@@ -192,7 +195,7 @@ private fun ColumnScope.PhotoContent(
                 ) {
                     Text(
                         text = "📥",
-                        fontSize = 16.sp
+                        fontSize = YoinFontSizes.bodyMedium.value.sp
                     )
                 }
             }
@@ -201,12 +204,12 @@ private fun ColumnScope.PhotoContent(
         // 日付の透かし（右下）
         Text(
             text = photo.dateWatermark,
-            fontSize = 12.sp,
+            fontSize = YoinFontSizes.labelSmall.value.sp,
             color = YoinColors.Surface,
             fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 40.dp, bottom = 16.dp)
+                .padding(end = YoinSizes.buttonHeightSmall, bottom = YoinSpacing.lg)
         )
     }
 }
@@ -224,21 +227,21 @@ private fun PhotoInfoBottomSheet(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shape = RoundedCornerShape(topStart = YoinSpacing.xxl, topEnd = YoinSpacing.xxl),
         color = YoinColors.Surface,
-        shadowElevation = 8.dp
+        shadowElevation = YoinSpacing.sm
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(horizontal = YoinSpacing.xxl, vertical = YoinSpacing.xl),
+            verticalArrangement = Arrangement.spacedBy(YoinSpacing.lg)
         ) {
             // ハンドルバー
             Box(
                 modifier = Modifier
-                    .width(40.dp)
-                    .height(4.dp)
+                    .width(YoinSizes.buttonHeightSmall)
+                    .height(YoinSpacing.xs)
                     .background(YoinColors.SurfaceVariant, RoundedCornerShape(2.dp))
                     .align(Alignment.CenterHorizontally)
             )
@@ -246,19 +249,19 @@ private fun PhotoInfoBottomSheet(
             // 撮影者情報
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // アバター
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(YoinSizes.iconXLarge)
                         .background(YoinColors.AccentPeach, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = photo.photographerInitial,
-                        fontSize = 14.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
                         fontWeight = FontWeight.Bold,
                         color = YoinColors.TextPrimary
                     )
@@ -267,13 +270,13 @@ private fun PhotoInfoBottomSheet(
                 Column {
                     Text(
                         text = photo.photographerName,
-                        fontSize = 16.sp,
+                        fontSize = YoinFontSizes.bodyMedium.value.sp,
                         fontWeight = FontWeight.Bold,
                         color = YoinColors.TextPrimary
                     )
                     Text(
                         text = "撮影者",
-                        fontSize = 13.sp,
+                        fontSize = YoinFontSizes.labelMedium.value.sp,
                         color = YoinColors.TextSecondary
                     )
                 }
@@ -284,47 +287,47 @@ private fun PhotoInfoBottomSheet(
             // 日時情報
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "📅",
-                    fontSize = 18.sp
+                    fontSize = YoinFontSizes.headingSmall.value.sp
                 )
                 Text(
                     text = photo.dateTime,
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = YoinColors.TextPrimary
                 )
             }
 
             // 位置情報
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "📍",
-                        fontSize = 18.sp
+                        fontSize = YoinFontSizes.headingSmall.value.sp
                     )
                     Text(
                         text = photo.location,
-                        fontSize = 14.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
                         color = YoinColors.TextPrimary
                     )
                 }
                 Text(
                     text = photo.subLocation,
-                    fontSize = 12.sp,
+                    fontSize = YoinFontSizes.labelSmall.value.sp,
                     color = YoinColors.TextSecondary,
                     modifier = Modifier.padding(start = 26.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
             // ナビゲーションコントロール
             Row(
@@ -339,21 +342,21 @@ private fun PhotoInfoBottomSheet(
                 ) {
                     Text(
                         text = "←",
-                        fontSize = 16.sp,
+                        fontSize = YoinFontSizes.bodyMedium.value.sp,
                         color = if (currentIndex > 0) YoinColors.TextSecondary else YoinColors.SurfaceVariant
                     )
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(YoinSpacing.lg))
 
                 // ドットインジケーター
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs + 2.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(6.dp)
+                            .size(YoinSpacing.xs + 2.dp)
                             .background(
                                 if (currentIndex > 0) YoinColors.SurfaceVariant else YoinColors.TextPrimary,
                                 CircleShape
@@ -361,12 +364,12 @@ private fun PhotoInfoBottomSheet(
                     )
                     Box(
                         modifier = Modifier
-                            .size(6.dp)
+                            .size(YoinSpacing.xs + 2.dp)
                             .background(YoinColors.TextPrimary, CircleShape)
                     )
                     Box(
                         modifier = Modifier
-                            .size(6.dp)
+                            .size(YoinSpacing.xs + 2.dp)
                             .background(
                                 if (currentIndex < totalPhotos - 1) YoinColors.SurfaceVariant else YoinColors.TextPrimary,
                                 CircleShape
@@ -374,7 +377,7 @@ private fun PhotoInfoBottomSheet(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(YoinSpacing.lg))
 
                 // 次へボタン
                 IconButton(
@@ -383,7 +386,7 @@ private fun PhotoInfoBottomSheet(
                 ) {
                     Text(
                         text = "→",
-                        fontSize = 16.sp,
+                        fontSize = YoinFontSizes.bodyMedium.value.sp,
                         color = if (currentIndex < totalPhotos - 1) YoinColors.TextSecondary else YoinColors.SurfaceVariant
                     )
                 }
@@ -392,7 +395,7 @@ private fun PhotoInfoBottomSheet(
             // カウンター
             Text(
                 text = "${currentIndex + 1} / $totalPhotos",
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.TextSecondary,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )

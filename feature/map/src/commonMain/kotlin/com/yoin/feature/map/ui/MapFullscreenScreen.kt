@@ -20,6 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.map.model.MapMember
 import com.yoin.feature.map.model.PhotoLocation
@@ -81,17 +84,17 @@ fun MapFullscreenScreen(
             // ステータスバー風の時刻表示
             Text(
                 text = "9:41",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Italic,
                 color = YoinColors.TextPrimary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp)
+                    .padding(top = YoinSpacing.xxl)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // ヘッダー
             MapHeader(
@@ -104,7 +107,7 @@ fun MapFullscreenScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // メンバーフィルター
             MemberFilterRow(
@@ -115,7 +118,7 @@ fun MapFullscreenScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // 地図エリア
             Box(
@@ -145,7 +148,7 @@ fun MapFullscreenScreen(
                     },
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .padding(end = 16.dp)
+                        .padding(end = YoinSpacing.lg)
                 )
 
                 // 写真枚数バッジ
@@ -153,7 +156,7 @@ fun MapFullscreenScreen(
                     count = state.totalPhotoCount,
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(start = 16.dp, bottom = 120.dp)
+                        .padding(start = YoinSpacing.lg, bottom = YoinSizes.logoLarge)
                 )
 
                 // 写真詳細カード
@@ -165,7 +168,7 @@ fun MapFullscreenScreen(
                         },
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .padding(horizontal = 16.dp, vertical = 16.dp)
+                            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.lg)
                     )
                 }
             }
@@ -175,9 +178,9 @@ fun MapFullscreenScreen(
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 16.dp)
+                .padding(bottom = YoinSpacing.lg)
                 .width(134.dp)
-                .height(5.dp)
+                .height(YoinSpacing.xs)
                 .background(Color.Black, RoundedCornerShape(100.dp))
         )
 
@@ -201,19 +204,19 @@ private fun MapHeader(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = YoinColors.OnPrimary,
-        shape = RoundedCornerShape(24.dp)
+        shape = RoundedCornerShape(YoinSpacing.xxl)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // 戻るボタン
             Text(
                 text = "←",
-                fontSize = 20.sp,
+                fontSize = YoinFontSizes.headingSmall.value.sp,
                 color = YoinColors.TextPrimary,
                 modifier = Modifier.clickable(onClick = onBackPressed)
             )
@@ -221,7 +224,7 @@ private fun MapHeader(
             // タイトル
             Text(
                 text = title,
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.TextPrimary
             )
@@ -229,7 +232,7 @@ private fun MapHeader(
             // メニューボタン
             Text(
                 text = "...",
-                fontSize = 20.sp,
+                fontSize = YoinFontSizes.headingSmall.value.sp,
                 color = YoinColors.TextPrimary,
                 modifier = Modifier.clickable(onClick = onMenuPressed)
             )
@@ -249,8 +252,8 @@ private fun MemberFilterRow(
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = YoinSpacing.lg),
+        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         // 「全員」チップ
         item {
@@ -285,16 +288,16 @@ private fun MemberChip(
     val textColor = if (isSelected) Color.White else YoinColors.TextSecondary
 
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(YoinSpacing.xl),
         color = backgroundColor,
         modifier = Modifier.clickable(onClick = onClick)
     ) {
         Text(
             text = label,
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
             color = textColor,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm)
         )
     }
 }
@@ -310,7 +313,7 @@ private fun MemberAvatarChip(
 ) {
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(YoinSizes.buttonHeightSmall)
             .clip(CircleShape)
             .background(YoinColors.AccentPeach) // デフォルトのメンバーアバター色
             .clickable(onClick = onClick)
@@ -341,7 +344,7 @@ private fun MapMockup(
     ) {
         Text(
             text = "地図表示エリア\n（実装には地図ライブラリが必要）\n\n写真: ${photos.size}枚",
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             color = YoinColors.TextSecondary,
             textAlign = TextAlign.Center,
             modifier = Modifier.align(Alignment.Center)
@@ -361,7 +364,7 @@ private fun MapControls(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         // ズームインボタン
         ControlButton(
@@ -375,7 +378,7 @@ private fun MapControls(
             onClick = onZoomOutPressed
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
         // 現在地ボタン
         ControlButton(
@@ -394,11 +397,11 @@ private fun ControlButton(
     onClick: () -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(YoinSpacing.sm),
         color = YoinColors.OnPrimary,
         shadowElevation = 2.dp,
         modifier = Modifier
-            .size(40.dp)
+            .size(YoinSizes.buttonHeightSmall)
             .clickable(onClick = onClick)
     ) {
         Box(
@@ -406,7 +409,7 @@ private fun ControlButton(
         ) {
             Text(
                 text = text,
-                fontSize = 20.sp,
+                fontSize = YoinFontSizes.headingSmall.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.TextPrimary
             )
@@ -425,14 +428,14 @@ private fun PhotoCountBadge(
     Surface(
         shape = CircleShape,
         color = YoinColors.Primary,
-        modifier = modifier.size(60.dp)
+        modifier = modifier.size(YoinSizes.iconXLarge + YoinSpacing.md)
     ) {
         Box(
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = count.toString(),
-                fontSize = 20.sp,
+                fontSize = YoinFontSizes.headingSmall.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.OnPrimary
             )
@@ -453,54 +456,54 @@ private fun PhotoDetailCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(YoinSpacing.lg),
         color = YoinColors.OnPrimary,
         shadowElevation = 4.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                .padding(YoinSpacing.md),
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // サムネイル
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(YoinSizes.logoSmall)
+                    .clip(RoundedCornerShape(YoinSpacing.sm))
                     .background(YoinColors.Primary)
             )
 
             // 情報
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
             ) {
                 Text(
                     text = photo.title,
-                    fontSize = 16.sp,
+                    fontSize = YoinFontSizes.bodyMedium.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
 
                 Text(
                     text = "${photo.photographer} • ${photo.timestamp}",
-                    fontSize = 12.sp,
+                    fontSize = YoinFontSizes.labelSmall.value.sp,
                     color = YoinColors.TextSecondary
                 )
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
                 ) {
                     Text(
                         text = "📍",
-                        fontSize = 12.sp
+                        fontSize = YoinFontSizes.labelSmall.value.sp
                     )
                     Text(
                         text = photo.location,
-                        fontSize = 12.sp,
+                        fontSize = YoinFontSizes.labelSmall.value.sp,
                         color = YoinColors.Error
                     )
                 }
@@ -509,7 +512,7 @@ private fun PhotoDetailCard(
             // シェブロン
             Text(
                 text = "›",
-                fontSize = 20.sp,
+                fontSize = YoinFontSizes.headingSmall.value.sp,
                 color = YoinColors.TextSecondary
             )
         }

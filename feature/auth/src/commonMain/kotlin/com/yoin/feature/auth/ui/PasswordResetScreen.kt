@@ -40,6 +40,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.auth.viewmodel.PasswordResetContract
 import com.yoin.feature.auth.viewmodel.PasswordResetViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -80,216 +84,252 @@ fun PasswordResetScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize().background(YoinColors.Surface)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = YoinSpacing.xxl),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // ステータスバー風の時刻表示
             Text(
                 text = "9:41",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
+                fontWeight = FontWeight.Medium,
                 color = YoinColors.TextPrimary,
-                letterSpacing = (-0.15).sp,
-                modifier = Modifier.padding(top = 24.dp)
+                modifier = Modifier.padding(top = YoinSpacing.xxl)
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
             // ナビゲーションバー
             Row(
-                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
                 Text(
                     text = "←",
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.headingMedium.value.sp,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.clickable {
                         viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
-                    })
+                    }
+                )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(YoinSpacing.lg))
 
                 // タイトル
                 Text(
                     text = "パスワードをリセット",
-                    fontSize = 18.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
-
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                HorizontalDivider(
-                    color = YoinColors.SurfaceVariant, thickness = 0.65.dp
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // 鍵アイコン
-                Box(
-                    modifier = Modifier.size(120.dp)
-                        .background(YoinColors.AccentPeach, CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "🔑", fontSize = 40.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // タイトル
-                Text(
-                    text = "パスワードをお忘れですか？",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // 説明文1
-                Text(
-                    text = "登録したメールアドレスを入力してください。",
-                    fontSize = 14.sp,
-                    color = YoinColors.TextSecondary,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // 説明文2
-                Text(
-                    text = "パスワード再設定用のリンクをお送りします。",
-                    fontSize = 14.sp,
-                    color = YoinColors.TextSecondary,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                // メールアドレス入力
-                EmailField(
-                    email = state.email,
-                    error = state.emailError,
-                    enabled = !state.isLoading && !state.isEmailSent,
-                    onEmailChanged = { email ->
-                        viewModel.handleIntent(PasswordResetContract.Intent.OnEmailChanged(email))
-                    })
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // リセットリンク送信ボタン
-                Button(
-                    onClick = {
-                        viewModel.handleIntent(PasswordResetContract.Intent.OnSendResetLinkPressed)
-                    },
-                    modifier = Modifier.fillMaxWidth().height(52.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = YoinColors.Primary,
-                        disabledContainerColor = YoinColors.TextSecondary
-                    ),
-                    shape = RoundedCornerShape(12.dp),
-                    enabled = !state.isLoading && !state.isEmailSent
-                ) {
-                    if (state.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp), color = YoinColors.Surface
-                        )
-                    } else {
-                        Text(
-                            text = if (state.isEmailSent) "送信完了" else "リセットリンクを送信",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = YoinColors.Surface
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // ログインに戻るリンク
-                Text(
-                    text = "← ログインに戻る",
-                    fontSize = 14.sp,
-                    color = YoinColors.Primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.clickable {
-                        viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
-                    })
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                // ホームインジケーター
-                Box(
-                    modifier = Modifier.width(134.dp).height(5.dp)
-                        .background(Color.Black, RoundedCornerShape(100.dp))
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
             }
 
-            // スナックバー
-            SnackbarHost(
-                hostState = snackbarHostState,
-//                modifier = Modifier.align(Alignment.BottomCenter)
-            )
-        }
-    }
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
-    /**
-     * メールアドレス入力フィールド
-     */
-    @Composable
-    fun EmailField(
-        email: String, error: String?, enabled: Boolean, onEmailChanged: (String) -> Unit
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+            HorizontalDivider(
+                color = YoinColors.AccentPeach
+            )
+
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+
+            // 鍵アイコン
+            Box(
+                modifier = Modifier
+                    .size(YoinSizes.logoLarge)
+                    .background(YoinColors.AccentPeach, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "🔑",
+                    fontSize = YoinSizes.iconXLarge.value.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+
+            // タイトル
             Text(
-                text = "メールアドレス", fontSize = 12.sp, color = YoinColors.TextSecondary
+                text = "パスワードをお忘れですか？",
+                fontSize = YoinFontSizes.bodyLarge.value.sp,
+                fontWeight = FontWeight.Bold,
+                color = YoinColors.TextPrimary,
+                textAlign = TextAlign.Center
             )
 
-            OutlinedTextField(
-                value = email,
-                onValueChange = onEmailChanged,
-                placeholder = {
-                    Text(
-                        text = "email@example.com",
-                        fontSize = 14.sp,
-                        color = YoinColors.TextSecondary
-                    )
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
+
+            // 説明文1
+            Text(
+                text = "登録したメールアドレスを入力してください。",
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
+                color = YoinColors.TextSecondary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
+
+            // 説明文2
+            Text(
+                text = "パスワード再設定用のリンクをお送りします。",
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
+                color = YoinColors.TextSecondary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(YoinSpacing.huge))
+
+            // メールアドレス入力
+            PasswordResetEmailField(
+                email = state.email,
+                error = state.emailError,
+                enabled = !state.isLoading && !state.isEmailSent,
+                onEmailChanged = {
+                    viewModel.handleIntent(PasswordResetContract.Intent.OnEmailChanged(it))
+                }
+            )
+
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+
+            // リセットリンク送信ボタン
+            Button(
+                onClick = {
+                    viewModel.handleIntent(PasswordResetContract.Intent.OnSendResetLinkPressed)
                 },
-                leadingIcon = {
-                    Text(
-                        text = "📧", fontSize = 16.sp
-                    )
-                },
-                isError = error != null,
-                enabled = enabled,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                    unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.SurfaceVariant,
-                    errorBorderColor = YoinColors.Error,
-                    disabledBorderColor = YoinColors.SurfaceVariant
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(YoinSizes.buttonHeightLarge),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = YoinColors.Primary,
+                    disabledContainerColor = YoinColors.TextSecondary
                 ),
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                shape = RoundedCornerShape(YoinSpacing.lg),
+                enabled = !state.isLoading && !state.isEmailSent
+            ) {
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(YoinSizes.iconMedium),
+                        color = Color.White
+                    )
+                } else {
+                    Text(
+                        text = if (state.isEmailSent) "送信完了" else "リセットリンクを送信",
+                        fontSize = YoinFontSizes.bodyLarge.value.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
+
+            // ログインに戻るリンク
+            Text(
+                text = "← ログインに戻る",
+                fontSize = YoinFontSizes.labelLarge.value.sp,
+                color = YoinColors.Primary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.clickable {
+                    viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
+                }
             )
 
-            if (error != null) {
+            Spacer(modifier = Modifier.weight(1f))
+
+            // ホームインジケーター
+            Box(
+                modifier = Modifier
+                    .width(134.dp)
+                    .height(5.dp)
+                    .background(Color.Black, RoundedCornerShape(100.dp))
+            )
+
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
+        }
+
+        // スナックバー
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+    }
+}
+
+/**
+ * メールアドレス入力フィールド
+ */
+@Composable
+private fun PasswordResetEmailField(
+    email: String,
+    error: String?,
+    enabled: Boolean,
+    onEmailChanged: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+    ) {
+        Text(
+            text = "メールアドレス",
+            fontSize = YoinFontSizes.labelSmall.value.sp,
+            color = YoinColors.TextSecondary
+        )
+
+        OutlinedTextField(
+            value = email,
+            onValueChange = onEmailChanged,
+            placeholder = {
                 Text(
-                    text = error, fontSize = 12.sp, color = YoinColors.Error
+                    text = "email@example.com",
+                    fontSize = YoinFontSizes.bodySmall.value.sp,
+                    color = YoinColors.TextTertiary
                 )
-            }
+            },
+            leadingIcon = {
+                Text(
+                    text = "📧",
+                    fontSize = 18.sp
+                )
+            },
+            isError = error != null,
+            enabled = enabled,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
+                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.AccentPeach,
+                errorBorderColor = YoinColors.Error,
+                disabledBorderColor = YoinColors.AccentPeach,
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White
+            ),
+            shape = RoundedCornerShape(YoinSpacing.md),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        if (error != null) {
+            Text(
+                text = error,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
+                color = YoinColors.Error
+            )
         }
     }
+}
+
+/**
+ * プレビュー
+ */
+@PhonePreview
+@Composable
+private fun PasswordResetScreenPreview() {
+    PasswordResetScreen(
+        viewModel = PasswordResetViewModel(),
+        onNavigateToLogin = {}
+    )
 }

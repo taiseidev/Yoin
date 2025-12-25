@@ -36,6 +36,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.settings.viewmodel.SettingsContract
 import com.yoin.feature.settings.viewmodel.SettingsViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -128,11 +131,11 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(YoinColors.Surface)
-                    .padding(top = 24.dp)
+                    .padding(top = YoinSpacing.xxl)
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = YoinColors.TextPrimary,
@@ -141,18 +144,18 @@ fun SettingsScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // ヘッダー
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(YoinColors.Surface)
-                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.lg)
             ) {
                 Text(
                     text = "設定",
-                    fontSize = 24.sp,
+                    fontSize = YoinFontSizes.headingLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
@@ -163,13 +166,13 @@ fun SettingsScreen(
                 thickness = 0.65.dp
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
             if (state.isLoading) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(32.dp),
+                        .padding(YoinSpacing.xxxl),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(color = YoinColors.Primary)
@@ -185,12 +188,12 @@ fun SettingsScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
                 // プラン
                 SectionHeader(title = "プラン")
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
                 state.plan?.let { plan ->
                     PlanCard(
@@ -201,12 +204,12 @@ fun SettingsScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
                 // 一般
                 SectionHeader(title = "一般")
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
                 GeneralSettingsCard(
                     isDarkModeEnabled = state.isDarkModeEnabled,
@@ -218,12 +221,12 @@ fun SettingsScreen(
                     }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
                 // サポート
                 SectionHeader(title = "サポート")
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
                 SupportCard(
                     onHelpPressed = {
@@ -259,10 +262,10 @@ fun SettingsScreen(
 private fun SectionHeader(title: String) {
     Text(
         text = title,
-        fontSize = 13.sp,
+        fontSize = YoinFontSizes.labelMedium.value.sp,
         fontWeight = FontWeight.Bold,
         color = YoinColors.TextSecondary,
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = YoinSpacing.lg)
     )
 }
 
@@ -277,17 +280,17 @@ private fun UserProfileCard(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = YoinSpacing.lg)
             .clickable(onClick = onProfilePressed),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(YoinSpacing.md),
         color = YoinColors.Surface,
         shadowElevation = 1.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                .padding(YoinSpacing.lg),
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // アバター
@@ -299,7 +302,7 @@ private fun UserProfileCard(
             ) {
                 Text(
                     text = profile.initial,
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
@@ -308,17 +311,17 @@ private fun UserProfileCard(
             // 名前とメール
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
             ) {
                 Text(
                     text = profile.name,
-                    fontSize = 18.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
                 Text(
                     text = profile.email,
-                    fontSize = 13.sp,
+                    fontSize = YoinFontSizes.labelMedium.value.sp,
                     color = YoinColors.TextSecondary
                 )
             }
@@ -326,7 +329,7 @@ private fun UserProfileCard(
             // 矢印アイコン
             Text(
                 text = "›",
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 color = YoinColors.TextSecondary
             )
         }
@@ -344,39 +347,39 @@ private fun PlanCard(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = YoinSpacing.lg)
             .clickable(onClick = onPlanPressed),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(YoinSpacing.md),
         color = YoinColors.Surface,
         shadowElevation = 1.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                .padding(YoinSpacing.lg),
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // アイコン
             Text(
                 text = "👑",
-                fontSize = 20.sp
+                fontSize = YoinFontSizes.headingSmall.value.sp
             )
 
             // プラン情報
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
             ) {
                 Text(
                     text = plan.name,
-                    fontSize = 15.sp,
+                    fontSize = YoinFontSizes.bodySmall.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
                 Text(
                     text = plan.description,
-                    fontSize = 12.sp,
+                    fontSize = YoinFontSizes.labelSmall.value.sp,
                     color = YoinColors.Primary
                 )
             }
@@ -384,7 +387,7 @@ private fun PlanCard(
             // 矢印アイコン
             Text(
                 text = "›",
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 color = YoinColors.Primary
             )
         }
@@ -403,8 +406,8 @@ private fun GeneralSettingsCard(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(12.dp),
+            .padding(horizontal = YoinSpacing.lg),
+        shape = RoundedCornerShape(YoinSpacing.md),
         color = YoinColors.Surface,
         shadowElevation = 1.dp
     ) {
@@ -414,23 +417,23 @@ private fun GeneralSettingsCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = onNotificationPressed)
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    .padding(YoinSpacing.lg),
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "🔔",
-                    fontSize = 18.sp
+                    fontSize = YoinFontSizes.headingSmall.value.sp
                 )
                 Text(
                     text = "通知設定",
-                    fontSize = 15.sp,
+                    fontSize = YoinFontSizes.bodySmall.value.sp,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.weight(1f)
                 )
                 Text(
                     text = "›",
-                    fontSize = 16.sp,
+                    fontSize = YoinFontSizes.bodyMedium.value.sp,
                     color = YoinColors.TextSecondary
                 )
             }
@@ -445,17 +448,17 @@ private fun GeneralSettingsCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    .padding(YoinSpacing.lg),
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "🌙",
-                    fontSize = 18.sp
+                    fontSize = YoinFontSizes.headingSmall.value.sp
                 )
                 Text(
                     text = "ダークモード",
-                    fontSize = 15.sp,
+                    fontSize = YoinFontSizes.bodySmall.value.sp,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.weight(1f)
                 )
@@ -487,8 +490,8 @@ private fun SupportCard(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        shape = RoundedCornerShape(12.dp),
+            .padding(horizontal = YoinSpacing.lg),
+        shape = RoundedCornerShape(YoinSpacing.md),
         color = YoinColors.Surface,
         shadowElevation = 1.dp
     ) {
@@ -557,23 +560,23 @@ private fun SettingItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(YoinSpacing.lg),
+        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = icon,
-            fontSize = 18.sp
+            fontSize = YoinFontSizes.headingSmall.value.sp
         )
         Text(
             text = label,
-            fontSize = 15.sp,
+            fontSize = YoinFontSizes.bodySmall.value.sp,
             color = YoinColors.TextPrimary,
             modifier = Modifier.weight(1f)
         )
         Text(
             text = "›",
-            fontSize = 16.sp,
+            fontSize = YoinFontSizes.bodyMedium.value.sp,
             color = YoinColors.TextSecondary
         )
     }

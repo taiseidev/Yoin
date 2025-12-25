@@ -18,6 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.camera.viewmodel.CameraContract
 import com.yoin.feature.camera.viewmodel.CameraViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -109,7 +112,7 @@ fun CameraScreen(
             // 警告メッセージ
             WarningMessage()
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
         }
 
         // スナックバー
@@ -131,7 +134,7 @@ private fun CameraHeader(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -145,7 +148,7 @@ private fun CameraHeader(
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = Color.White
@@ -156,7 +159,7 @@ private fun CameraHeader(
         // 閉じるボタン（左）
         Surface(
             modifier = Modifier
-                .size(40.dp)
+                .size(YoinSizes.buttonHeightSmall)
                 .align(Alignment.CenterStart),
             color = Color(0xFF374151),
             shape = CircleShape
@@ -169,7 +172,7 @@ private fun CameraHeader(
             ) {
                 Text(
                     text = "✕",
-                    fontSize = 20.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     color = Color.White
                 )
             }
@@ -180,14 +183,14 @@ private fun CameraHeader(
             modifier = Modifier
                 .align(Alignment.CenterEnd),
             color = Color(0xFF374151),
-            shape = RoundedCornerShape(20.dp)
+            shape = RoundedCornerShape(YoinSpacing.xl)
         ) {
             Text(
                 text = "残り ${remainingPhotos}枚",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = YoinSpacing.md, vertical = YoinSpacing.sm)
             )
         }
     }
@@ -202,26 +205,26 @@ private fun CameraPreview(
 ) {
     Box(
         modifier = modifier
-            .padding(16.dp)
+            .padding(YoinSpacing.lg)
             .border(
                 width = 2.dp,
                 color = Color(0xFF6B7280),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(YoinSpacing.md)
             )
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(RoundedCornerShape(YoinSpacing.md)),
         contentAlignment = Alignment.Center
     ) {
         // プレースホルダー
         Surface(
             color = Color(0xFF374151),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.padding(16.dp)
+            shape = RoundedCornerShape(YoinSpacing.sm),
+            modifier = Modifier.padding(YoinSpacing.lg)
         ) {
             Text(
                 text = "カメラプレビュー",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = Color.White.copy(alpha = 0.5f),
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+                modifier = Modifier.padding(horizontal = YoinSpacing.xxl, vertical = YoinSpacing.md)
             )
         }
     }
@@ -239,21 +242,21 @@ private fun LocationSection(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF111827))
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
         ) {
             Text(
                 text = "📍",
-                fontSize = 16.sp
+                fontSize = YoinFontSizes.bodyMedium.value.sp
             )
             Text(
                 text = location ?: "位置情報を取得中...",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = Color.White
             )
         }
@@ -261,7 +264,7 @@ private fun LocationSection(
         if (isLoading) {
             Text(
                 text = "取得中...",
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = Color(0xFF9CA3AF)
             )
         }
@@ -282,7 +285,7 @@ private fun CameraControls(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF111827))
-            .padding(vertical = 24.dp)
+            .padding(vertical = YoinSpacing.xxl)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -316,7 +319,7 @@ private fun ControlButton(
     onClick: () -> Unit
 ) {
     Surface(
-        modifier = Modifier.size(52.dp),
+        modifier = Modifier.size(YoinSizes.buttonHeightLarge),
         color = Color(0xFF374151),
         shape = CircleShape
     ) {
@@ -328,7 +331,7 @@ private fun ControlButton(
         ) {
             Text(
                 text = icon,
-                fontSize = 20.sp
+                fontSize = YoinFontSizes.headingSmall.value.sp
             )
         }
     }
@@ -343,7 +346,7 @@ private fun ShutterButton(
 ) {
     Box(
         modifier = Modifier
-            .size(80.dp)
+            .size(YoinSizes.logoSmall)
             .background(Color.White, CircleShape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
@@ -365,38 +368,38 @@ private fun WarningMessage() {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF111827))
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalDivider(
             color = Color(0xFF374151),
             thickness = 1.dp,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = YoinSpacing.md)
         )
 
         Text(
             text = "⚠️ 撮り直しはできません",
-            fontSize = 12.sp,
+            fontSize = YoinFontSizes.labelSmall.value.sp,
             color = Color(0xFF9CA3AF),
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.xs))
 
         Text(
             text = "大切に1枚を撮りましょう",
-            fontSize = 12.sp,
+            fontSize = YoinFontSizes.labelSmall.value.sp,
             color = Color(0xFF6B7280),
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
         // ホームインジケーター
         Box(
             modifier = Modifier
                 .width(134.dp)
-                .height(4.dp)
+                .height(YoinSpacing.xs)
                 .background(Color(0xFF374151), RoundedCornerShape(100.dp))
         )
     }

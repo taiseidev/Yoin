@@ -44,6 +44,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.room.viewmodel.QRScanContract
 import com.yoin.feature.room.viewmodel.QRScanViewModel
@@ -136,23 +139,23 @@ fun QRScanScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp),
+                    .padding(horizontal = YoinSpacing.huge),
                 contentAlignment = Alignment.Center
             ) {
                 ScanFrame(isScanning = state.isScanning)
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             // 説明テキスト
             Text(
                 text = "招待されたQRコードを枠内に収めてください",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
+                    .padding(horizontal = YoinSpacing.xxxl)
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -161,8 +164,8 @@ fun QRScanScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    .padding(horizontal = YoinSpacing.huge, vertical = YoinSpacing.lg),
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.lg)
             ) {
                 ControlButton(
                     text = "ライト",
@@ -183,7 +186,7 @@ fun QRScanScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // 手動入力ボタン
             TextButton(
@@ -194,21 +197,21 @@ fun QRScanScreen(
             ) {
                 Text(
                     text = "コードを手入力する",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Medium
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
             // ホームインジケーター
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = YoinSpacing.lg)
                     .width(134.dp)
-                    .height(5.dp)
+                    .height(YoinSpacing.xs)
                     .background(Color.White.copy(alpha = 0.5f), RoundedCornerShape(100.dp))
             )
         }
@@ -235,7 +238,7 @@ private fun CameraPreviewPlaceholder() {
     ) {
         Text(
             text = "カメラプレビュー\n（プラットフォーム固有の実装が必要）",
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             color = Color.Gray,
             textAlign = TextAlign.Center
         )
@@ -250,23 +253,23 @@ private fun QRScanHeader(onClosePressed: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 48.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(top = YoinSpacing.massive, start = YoinSpacing.lg, end = YoinSpacing.lg, bottom = YoinSpacing.lg)
     ) {
         // 閉じるボタン
         Text(
             text = "×",
-            fontSize = 28.sp,
+            fontSize = YoinFontSizes.displaySmall.value.sp,
             color = Color.White,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable(onClick = onClosePressed)
-                .padding(8.dp)
+                .padding(YoinSpacing.sm)
         )
 
         // タイトル
         Text(
             text = "QRコードをスキャン",
-            fontSize = 18.sp,
+            fontSize = YoinFontSizes.headingSmall.value.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.Center)
@@ -471,16 +474,16 @@ private fun ControlButton(
 
     Button(
         onClick = onClick,
-        modifier = modifier.height(48.dp),
+        modifier = modifier.height(YoinSizes.buttonHeightMedium),
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor,
             contentColor = textColor
         ),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(YoinSpacing.sm)
     ) {
         Text(
             text = text,
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = FontWeight.Medium
         )
     }

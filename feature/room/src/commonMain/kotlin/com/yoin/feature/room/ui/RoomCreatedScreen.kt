@@ -18,6 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.room.viewmodel.RoomCreatedContract
 import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -98,20 +101,20 @@ fun RoomCreatedScreen(
                         .fillMaxSize()
                         .weight(1f)
                         .verticalScroll(rememberScrollState())
-                        .padding(horizontal = 20.dp, vertical = 32.dp),
+                        .padding(horizontal = YoinSpacing.xl, vertical = YoinSpacing.xxxl),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                    verticalArrangement = Arrangement.spacedBy(YoinSpacing.xxl)
                 ) {
                     // 成功アイコン
                     Text(
                         text = "✅",
-                        fontSize = 80.sp
+                        fontSize = YoinSizes.logoSmall.value.sp
                     )
 
                     // 成功メッセージ
                     Text(
                         text = "ルームを作成しました！",
-                        fontSize = 24.sp,
+                        fontSize = YoinFontSizes.headingMedium.value.sp,
                         fontWeight = FontWeight.Bold,
                         color = YoinColors.TextPrimary,
                         textAlign = TextAlign.Center
@@ -121,7 +124,7 @@ fun RoomCreatedScreen(
                         // ルーム情報カード
                         RoomInfoCard(roomInfo)
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
                         // 招待セクション
                         InvitationSection(
@@ -134,7 +137,7 @@ fun RoomCreatedScreen(
                             }
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
                         // ルームに移動ボタン
                         Button(
@@ -144,14 +147,14 @@ fun RoomCreatedScreen(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = YoinColors.Primary
                             ),
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(YoinSpacing.md),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(56.dp)
+                                .height(YoinSizes.buttonHeightLarge)
                         ) {
                             Text(
                                 text = "ルームを見る",
-                                fontSize = 16.sp,
+                                fontSize = YoinFontSizes.bodyMedium.value.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = YoinColors.OnPrimary
                             )
@@ -166,7 +169,7 @@ fun RoomCreatedScreen(
                         ) {
                             Text(
                                 text = "ホームに戻る",
-                                fontSize = 14.sp,
+                                fontSize = YoinFontSizes.labelLarge.value.sp,
                                 color = YoinColors.TextSecondary
                             )
                         }
@@ -199,12 +202,12 @@ private fun RoomCreatedHeader() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(24.dp),
+                    .height(YoinSpacing.xxl),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Italic,
                     color = YoinColors.TextPrimary
@@ -215,12 +218,12 @@ private fun RoomCreatedHeader() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "作成完了",
-                    fontSize = 18.sp,
+                    fontSize = YoinFontSizes.headingSmall.value.sp,
                     fontWeight = FontWeight.Bold,
                     color = YoinColors.TextPrimary
                 )
@@ -241,38 +244,38 @@ private fun RoomCreatedHeader() {
 private fun RoomInfoCard(roomInfo: RoomCreatedContract.RoomInfo) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(YoinSpacing.md),
         colors = CardDefaults.cardColors(containerColor = YoinColors.Background),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(YoinSpacing.xl),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
         ) {
             Text(
                 text = roomInfo.emoji,
-                fontSize = 48.sp
+                fontSize = YoinSpacing.massive.value.sp
             )
 
             Text(
                 text = roomInfo.title,
-                fontSize = 20.sp,
+                fontSize = YoinFontSizes.headingSmall.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.TextPrimary
             )
 
             Text(
                 text = roomInfo.dateRange,
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = YoinColors.TextSecondary
             )
 
             Text(
                 text = "📍 ${roomInfo.destination}",
-                fontSize = 14.sp,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
                 color = YoinColors.TextSecondary
             )
         }
@@ -290,12 +293,12 @@ private fun InvitationSection(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.lg)
     ) {
         // セクションタイトル
         Text(
             text = "メンバーを招待",
-            fontSize = 18.sp,
+            fontSize = YoinFontSizes.headingSmall.value.sp,
             fontWeight = FontWeight.Bold,
             color = YoinColors.TextPrimary
         )
@@ -322,11 +325,11 @@ private fun InviteLinkCard(
     onCopyClick: () -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         Text(
             text = "招待リンク",
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = FontWeight.SemiBold,
             color = YoinColors.TextPrimary
         )
@@ -334,20 +337,20 @@ private fun InviteLinkCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(YoinColors.Background, RoundedCornerShape(8.dp))
-                .border(1.dp, YoinColors.SurfaceVariant, RoundedCornerShape(8.dp))
-                .padding(12.dp),
+                .background(YoinColors.Background, RoundedCornerShape(YoinSpacing.sm))
+                .border(1.dp, YoinColors.SurfaceVariant, RoundedCornerShape(YoinSpacing.sm))
+                .padding(YoinSpacing.md),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = link,
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.TextSecondary,
                 modifier = Modifier.weight(1f)
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(YoinSpacing.sm))
 
             TextButton(
                 onClick = onCopyClick,
@@ -357,7 +360,7 @@ private fun InviteLinkCard(
             ) {
                 Text(
                     text = "コピー",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -373,47 +376,47 @@ private fun QRCodeCard(
     onShareClick: () -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         Text(
             text = "QRコード",
-            fontSize = 14.sp,
+            fontSize = YoinFontSizes.labelLarge.value.sp,
             fontWeight = FontWeight.SemiBold,
             color = YoinColors.TextPrimary
         )
 
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             colors = CardDefaults.cardColors(containerColor = YoinColors.Surface),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
+                    .padding(YoinSpacing.xl),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.md)
             ) {
                 // QRコードプレースホルダー
                 Box(
                     modifier = Modifier
                         .size(200.dp)
-                        .background(YoinColors.Background, RoundedCornerShape(8.dp)),
+                        .background(YoinColors.Background, RoundedCornerShape(YoinSpacing.sm)),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
                     ) {
                         Text(
                             text = "◼◻◼",
-                            fontSize = 48.sp,
+                            fontSize = YoinSpacing.massive.value.sp,
                             color = YoinColors.TextSecondary
                         )
                         Text(
                             text = "QRコード",
-                            fontSize = 14.sp,
+                            fontSize = YoinFontSizes.labelLarge.value.sp,
                             color = YoinColors.TextSecondary
                         )
                     }
@@ -426,12 +429,12 @@ private fun QRCodeCard(
                         contentColor = YoinColors.Primary
                     ),
                     border = androidx.compose.foundation.BorderStroke(1.dp, YoinColors.Primary),
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(YoinSpacing.sm),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
                         text = "QRコードを共有",
-                        fontSize = 14.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }

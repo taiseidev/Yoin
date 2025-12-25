@@ -19,6 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.feature.home.viewmodel.HomeContract
 import com.yoin.feature.home.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -94,12 +97,12 @@ fun HomeScreen(
                         .fillMaxSize()
                         .weight(1f),
                     contentPadding = PaddingValues(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 32.dp,
+                        start = YoinSpacing.lg,
+                        end = YoinSpacing.lg,
+                        top = YoinSpacing.xxxl,
                         bottom = 96.dp // ボトムナビゲーションバーのスペース確保
                     ),
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
+                    verticalArrangement = Arrangement.spacedBy(YoinSpacing.xxxl)
                 ) {
                     // 進行中の旅セクション
                     if (state.ongoingTrips.isNotEmpty()) {
@@ -171,12 +174,12 @@ private fun HomeHeader(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(24.dp),
+                    .height(YoinSpacing.xxl),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = YoinColors.TextPrimary,
                     letterSpacing = (-0.15).sp
                 )
@@ -186,14 +189,14 @@ private fun HomeHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm + YoinSpacing.xs),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // ロゴ
                 Text(
                     text = "Yoin.",
-                    fontSize = 24.sp,
+                    fontSize = YoinFontSizes.displaySmall.value.sp,
                     fontStyle = FontStyle.Italic,
                     color = YoinColors.TextSecondary,
                     letterSpacing = 0.07.sp
@@ -202,22 +205,22 @@ private fun HomeHeader(
                 // 通知アイコン
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
-                        .background(YoinColors.Background, RoundedCornerShape(10.dp))
+                        .size(YoinSizes.iconXLarge)
+                        .background(YoinColors.Background, RoundedCornerShape(YoinSpacing.sm + YoinSpacing.xs))
                         .clickable(onClick = onNotificationClick),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "🔔",
-                        fontSize = 20.sp
+                        fontSize = YoinFontSizes.labelLarge.value.sp
                     )
 
                     // 通知バッジ
                     if (hasNotification) {
                         Box(
                             modifier = Modifier
-                                .size(8.dp)
-                                .offset(x = 8.dp, y = (-8).dp)
+                                .size(YoinSizes.indicatorSmall)
+                                .offset(x = YoinSpacing.sm, y = (-YoinSpacing.sm))
                                 .background(YoinColors.Error, CircleShape)
                                 .align(Alignment.TopEnd)
                         )
@@ -245,7 +248,7 @@ private fun TripSection(
     onTripClick: (String) -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.lg)
     ) {
         // セクションヘッダー
         Row(
@@ -255,7 +258,7 @@ private fun TripSection(
         ) {
             Text(
                 text = title,
-                fontSize = 16.sp,
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
                 color = YoinColors.TextPrimary,
                 letterSpacing = (-0.31).sp
             )
@@ -263,18 +266,18 @@ private fun TripSection(
             // すべてボタン
             Row(
                 modifier = Modifier.clickable(onClick = onViewAllClick),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "すべて",
-                    fontSize = 14.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = YoinColors.TextSecondary,
                     letterSpacing = (-0.15).sp
                 )
                 Text(
                     text = "›",
-                    fontSize = 16.sp,
+                    fontSize = YoinFontSizes.bodyMedium.value.sp,
                     color = YoinColors.TextSecondary
                 )
             }
@@ -303,32 +306,32 @@ private fun TripCard(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         color = YoinColors.Surface,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(YoinSpacing.md),
         border = BorderStroke(0.65.dp, YoinColors.SurfaceVariant)
     ) {
         Column(
-            modifier = Modifier.padding(17.dp)
+            modifier = Modifier.padding(YoinSpacing.lg + 1.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md)
             ) {
                 // 絵文字
                 Text(
                     text = trip.emoji,
-                    fontSize = 32.sp,
-                    modifier = Modifier.size(32.dp)
+                    fontSize = YoinFontSizes.displayMedium.value.sp,
+                    modifier = Modifier.size(YoinSizes.iconLarge)
                 )
 
                 // メイン情報
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
                 ) {
                     // タイトル
                     Text(
                         text = trip.title,
-                        fontSize = 16.sp,
+                        fontSize = YoinFontSizes.bodyMedium.value.sp,
                         color = YoinColors.TextPrimary,
                         letterSpacing = (-0.31).sp
                     )
@@ -336,18 +339,18 @@ private fun TripCard(
                     // 日付・場所
                     Text(
                         text = "${trip.dateRange} • ${trip.location}",
-                        fontSize = 12.sp,
+                        fontSize = YoinFontSizes.labelSmall.value.sp,
                         color = YoinColors.TextSecondary
                     )
 
                     // プログレスバー（進行中の場合）
                     if (trip.progress != null) {
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.xs))
                         LinearProgressIndicator(
                             progress = { trip.progress },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(8.dp)
+                                .height(YoinSizes.indicatorSmall)
                                 .clip(RoundedCornerShape(100.dp)),
                             color = YoinColors.Primary,
                             trackColor = YoinColors.SurfaceVariant
@@ -356,32 +359,32 @@ private fun TripCard(
 
                     // 残り日数または写真枚数
                     trip.daysUntilDevelopment?.let { days ->
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.xs))
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = "残り${days}日で現像 📸",
-                                fontSize = 12.sp,
+                                fontSize = YoinFontSizes.labelSmall.value.sp,
                                 color = YoinColors.Primary
                             )
                         }
                     }
 
                     trip.photoCount?.let { count ->
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(YoinSpacing.xs))
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = "🎞",
-                                fontSize = 12.sp
+                                fontSize = YoinFontSizes.labelSmall.value.sp
                             )
                             Text(
                                 text = "${count}枚の思い出",
-                                fontSize = 12.sp,
+                                fontSize = YoinFontSizes.labelSmall.value.sp,
                                 color = YoinColors.Primary
                             )
                         }
@@ -409,7 +412,7 @@ private fun MemberAvatars(
     additionalCount: Int
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy((-8).dp)
+        horizontalArrangement = Arrangement.spacedBy((-YoinSpacing.sm))
     ) {
         // アバター画像（最大3つ）
         avatars.take(3).forEachIndexed { index, _ ->
@@ -439,7 +442,7 @@ private fun MemberAvatars(
             ) {
                 Text(
                     text = "+$additionalCount",
-                    fontSize = 10.sp,
+                    fontSize = YoinFontSizes.caption.value.sp,
                     color = Color.White,
                     fontWeight = FontWeight.Normal
                 )
