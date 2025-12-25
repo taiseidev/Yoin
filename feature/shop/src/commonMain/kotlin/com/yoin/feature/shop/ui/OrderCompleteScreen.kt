@@ -7,6 +7,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocalShipping
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -203,21 +208,7 @@ fun OrderCompleteScreen(
  */
 @Composable
 private fun OrderCompleteStatusBar() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "9:41",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic,
-            color = YoinColors.TextPrimary,
-            letterSpacing = (-0.15).sp
-        )
-    }
+    Spacer(modifier = Modifier.height(40.dp))
 }
 
 /**
@@ -250,11 +241,11 @@ private fun SuccessIcon() {
             contentAlignment = Alignment.Center
         ) {
             // チェックマーク
-            Text(
-                text = "✓",
-                fontSize = 36.sp,
-                color = YoinColors.OnPrimary,
-                textAlign = TextAlign.Center
+            Icon(
+                imageVector = Icons.Filled.Check,
+                contentDescription = "Success",
+                tint = YoinColors.OnPrimary,
+                modifier = Modifier.size(36.dp)
             )
         }
     }
@@ -371,9 +362,11 @@ private fun EmailConfirmationCard(email: String) {
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // メールアイコン
-            Text(
-                text = "📧",
-                fontSize = 20.sp
+            Icon(
+                imageVector = Icons.Filled.Email,
+                contentDescription = "Email",
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(20.dp)
             )
 
             // テキスト
@@ -419,9 +412,11 @@ private fun DeliveryStatusCard(onClick: () -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 // 配送アイコン
-                Text(
-                    text = "📦",
-                    fontSize = 18.sp
+                Icon(
+                    imageVector = Icons.Filled.LocalShipping,
+                    contentDescription = "Delivery",
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(18.dp)
                 )
 
                 // テキスト
@@ -433,10 +428,10 @@ private fun DeliveryStatusCard(onClick: () -> Unit) {
             }
 
             // 矢印
-            Text(
-                text = "›",
-                fontSize = 16.sp,
-                color = YoinColors.TextSecondary
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = YoinColors.TextSecondary
             )
         }
     }

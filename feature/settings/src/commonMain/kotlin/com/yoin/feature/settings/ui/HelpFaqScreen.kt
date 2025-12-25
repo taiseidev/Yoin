@@ -6,6 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -191,24 +196,7 @@ private fun HelpFaqHeader(onBackPressed: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            // ステータスバー
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.TextPrimary,
-                    letterSpacing = (-0.15).sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             // タイトルと戻るボタン
             Row(
@@ -218,14 +206,15 @@ private fun HelpFaqHeader(onBackPressed: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = 20.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable(onClick = onBackPressed)
-                )
+                IconButton(onClick = onBackPressed) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = YoinColors.TextPrimary
+                    )
+                }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(4.dp))
 
                 // タイトル
                 Text(
@@ -265,9 +254,10 @@ private fun SearchBar(
             )
         },
         leadingIcon = {
-            Text(
-                text = "🔍",
-                fontSize = 18.sp
+            Icon(
+                imageVector = Icons.Filled.Search,
+                contentDescription = "Search",
+                tint = YoinColors.TextSecondary
             )
         },
         singleLine = true,
@@ -332,10 +322,10 @@ private fun FaqItemCard(
             }
 
             // 矢印
-            Text(
-                text = "›",
-                fontSize = 16.sp,
-                color = YoinColors.TextSecondary
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = YoinColors.TextSecondary
             )
         }
     }
@@ -429,9 +419,11 @@ private fun ContactSupportCard(onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // アイコン
-                Text(
-                    text = "💬",
-                    fontSize = 24.sp
+                Icon(
+                    imageVector = Icons.Filled.Message,
+                    contentDescription = "Contact",
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(24.dp)
                 )
 
                 // テキスト
@@ -454,10 +446,10 @@ private fun ContactSupportCard(onClick: () -> Unit) {
             }
 
             // 矢印
-            Text(
-                text = "›",
-                fontSize = 16.sp,
-                color = YoinColors.Primary
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = YoinColors.Primary
             )
         }
     }

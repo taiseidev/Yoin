@@ -7,6 +7,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -174,35 +177,20 @@ private fun PremiumHeader(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ステータスバーエリア
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.Surface,
-                    letterSpacing = (-0.15).sp
-                )
-            }
+            Spacer(modifier = Modifier.height(56.dp))
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // 👑アイコン
+            // プレミアムアイコン
             Box(
                 modifier = Modifier
                     .size(100.dp)
                     .background(YoinColors.Primary, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "👑",
-                    fontSize = 48.sp
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = "Premium",
+                    tint = YoinColors.Surface,
+                    modifier = Modifier.size(48.dp)
                 )
             }
 
@@ -254,12 +242,6 @@ private fun PremiumHeader(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "▶",
-                    fontSize = 10.sp,
-                    color = YoinColors.AccentCoral
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
                     text = "年払いで$yearlySavings！",
                     fontSize = 13.sp,
                     color = YoinColors.Surface
@@ -292,10 +274,11 @@ private fun PremiumHeader(
                 modifier = Modifier.size(32.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(
-                        text = "×",
-                        fontSize = 20.sp,
-                        color = YoinColors.Surface
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close",
+                        tint = YoinColors.Surface,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }

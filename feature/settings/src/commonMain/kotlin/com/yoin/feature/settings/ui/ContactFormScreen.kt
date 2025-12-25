@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -283,9 +287,11 @@ fun ContactFormScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(
-                            text = "📎",
-                            fontSize = 24.sp
+                        Icon(
+                            imageVector = Icons.Filled.AttachFile,
+                            contentDescription = "Attach File",
+                            tint = YoinColors.TextSecondary,
+                            modifier = Modifier.size(24.dp)
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -322,7 +328,12 @@ fun ContactFormScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "💡", fontSize = 16.sp)
+                            Icon(
+                                imageVector = Icons.Filled.Info,
+                                contentDescription = "Info",
+                                tint = YoinColors.Primary,
+                                modifier = Modifier.size(16.dp)
+                            )
                             Text(
                                 text = "通常1〜3営業日以内にご返信いたします",
                                 fontSize = 12.sp,
@@ -406,24 +417,7 @@ private fun ContactFormHeader(onBackPressed: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            // ステータスバー
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.TextPrimary,
-                    letterSpacing = (-0.15).sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             // タイトルと戻るボタン
             Row(
@@ -433,14 +427,15 @@ private fun ContactFormHeader(onBackPressed: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = 20.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable(onClick = onBackPressed)
-                )
+                IconButton(onClick = onBackPressed) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = YoinColors.TextPrimary
+                    )
+                }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(4.dp))
 
                 // タイトル
                 Text(

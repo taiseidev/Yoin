@@ -9,6 +9,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -182,21 +187,7 @@ private fun ProfileEditHeader(
     isSaving: Boolean
 ) {
     Column {
-        // ステータスバー
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(44.dp)
-                .background(YoinColors.Surface),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "9:41",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = YoinColors.TextPrimary
-            )
-        }
+        Spacer(modifier = Modifier.height(44.dp))
 
         // ヘッダー
         Row(
@@ -289,10 +280,11 @@ private fun ProfileImageSection(
                     .clickable(onClick = onImageClick),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "📷",
-                    fontSize = 14.sp,
-                    color = Color.White
+                Icon(
+                    imageVector = Icons.Filled.CameraAlt,
+                    contentDescription = "Change Photo",
+                    tint = Color.White,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
@@ -359,14 +351,14 @@ private fun ProfileEditField(
                         }
 
                         if (showClearButton) {
-                            Text(
-                                text = "✕",
-                                fontSize = 14.sp,
-                                color = YoinColors.TextSecondary,
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .clickable(onClick = onClearClick)
-                            )
+                            IconButton(onClick = onClearClick) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = "Clear",
+                                    tint = YoinColors.TextSecondary,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
                         }
                     }
                 }
@@ -426,10 +418,11 @@ private fun ProfileEditReadOnlyField(
                     modifier = Modifier.weight(1f)
                 )
 
-                Text(
-                    text = "🔒",
-                    fontSize = 12.sp,
-                    color = YoinColors.TextSecondary
+                Icon(
+                    imageVector = Icons.Filled.Lock,
+                    contentDescription = "Locked",
+                    tint = YoinColors.TextSecondary,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
@@ -577,10 +570,10 @@ private fun AccountMenuItem(
                 modifier = Modifier.weight(1f)
             )
 
-            Text(
-                text = "›",
-                fontSize = 16.sp,
-                color = textColor
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = textColor
             )
         }
     }
