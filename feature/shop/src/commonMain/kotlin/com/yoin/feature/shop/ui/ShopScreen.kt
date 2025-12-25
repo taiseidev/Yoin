@@ -20,6 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.component.YoinSimpleAppBar
 import com.yoin.feature.shop.viewmodel.ShopContract
 import com.yoin.feature.shop.viewmodel.ShopViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -75,24 +77,8 @@ fun ShopScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
             // ヘッダー
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(YoinColors.Surface)
-                    .padding(horizontal = 16.dp, vertical = 16.dp)
-            ) {
-                Text(
-                    text = "Shop",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
-            HorizontalDivider(color = YoinColors.SurfaceVariant)
+            YoinSimpleAppBar(title = "Shop")
 
             Spacer(modifier = Modifier.height(16.dp))
 

@@ -41,6 +41,7 @@ import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
 import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.component.YoinSimpleAppBar
 import com.yoin.feature.settings.viewmodel.SettingsContract
 import com.yoin.feature.settings.viewmodel.SettingsViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -128,27 +129,8 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
-
             // ヘッダー
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(YoinColors.Surface)
-                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.lg)
-            ) {
-                Text(
-                    text = "設定",
-                    fontSize = YoinFontSizes.headingLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
-            HorizontalDivider(
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
+            YoinSimpleAppBar(title = "設定")
 
             Spacer(modifier = Modifier.height(YoinSpacing.sm))
 

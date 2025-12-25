@@ -21,6 +21,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.component.YoinAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.settings.viewmodel.ContactFormContract
 import com.yoin.feature.settings.viewmodel.ContactFormViewModel
@@ -86,9 +88,18 @@ fun ContactFormScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             // ヘッダー
-            ContactFormHeader(
-                onBackPressed = {
-                    viewModel.onIntent(ContactFormContract.Intent.OnBackPressed)
+            YoinAppBar(
+                title = "お問い合わせ",
+                navigationIcon = {
+                    IconButton(onClick = {
+                        viewModel.onIntent(ContactFormContract.Intent.OnBackPressed)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = YoinColors.TextPrimary
+                        )
+                    }
                 }
             )
 
@@ -402,57 +413,6 @@ fun ContactFormScreen(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
-    }
-}
-
-/**
- * お問い合わせフォームヘッダー
- */
-@Composable
-private fun ContactFormHeader(onBackPressed: () -> Unit) {
-    Surface(
-        color = YoinColors.Surface,
-        shadowElevation = 1.dp
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
-            // タイトルと戻るボタン
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // 戻るボタン
-                IconButton(onClick = onBackPressed) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = YoinColors.TextPrimary
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(4.dp))
-
-                // タイトル
-                Text(
-                    text = "お問い合わせ",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            HorizontalDivider(
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
-        }
     }
 }
 

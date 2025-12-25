@@ -22,6 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.component.YoinAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.settings.viewmodel.HelpFaqContract
 import com.yoin.feature.settings.viewmodel.HelpFaqViewModel
@@ -88,9 +90,18 @@ fun HelpFaqScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             // ヘッダー
-            HelpFaqHeader(
-                onBackPressed = {
-                    viewModel.onIntent(HelpFaqContract.Intent.OnBackPressed)
+            YoinAppBar(
+                title = "ヘルプ",
+                navigationIcon = {
+                    IconButton(onClick = {
+                        viewModel.onIntent(HelpFaqContract.Intent.OnBackPressed)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = YoinColors.TextPrimary
+                        )
+                    }
                 }
             )
 
@@ -181,57 +192,6 @@ fun HelpFaqScreen(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter)
         )
-    }
-}
-
-/**
- * ヘルプ・FAQヘッダー
- */
-@Composable
-private fun HelpFaqHeader(onBackPressed: () -> Unit) {
-    Surface(
-        color = YoinColors.Surface,
-        shadowElevation = 1.dp
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
-            // タイトルと戻るボタン
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // 戻るボタン
-                IconButton(onClick = onBackPressed) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = YoinColors.TextPrimary
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(4.dp))
-
-                // タイトル
-                Text(
-                    text = "ヘルプ",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            HorizontalDivider(
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
-        }
     }
 }
 

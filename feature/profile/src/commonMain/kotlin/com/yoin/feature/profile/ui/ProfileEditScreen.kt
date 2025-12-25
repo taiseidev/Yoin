@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSizes
 import com.yoin.feature.profile.viewmodel.ProfileEditContract
 import com.yoin.feature.profile.viewmodel.ProfileEditViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -187,13 +188,13 @@ private fun ProfileEditHeader(
     isSaving: Boolean
 ) {
     Column {
-        Spacer(modifier = Modifier.height(44.dp))
+        Spacer(modifier = Modifier.height(YoinSizes.statusBarHeight))
 
         // ヘッダー
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(YoinSizes.headerHeight)
                 .background(YoinColors.Surface)
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -237,7 +238,7 @@ private fun ProfileEditHeader(
         }
 
         // 区切り線
-        Divider(color = YoinColors.SurfaceVariant, thickness = 1.dp)
+        HorizontalDivider(color = YoinColors.SurfaceVariant, thickness = 0.65.dp)
     }
 }
 

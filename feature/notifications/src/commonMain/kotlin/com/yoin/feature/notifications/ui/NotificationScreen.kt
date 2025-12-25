@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.ui.component.YoinAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.notifications.model.Notification
 import com.yoin.feature.notifications.model.NotificationGroup
@@ -77,64 +79,41 @@ fun NotificationScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.height(56.dp))
-
-            // ナビゲーションバー
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // 戻るボタン
-                IconButton(
-                    onClick = { viewModel.handleIntent(NotificationContract.Intent.OnBackPressed) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = YoinColors.TextPrimary
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                // タイトル
-                Text(
-                    text = "通知",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                // 設定アイコン
-                IconButton(
-                    onClick = onNavigateToSettings,
-                    modifier = Modifier.padding(end = 8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Settings,
-                        contentDescription = "Settings",
-                        tint = YoinColors.TextSecondary
-                    )
-                }
-
-                // すべて既読ボタン
-                Text(
-                    text = "すべて既読",
-                    fontSize = 14.sp,
-                    color = YoinColors.Primary,
-                    modifier = Modifier.clickable {
-                        viewModel.handleIntent(NotificationContract.Intent.OnMarkAllAsRead)
+            // ヘッダー
+            YoinAppBar(
+                title = "通知",
+                navigationIcon = {
+                    IconButton(onClick = {
+                        viewModel.handleIntent(NotificationContract.Intent.OnBackPressed)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = YoinColors.TextPrimary
+                        )
                     }
-                )
-            }
+                },
+                actions = {
+                    // 設定アイコン
+                    IconButton(onClick = onNavigateToSettings) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = "Settings",
+                            tint = YoinColors.TextSecondary
+                        )
+                    }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            HorizontalDivider(color = YoinColors.SurfaceVariant)
+                    // すべて既読ボタン
+                    Text(
+                        text = "すべて既読",
+                        fontSize = 14.sp,
+                        color = YoinColors.Primary,
+                        modifier = Modifier.clickable {
+                            viewModel.handleIntent(NotificationContract.Intent.OnMarkAllAsRead)
+                        }
+                    )
+                }
+            )
 
             // 通知リスト
             if (state.isLoading) {
