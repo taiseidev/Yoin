@@ -24,6 +24,10 @@ object YoinSpacing {
  * コンポーネントサイズの定数
  */
 object YoinSizes {
+    // ヘッダー・AppBar高さ
+    val headerHeight = 56.dp
+    val statusBarHeight = 32.dp  // YoinSpacing.xxl相当
+
     // ボタン高さ
     val buttonHeightLarge = 54.dp
     val buttonHeightMedium = 48.dp
