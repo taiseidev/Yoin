@@ -65,10 +65,12 @@ import com.yoin.feature.settings.viewmodel.HelpFaqViewModel
 import com.yoin.feature.settings.viewmodel.NotificationSettingsViewModel
 import com.yoin.feature.settings.viewmodel.PremiumPlanViewModel
 import com.yoin.feature.shop.ui.OrderCompleteScreen
+import com.yoin.feature.shop.ui.OrderConfirmationScreen
 import com.yoin.feature.shop.ui.OrderHistoryScreen
 import com.yoin.feature.shop.ui.ShippingAddressScreen
 import com.yoin.feature.shop.ui.ShopOrderScreen
 import com.yoin.feature.shop.viewmodel.OrderCompleteViewModel
+import com.yoin.feature.shop.viewmodel.OrderConfirmationViewModel
 import com.yoin.feature.shop.viewmodel.OrderHistoryViewModel
 import com.yoin.feature.shop.viewmodel.ShippingAddressViewModel
 import com.yoin.feature.shop.viewmodel.ShopOrderViewModel
@@ -756,7 +758,7 @@ class PlanComparisonScreenVoyager : Screen {
 }
 
 /**
- * 注文確認画面（プレースホルダー）
+ * 注文確認画面
  */
 data class OrderConfirmationScreenVoyager(
     val lastName: String,
@@ -770,9 +772,26 @@ data class OrderConfirmationScreenVoyager(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "注文確認",
-            onNavigateBack = { navigator.pop() }
+        val viewModel: OrderConfirmationViewModel = koinInject(
+            parameters = {
+                parametersOf(lastName, firstName, postalCode, prefecture, city, addressLine, phoneNumber)
+            }
+        )
+
+        OrderConfirmationScreen(
+            viewModel = viewModel,
+            onNavigateBack = { navigator.pop() },
+            onNavigateToOrderComplete = { orderId, productName, deliveryAddress, deliveryDateRange, email ->
+                navigator.push(
+                    OrderCompleteScreenVoyager(
+                        orderId = orderId,
+                        productName = productName,
+                        deliveryAddress = deliveryAddress,
+                        deliveryDateRange = deliveryDateRange,
+                        email = email
+                    )
+                )
+            }
         )
     }
 }
