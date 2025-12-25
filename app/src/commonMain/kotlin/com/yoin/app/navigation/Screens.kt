@@ -417,11 +417,16 @@ data class ShopOrderScreenVoyager(val productId: String, val tripId: String? = n
             onNavigateBack = {
                 navigator.pop()
             },
-            onNavigateToOrderComplete = { orderId ->
-                // TODO: OrderCompleteScreenVoyagerは5つのパラメータが必要だが、
-                // ViewModelからはorderIdのみ提供される。
-                // OrderCompleteScreenで注文情報を取得する実装に変更するか、
-                // ViewModelを修正して全情報を提供する必要がある
+            onNavigateToOrderComplete = { orderId, productName, deliveryAddress, deliveryDateRange, email ->
+                navigator.push(
+                    OrderCompleteScreenVoyager(
+                        orderId = orderId,
+                        productName = productName,
+                        deliveryAddress = deliveryAddress,
+                        deliveryDateRange = deliveryDateRange,
+                        email = email
+                    )
+                )
             }
         )
     }

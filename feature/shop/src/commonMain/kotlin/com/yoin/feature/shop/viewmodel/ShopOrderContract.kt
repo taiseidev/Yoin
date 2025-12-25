@@ -76,6 +76,12 @@ object ShopOrderContract {
         data class ShowError(val message: String) : Effect
         data class ShowSuccess(val message: String) : Effect
         data object NavigateBack : Effect
-        data class NavigateToOrderComplete(val orderId: String) : Effect
+        data class NavigateToOrderComplete(
+            val orderId: String,
+            val productName: String,
+            val deliveryAddress: String,
+            val deliveryDateRange: String,
+            val email: String
+        ) : Effect
     }
 }

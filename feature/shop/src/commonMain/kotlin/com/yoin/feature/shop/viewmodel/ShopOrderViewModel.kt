@@ -256,10 +256,25 @@ class ShopOrderViewModel : ScreenModel {
 
                 // モックの注文ID (実装時はUUID等を使用)
                 val orderId = "ORDER_2025_001"
+
+                // 注文完了画面に必要な情報を準備
+                val productName = currentState.product?.name ?: ""
+                val deliveryAddress = "${currentState.shippingAddress.postalCode} ${currentState.shippingAddress.address}\n${currentState.shippingAddress.name}"
+                val deliveryDateRange = "3-5営業日"
+                val email = "user@example.com" // TODO: 実際のユーザーメールアドレスを取得
+
                 _state.update { it.copy(isLoading = false) }
                 _effect.send(ShopOrderContract.Effect.ShowSuccess("注文が完了しました"))
                 delay(500)
-                _effect.send(ShopOrderContract.Effect.NavigateToOrderComplete(orderId))
+                _effect.send(
+                    ShopOrderContract.Effect.NavigateToOrderComplete(
+                        orderId = orderId,
+                        productName = productName,
+                        deliveryAddress = deliveryAddress,
+                        deliveryDateRange = deliveryDateRange,
+                        email = email
+                    )
+                )
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false) }
                 _effect.send(ShopOrderContract.Effect.ShowError("注文に失敗しました"))

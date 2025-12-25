@@ -46,7 +46,7 @@ fun ShopOrderScreen(
     tripId: String? = null,
     viewModel: ShopOrderViewModel,
     onNavigateBack: () -> Unit = {},
-    onNavigateToOrderComplete: (String) -> Unit = {}
+    onNavigateToOrderComplete: (String, String, String, String, String) -> Unit = { _, _, _, _, _ -> }
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -65,7 +65,13 @@ fun ShopOrderScreen(
                     onNavigateBack()
                 }
                 is ShopOrderContract.Effect.NavigateToOrderComplete -> {
-                    onNavigateToOrderComplete(effect.orderId)
+                    onNavigateToOrderComplete(
+                        effect.orderId,
+                        effect.productName,
+                        effect.deliveryAddress,
+                        effect.deliveryDateRange,
+                        effect.email
+                    )
                 }
             }
         }
