@@ -45,20 +45,27 @@ import com.yoin.feature.onboarding.ui.SplashScreen
 import com.yoin.feature.onboarding.viewmodel.OnboardingViewModel
 import com.yoin.feature.onboarding.viewmodel.SplashViewModel
 import com.yoin.feature.room.ui.JoinConfirmScreen
+import com.yoin.feature.room.ui.ManualInputScreen
+import com.yoin.feature.room.ui.MemberListScreen
 import com.yoin.feature.room.ui.QRScanScreen
 import com.yoin.feature.room.ui.RoomCreateScreen
 import com.yoin.feature.room.ui.RoomCreatedScreen
 import com.yoin.feature.room.ui.RoomSettingsScreen
 import com.yoin.feature.room.viewmodel.JoinConfirmViewModel
+import com.yoin.feature.room.viewmodel.ManualInputViewModel
+import com.yoin.feature.room.viewmodel.MemberListViewModel
 import com.yoin.feature.room.viewmodel.QRScanViewModel
 import com.yoin.feature.room.viewmodel.RoomCreateViewModel
 import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
 import com.yoin.feature.room.viewmodel.RoomSettingsViewModel
+import com.yoin.feature.settings.ui.CategoryDetailScreen
 import com.yoin.feature.settings.ui.ChangePasswordScreen
 import com.yoin.feature.settings.ui.ContactFormScreen
 import com.yoin.feature.settings.ui.DeleteAccountScreen
+import com.yoin.feature.settings.ui.FaqDetailScreen
 import com.yoin.feature.settings.ui.HelpFaqScreen
 import com.yoin.feature.settings.ui.NotificationSettingsScreen
+import com.yoin.feature.settings.ui.PlanComparisonScreen
 import com.yoin.feature.settings.ui.PremiumPlanScreen
 import com.yoin.feature.settings.viewmodel.ChangePasswordViewModel
 import com.yoin.feature.settings.viewmodel.ContactFormViewModel
@@ -692,22 +699,29 @@ class ManualInputScreenVoyager : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "手動入力",
-            onNavigateBack = { navigator.pop() }
+        val viewModel: ManualInputViewModel = koinScreenModel()
+
+        ManualInputScreen(
+            viewModel = viewModel,
+            onNavigateBack = { navigator.pop() },
+            onNavigateToJoinConfirm = { roomId ->
+                navigator.replace(JoinConfirmScreenVoyager(roomId))
+            }
         )
     }
 }
 
 /**
- * メンバー一覧画面（プレースホルダー）
+ * メンバー一覧画面
  */
 data class MemberListScreenVoyager(val roomId: String) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "メンバー一覧",
+        val viewModel: MemberListViewModel = koinScreenModel { parametersOf(roomId) }
+
+        MemberListScreen(
+            viewModel = viewModel,
             onNavigateBack = { navigator.pop() }
         )
     }
@@ -756,8 +770,8 @@ class PlanComparisonScreenVoyager : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "プラン比較",
+
+        PlanComparisonScreen(
             onNavigateBack = { navigator.pop() }
         )
     }
@@ -844,28 +858,30 @@ data class OrderDetailScreenVoyager(val orderId: String) : Screen {
 }
 
 /**
- * FAQ詳細画面（プレースホルダー）
+ * FAQ詳細画面
  */
 data class FaqDetailScreenVoyager(val faqItem: com.yoin.feature.settings.viewmodel.HelpFaqContract.FaqItem) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "FAQ詳細",
+
+        FaqDetailScreen(
+            faqItem = faqItem,
             onNavigateBack = { navigator.pop() }
         )
     }
 }
 
 /**
- * カテゴリ詳細画面（プレースホルダー）
+ * カテゴリ詳細画面
  */
 data class CategoryDetailScreenVoyager(val category: com.yoin.feature.settings.viewmodel.HelpFaqContract.Category) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "カテゴリ詳細",
+
+        CategoryDetailScreen(
+            category = category,
             onNavigateBack = { navigator.pop() }
         )
     }

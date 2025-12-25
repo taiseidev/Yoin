@@ -1,6 +1,8 @@
 package com.yoin.feature.room.di
 
 import com.yoin.feature.room.viewmodel.JoinConfirmViewModel
+import com.yoin.feature.room.viewmodel.ManualInputViewModel
+import com.yoin.feature.room.viewmodel.MemberListViewModel
 import com.yoin.feature.room.viewmodel.QRScanViewModel
 import com.yoin.feature.room.viewmodel.RoomCreateViewModel
 import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
@@ -15,5 +17,7 @@ val roomModule = module {
     factory { RoomCreatedViewModel() }
     factory { JoinConfirmViewModel() }
     factory { QRScanViewModel() }
+    factory { ManualInputViewModel() }
     factory { (roomId: String) -> RoomSettingsViewModel(roomId) }
+    factory { (roomId: String) -> MemberListViewModel(roomId) }
 }
