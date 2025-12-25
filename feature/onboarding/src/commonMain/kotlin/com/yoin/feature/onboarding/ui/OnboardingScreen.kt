@@ -36,6 +36,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.domain.common.model.OnboardingPage
 import com.yoin.feature.onboarding.viewmodel.OnboardingContract
@@ -79,7 +82,7 @@ fun OnboardingScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(YoinColors.Background)
+            .background(Color.White)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -89,14 +92,12 @@ fun OnboardingScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(YoinColors.Surface)
-                    .padding(top = 24.dp, bottom = 8.dp)
+                    .padding(top = YoinSpacing.xxl, bottom = YoinSpacing.sm)
             ) {
                 Text(
                     text = "9:41",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
+                    fontWeight = FontWeight.Medium,
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -106,7 +107,7 @@ fun OnboardingScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = YoinSpacing.xl, vertical = YoinSpacing.sm),
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
@@ -114,7 +115,8 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = "スキップ",
-                        fontSize = 14.sp,
+                        fontSize = YoinFontSizes.bodySmall.value.sp,
+                        fontWeight = FontWeight.Medium,
                         color = YoinColors.TextSecondary
                     )
                 }
@@ -134,20 +136,20 @@ fun OnboardingScreen(
 
             // ページインジケーター
             Row(
-                modifier = Modifier.padding(vertical = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.padding(vertical = YoinSpacing.xl),
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
             ) {
                 repeat(state.pages.size) { index ->
                     val isSelected = index == state.currentPage
                     Box(
                         modifier = Modifier
-                            .size(if (isSelected) 12.dp else 8.dp)
+                            .size(if (isSelected) YoinSizes.indicatorLarge else YoinSizes.indicatorSmall)
                             .clip(CircleShape)
                             .background(
                                 if (isSelected) {
                                     YoinColors.Primary
                                 } else {
-                                    YoinColors.SurfaceVariant
+                                    YoinColors.AccentPeach
                                 }
                             )
                     )
@@ -158,24 +160,24 @@ fun OnboardingScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 32.dp)
+                    .padding(horizontal = YoinSpacing.xxl, vertical = YoinSpacing.huge)
             ) {
                 if (state.isLastPage) {
                     Button(
                         onClick = { viewModel.handleIntent(OnboardingContract.Intent.GetStarted) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp),
+                            .height(YoinSizes.buttonHeightLarge),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = YoinColors.Primary,
-                            contentColor = YoinColors.OnPrimary
+                            contentColor = Color.White
                         ),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(YoinSpacing.lg)
                     ) {
                         Text(
                             text = "はじめる",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = YoinFontSizes.bodyLarge.value.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 } else {
@@ -187,17 +189,17 @@ fun OnboardingScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp),
+                            .height(YoinSizes.buttonHeightLarge),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = YoinColors.Primary,
-                            contentColor = YoinColors.OnPrimary
+                            contentColor = Color.White
                         ),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(YoinSpacing.lg)
                     ) {
                         Text(
                             text = "次へ",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = YoinFontSizes.bodyLarge.value.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
@@ -224,50 +226,50 @@ private fun OnboardingPageContent(
         else -> "📸"
     }
 
-    // 各ページの背景色を定義
+    // 各ページの背景色を定義（コーラル/ピーチ系の優しい色）
     val backgroundColor = when (pageIndex) {
-        0 -> YoinColors.Background // ベージュ
-        1 -> Color(0xFFE8F5E8) // 薄い緑
-        2 -> Color(0xFFFFF4E6) // 薄いオレンジ
-        3 -> YoinColors.AccentLight // 茶色がかったベージュ
-        else -> YoinColors.Background
+        0 -> Color(0xFFFFF5F0) // ほんのりピーチ
+        1 -> Color(0xFFFFECE6) // 薄いコーラル
+        2 -> Color(0xFFFFF0EB) // 明るいピーチ
+        3 -> YoinColors.AccentPeach // 淡いピーチ
+        else -> Color(0xFFFFF5F0)
     }
 
     Column(
-        modifier = modifier.padding(horizontal = 32.dp),
+        modifier = modifier.padding(horizontal = YoinSpacing.xxxl),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         // 絵文字アイコンを表示
         Box(
             modifier = Modifier
-                .size(200.dp)
-                .clip(RoundedCornerShape(24.dp))
+                .size(220.dp)
+                .clip(RoundedCornerShape(YoinSpacing.xxxl))
                 .background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = emoji,
-                fontSize = 80.sp
+                fontSize = 88.sp
             )
         }
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.huge))
 
         Text(
             text = page.title,
-            fontSize = 24.sp,
+            fontSize = YoinFontSizes.headingLarge.value.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             color = YoinColors.TextPrimary,
-            lineHeight = 32.sp
+            lineHeight = 34.sp
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(YoinSpacing.md))
 
         Text(
             text = page.description,
-            fontSize = 16.sp,
+            fontSize = YoinFontSizes.bodyMedium.value.sp,
             textAlign = TextAlign.Center,
             color = YoinColors.TextSecondary,
             lineHeight = 24.sp

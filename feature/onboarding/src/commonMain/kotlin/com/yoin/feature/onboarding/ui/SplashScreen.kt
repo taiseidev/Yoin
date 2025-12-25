@@ -25,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.preview.ComprehensivePreview
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.domain.common.model.InitializationState
@@ -33,11 +36,11 @@ import com.yoin.feature.onboarding.viewmodel.SplashViewModel
 
 /**
  * スプラッシュ画面
- * Figmaデザイン仕様:
- * - グリーンからオレンジへのグラデーション背景
+ * sassyアプリのデザインに基づく:
+ * - コーラル/ピーチのグラデーション背景
  * - 中央に白い角丸の枠でフィルムアイコン（🎞）
- * - アプリ名「Yoin.」（白、太字、36px、Noto Sans JP）
- * - サブタイトル「旅の思い出を、フィルムで。」（白80%透明度、14px）
+ * - アプリ名「Yoin.」（白、太字、36px）
+ * - サブタイトル「旅の思い出を、フィルムで。」（白90%透明度、16px）
  * - 下部にページインジケーター（3つのドット）
  */
 @Composable
@@ -80,8 +83,8 @@ private fun SplashContent(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF4A7C59), // グリーン
-                        Color(0xFF8B6F47)  // オレンジ
+                        YoinColors.Primary,      // コーラルピンク
+                        YoinColors.PrimaryLight  // 明るいコーラル
                     )
                 )
             ),
@@ -93,34 +96,34 @@ private fun SplashContent(
             // アイコン部分（白い角丸背景 + フィルム絵文字）
             Box(
                 modifier = Modifier
-                    .size(120.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(YoinColors.Surface),
+                    .size(YoinSizes.logoLarge)
+                    .clip(RoundedCornerShape(YoinSpacing.xxxl))
+                    .background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "🎞",
-                    fontSize = 56.sp
+                    fontSize = 64.sp
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.huge))
 
             // アプリ名
             Text(
                 text = "Yoin.",
-                fontSize = 36.sp,
+                fontSize = YoinFontSizes.displayLarge.value.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.md))
 
             // サブタイトル
             Text(
                 text = "旅の思い出を、フィルムで。",
-                fontSize = 14.sp,
-                color = Color.White.copy(alpha = 0.8f)
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
+                color = Color.White.copy(alpha = 0.9f)
             )
         }
 
@@ -128,7 +131,7 @@ private fun SplashContent(
         PageIndicator(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 64.dp)
+                .padding(bottom = YoinSpacing.massive)
         )
     }
 }
@@ -143,14 +146,14 @@ private fun PageIndicator(
         repeat(3) { index ->
             Box(
                 modifier = Modifier
-                    .size(8.dp)
+                    .size(YoinSizes.indicatorSmall)
                     .clip(CircleShape)
                     .background(
                         if (index == 0) Color.White else Color.White.copy(alpha = 0.5f)
                     )
             )
             if (index < 2) {
-                Spacer(modifier = Modifier.size(8.dp))
+                Spacer(modifier = Modifier.size(YoinSpacing.sm))
             }
         }
     }

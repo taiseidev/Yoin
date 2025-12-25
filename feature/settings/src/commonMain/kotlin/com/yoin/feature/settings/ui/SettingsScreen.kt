@@ -294,7 +294,7 @@ private fun UserProfileCard(
             Box(
                 modifier = Modifier
                     .size(56.dp)
-                    .background(YoinColors.AccentLight, CircleShape),
+                    .background(YoinColors.AccentPeach, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

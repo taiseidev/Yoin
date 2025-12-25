@@ -348,7 +348,7 @@ private fun MemberChip(
     name: String,
     isSelected: Boolean
 ) {
-    val backgroundColor = if (isSelected) YoinColors.AccentMedium else YoinColors.AccentLight
+    val backgroundColor = if (isSelected) YoinColors.AccentCoral else YoinColors.AccentPeach
     val textColor = if (isSelected) YoinColors.Primary else YoinColors.TextPrimary
 
     Box(

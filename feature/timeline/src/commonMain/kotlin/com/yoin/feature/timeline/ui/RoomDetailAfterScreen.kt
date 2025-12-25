@@ -374,7 +374,7 @@ private fun PhotoCard(
                     Box(
                         modifier = Modifier
                             .size(32.dp)
-                            .background(YoinColors.AccentLight, CircleShape),
+                            .background(YoinColors.AccentPeach, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -408,7 +408,7 @@ private fun PhotoCard(
                     Text(
                         text = if (photo.isDownloaded) "✓" else "⬇",
                         fontSize = 16.sp,
-                        color = if (photo.isDownloaded) YoinColors.AccentMedium else YoinColors.Primary
+                        color = if (photo.isDownloaded) YoinColors.AccentCoral else YoinColors.Primary
                     )
                 }
             }

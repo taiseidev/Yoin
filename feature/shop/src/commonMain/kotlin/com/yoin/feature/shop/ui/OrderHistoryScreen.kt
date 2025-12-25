@@ -246,7 +246,7 @@ private fun OrderItemCard(
                 modifier = Modifier
                     .size(80.dp)
                     .background(
-                        color = YoinColors.AccentLight,
+                        color = YoinColors.AccentPeach,
                         shape = RoundedCornerShape(12.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -283,7 +283,7 @@ private fun OrderItemCard(
                     Surface(
                         color = when (order.status) {
                             OrderHistoryContract.OrderStatus.SHIPPING -> YoinColors.Primary
-                            OrderHistoryContract.OrderStatus.DELIVERED -> YoinColors.AccentMedium
+                            OrderHistoryContract.OrderStatus.DELIVERED -> YoinColors.AccentCoral
                         },
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -352,7 +352,7 @@ private fun OrderItemCard(
                             fontSize = 12.sp,
                             color = when (order.status) {
                                 OrderHistoryContract.OrderStatus.SHIPPING -> YoinColors.Primary
-                                OrderHistoryContract.OrderStatus.DELIVERED -> YoinColors.AccentMedium
+                                OrderHistoryContract.OrderStatus.DELIVERED -> YoinColors.AccentCoral
                             }
                         )
                     }

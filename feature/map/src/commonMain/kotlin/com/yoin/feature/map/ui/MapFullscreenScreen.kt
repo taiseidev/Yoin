@@ -312,7 +312,7 @@ private fun MemberAvatarChip(
         modifier = Modifier
             .size(40.dp)
             .clip(CircleShape)
-            .background(YoinColors.AccentLight) // デフォルトのメンバーアバター色
+            .background(YoinColors.AccentPeach) // デフォルトのメンバーアバター色
             .clickable(onClick = onClick)
             .then(
                 if (isSelected) {
@@ -337,7 +337,7 @@ private fun MapMockup(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(YoinColors.AccentLight)
+            .background(YoinColors.AccentPeach)
     ) {
         Text(
             text = "地図表示エリア\n（実装には地図ライブラリが必要）\n\n写真: ${photos.size}枚",

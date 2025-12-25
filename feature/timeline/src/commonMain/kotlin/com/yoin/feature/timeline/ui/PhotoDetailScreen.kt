@@ -253,7 +253,7 @@ private fun PhotoInfoBottomSheet(
                 Box(
                     modifier = Modifier
                         .size(48.dp)
-                        .background(YoinColors.AccentLight, CircleShape),
+                        .background(YoinColors.AccentPeach, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(

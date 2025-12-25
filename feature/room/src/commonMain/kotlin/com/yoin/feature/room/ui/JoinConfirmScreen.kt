@@ -321,7 +321,7 @@ private fun RoomInfoCard(roomInfo: JoinConfirmContract.RoomInfo) {
                         Box(
                             modifier = Modifier
                                 .size(24.dp)
-                                .background(YoinColors.AccentLight, CircleShape)
+                                .background(YoinColors.AccentPeach, CircleShape)
                         )
                     }
 

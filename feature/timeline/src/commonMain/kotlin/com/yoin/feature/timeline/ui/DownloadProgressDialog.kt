@@ -81,7 +81,7 @@ fun DownloadProgressDialog(
                 Box(
                     modifier = Modifier
                         .size(72.dp)
-                        .background(YoinColors.AccentLight, CircleShape),
+                        .background(YoinColors.AccentPeach, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -185,7 +185,7 @@ private fun DownloadProgressDialogPreview() {
                     Box(
                         modifier = Modifier
                             .size(72.dp)
-                            .background(YoinColors.AccentLight, CircleShape),
+                            .background(YoinColors.AccentPeach, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(text = "📥", fontSize = 36.sp)

@@ -419,8 +419,8 @@ private fun MemberAvatars(
                     .border(2.dp, YoinColors.Surface, CircleShape)
                     .background(
                         when (index) {
-                            0 -> YoinColors.AccentLight
-                            1 -> YoinColors.AccentMedium
+                            0 -> YoinColors.AccentPeach
+                            1 -> YoinColors.AccentCoral
                             else -> YoinColors.Primary
                         },
                         CircleShape

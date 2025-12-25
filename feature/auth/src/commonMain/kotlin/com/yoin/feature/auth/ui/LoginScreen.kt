@@ -45,6 +45,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
+import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.design.theme.YoinSizes
+import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.auth.viewmodel.LoginContract
 import com.yoin.feature.auth.viewmodel.LoginViewModel
@@ -94,63 +97,62 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(YoinColors.Surface)
+            .background(Color.White)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // ステータスバー風の時刻表示
             Text(
                 text = "9:41",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
+                fontSize = YoinFontSizes.labelLarge.value.sp,
+                fontWeight = FontWeight.Medium,
                 color = YoinColors.TextPrimary,
-                modifier = Modifier.padding(top = 24.dp)
+                modifier = Modifier.padding(top = YoinSpacing.xxl)
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.massive))
 
-            // ロゴアイコン（緑の角丸四角背景 + フィルム絵文字）
+            // ロゴアイコン（コーラル背景 + フィルム絵文字）
             Box(
                 modifier = Modifier
-                    .size(80.dp)
-                    .background(YoinColors.Primary, RoundedCornerShape(16.dp)),
+                    .size(YoinSizes.logoMedium)
+                    .background(YoinColors.Primary, RoundedCornerShape(YoinSpacing.xxl)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "🎞",
-                    fontSize = 40.sp
+                    fontSize = YoinSizes.iconXLarge.value.sp
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
             // タイトル
             Text(
                 text = "Yoin.",
-                fontSize = 28.sp,
+                fontSize = YoinFontSizes.displayMedium.value.sp,
                 fontWeight = FontWeight.Bold,
-                color = YoinColors.Primary,
+                color = YoinColors.TextPrimary,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
             // サブタイトル
             Text(
-                text = "~ 旅の余韻を楽しむ ~",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = YoinColors.Primary,
+                text = "旅の余韻を楽しむ",
+                fontSize = YoinFontSizes.bodyMedium.value.sp,
+                fontWeight = FontWeight.Normal,
+                color = YoinColors.TextSecondary,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.huge))
 
             // メールアドレス入力
             EmailField(
@@ -161,7 +163,7 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // パスワード入力
             PasswordField(
@@ -176,12 +178,12 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
             // パスワードを忘れた
             Text(
                 text = "パスワードを忘れた",
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.Primary,
                 modifier = Modifier
                     .align(Alignment.End)
@@ -190,7 +192,7 @@ fun LoginScreen(
                     }
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             // ログインボタン
             Button(
@@ -199,35 +201,35 @@ fun LoginScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(YoinSizes.buttonHeightLarge),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = YoinColors.Primary
                 ),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(YoinSpacing.lg),
                 enabled = !state.isLoading
             ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = YoinColors.OnPrimary
+                        modifier = Modifier.size(YoinSizes.iconMedium),
+                        color = Color.White
                     )
                 } else {
                     Text(
                         text = "ログイン",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = YoinColors.OnPrimary
+                        fontSize = YoinFontSizes.bodyLarge.value.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             // または区切り線
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
             ) {
                 HorizontalDivider(
                     modifier = Modifier.weight(1f),
@@ -235,7 +237,7 @@ fun LoginScreen(
                 )
                 Text(
                     text = "または",
-                    fontSize = 12.sp,
+                    fontSize = YoinFontSizes.labelSmall.value.sp,
                     color = YoinColors.TextSecondary
                 )
                 HorizontalDivider(
@@ -244,7 +246,7 @@ fun LoginScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             // Googleでログインボタン
             OutlinedButton(
@@ -253,43 +255,43 @@ fun LoginScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(YoinSizes.buttonHeightLarge),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = YoinColors.Surface,
+                    containerColor = Color.White,
                     contentColor = YoinColors.TextPrimary
                 ),
-                border = androidx.compose.foundation.BorderStroke(1.dp, YoinColors.SurfaceVariant),
-                shape = RoundedCornerShape(12.dp),
+                border = androidx.compose.foundation.BorderStroke(1.5.dp, YoinColors.AccentPeach),
+                shape = RoundedCornerShape(YoinSpacing.lg),
                 enabled = !state.isLoading
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Googleアイコン（簡易実装）
                     Box(
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(YoinSizes.iconMedium)
                             .background(Color(0xFFEA4335), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "G",
-                            fontSize = 14.sp,
+                            fontSize = YoinFontSizes.labelLarge.value.sp,
                             fontWeight = FontWeight.Bold,
-                            fontStyle = FontStyle.Italic,
                             color = Color.White
                         )
                     }
                     Text(
                         text = "Googleでログイン",
-                        fontSize = 14.sp,
+                        fontSize = YoinFontSizes.bodySmall.value.sp,
+                        fontWeight = FontWeight.Medium,
                         color = YoinColors.TextPrimary
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // Appleでログインボタン
             Button(
@@ -298,42 +300,43 @@ fun LoginScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(YoinSizes.buttonHeightLarge),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Black
                 ),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(YoinSpacing.lg),
                 enabled = !state.isLoading
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "🍎",
-                        fontSize = 18.sp
+                        fontSize = YoinSizes.iconSmall.value.sp
                     )
                     Text(
                         text = "Appleでログイン",
-                        fontSize = 14.sp,
-                        color = YoinColors.OnPrimary
+                        fontSize = YoinFontSizes.bodySmall.value.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
             // 新規登録セクション
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(YoinSpacing.lg + YoinSpacing.xs),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                HorizontalDivider(color = YoinColors.SurfaceVariant)
+                HorizontalDivider(color = YoinColors.AccentPeach)
 
                 Text(
                     text = "アカウントをお持ちでない方",
-                    fontSize = 13.sp,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
                     color = YoinColors.TextSecondary,
                     textAlign = TextAlign.Center
                 )
@@ -344,18 +347,19 @@ fun LoginScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .height(YoinSizes.buttonHeightLarge),
                     colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.White,
                         contentColor = YoinColors.Primary
                     ),
-                    border = androidx.compose.foundation.BorderStroke(1.5.dp, YoinColors.Primary),
-                    shape = RoundedCornerShape(12.dp),
+                    border = androidx.compose.foundation.BorderStroke(2.dp, YoinColors.Primary),
+                    shape = RoundedCornerShape(YoinSpacing.lg),
                     enabled = !state.isLoading
                 ) {
                     Text(
                         text = "新規登録",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
+                        fontSize = YoinFontSizes.bodyMedium.value.sp,
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
 
@@ -367,13 +371,14 @@ fun LoginScreen(
                 ) {
                     Text(
                         text = "ゲストで始める",
-                        fontSize = 13.sp,
+                        fontSize = YoinFontSizes.labelLarge.value.sp,
+                        fontWeight = FontWeight.Medium,
                         color = YoinColors.TextSecondary
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
             // ホームインジケーター
             Box(
@@ -383,7 +388,7 @@ fun LoginScreen(
                     .background(Color.Black, RoundedCornerShape(100.dp))
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
         }
 
         // スナックバー
@@ -406,11 +411,11 @@ fun EmailField(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         Text(
             text = "メールアドレス",
-            fontSize = 12.sp,
+            fontSize = YoinFontSizes.labelSmall.value.sp,
             color = YoinColors.TextSecondary
         )
 
@@ -420,30 +425,32 @@ fun EmailField(
             placeholder = {
                 Text(
                     text = "email@example.com",
-                    fontSize = 14.sp,
-                    color = YoinColors.TextSecondary
+                    fontSize = YoinFontSizes.bodySmall.value.sp,
+                    color = YoinColors.TextTertiary
                 )
             },
             leadingIcon = {
                 Text(
                     text = "📧",
-                    fontSize = 16.sp
+                    fontSize = 18.sp
                 )
             },
             isError = error != null,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.SurfaceVariant,
-                errorBorderColor = YoinColors.Error
+                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.AccentPeach,
+                errorBorderColor = YoinColors.Error,
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White
             ),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             modifier = Modifier.fillMaxWidth()
         )
 
         if (error != null) {
             Text(
                 text = error,
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.Error
             )
         }
@@ -463,11 +470,11 @@ private fun PasswordField(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         Text(
             text = "パスワード",
-            fontSize = 12.sp,
+            fontSize = YoinFontSizes.labelSmall.value.sp,
             color = YoinColors.TextSecondary
         )
 
@@ -477,20 +484,20 @@ private fun PasswordField(
             placeholder = {
                 Text(
                     text = "••••••••",
-                    fontSize = 14.sp,
-                    color = YoinColors.TextSecondary
+                    fontSize = YoinFontSizes.bodySmall.value.sp,
+                    color = YoinColors.TextTertiary
                 )
             },
             leadingIcon = {
                 Text(
                     text = "🔒",
-                    fontSize = 16.sp
+                    fontSize = 18.sp
                 )
             },
             trailingIcon = {
                 Text(
                     text = if (isPasswordVisible) "👁" else "👁",
-                    fontSize = 16.sp,
+                    fontSize = 18.sp,
                     color = YoinColors.TextSecondary,
                     modifier = Modifier.clickable(onClick = onPasswordVisibilityToggled)
                 )
@@ -503,17 +510,19 @@ private fun PasswordField(
             isError = error != null,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.SurfaceVariant,
-                errorBorderColor = YoinColors.Error
+                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.AccentPeach,
+                errorBorderColor = YoinColors.Error,
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White
             ),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(YoinSpacing.md),
             modifier = Modifier.fillMaxWidth()
         )
 
         if (error != null) {
             Text(
                 text = error,
-                fontSize = 12.sp,
+                fontSize = YoinFontSizes.labelSmall.value.sp,
                 color = YoinColors.Error
             )
         }

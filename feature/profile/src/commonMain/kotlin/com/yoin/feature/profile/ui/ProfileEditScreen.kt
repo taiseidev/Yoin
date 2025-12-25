@@ -267,7 +267,7 @@ private fun ProfileImageSection(
                 modifier = Modifier
                     .size(104.dp)
                     .clip(CircleShape)
-                    .background(YoinColors.AccentLight)
+                    .background(YoinColors.AccentPeach)
                     .clickable(onClick = onImageClick),
                 contentAlignment = Alignment.Center
             ) {

@@ -416,7 +416,7 @@ private fun ContactSupportCard(onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        color = YoinColors.AccentLight,
+        color = YoinColors.AccentPeach,
         shape = RoundedCornerShape(12.dp)
     ) {
         Row(

@@ -362,7 +362,7 @@ private fun OrderDetailRow(
 private fun EmailConfirmationCard(email: String) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = YoinColors.AccentLight,
+        color = YoinColors.AccentPeach,
         shape = RoundedCornerShape(12.dp)
     ) {
         Row(
