@@ -52,10 +52,12 @@ import com.yoin.feature.room.viewmodel.QRScanViewModel
 import com.yoin.feature.room.viewmodel.RoomCreateViewModel
 import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
 import com.yoin.feature.room.viewmodel.RoomSettingsViewModel
+import com.yoin.feature.settings.ui.ChangePasswordScreen
 import com.yoin.feature.settings.ui.ContactFormScreen
 import com.yoin.feature.settings.ui.HelpFaqScreen
 import com.yoin.feature.settings.ui.NotificationSettingsScreen
 import com.yoin.feature.settings.ui.PremiumPlanScreen
+import com.yoin.feature.settings.viewmodel.ChangePasswordViewModel
 import com.yoin.feature.settings.viewmodel.ContactFormViewModel
 import com.yoin.feature.settings.viewmodel.HelpFaqViewModel
 import com.yoin.feature.settings.viewmodel.NotificationSettingsViewModel
@@ -702,14 +704,16 @@ data class MemberListScreenVoyager(val roomId: String) : Screen {
 }
 
 /**
- * パスワード変更画面（プレースホルダー）
+ * パスワード変更画面
  */
 class ChangePasswordScreenVoyager : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "パスワード変更",
+        val viewModel: ChangePasswordViewModel = koinInject()
+
+        ChangePasswordScreen(
+            viewModel = viewModel,
             onNavigateBack = { navigator.pop() }
         )
     }

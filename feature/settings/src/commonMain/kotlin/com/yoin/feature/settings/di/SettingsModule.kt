@@ -1,5 +1,6 @@
 package com.yoin.feature.settings.di
 
+import com.yoin.feature.settings.viewmodel.ChangePasswordViewModel
 import com.yoin.feature.settings.viewmodel.ContactFormViewModel
 import com.yoin.feature.settings.viewmodel.HelpFaqViewModel
 import com.yoin.feature.settings.viewmodel.NotificationSettingsViewModel
@@ -16,4 +17,5 @@ val settingsModule = module {
     factory { PremiumPlanViewModel() }
     factory { HelpFaqViewModel() }
     factory { ContactFormViewModel() }
+    factory { ChangePasswordViewModel() }
 }
