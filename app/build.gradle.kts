@@ -28,11 +28,13 @@ kotlin {
             export(project(":feature:map"))
             export(project(":feature:profile"))
             export(project(":feature:settings"))
+            export(project(":feature:shop"))
+            export(project(":feature:notifications"))
 
             // Export core modules that features depend on
-            export(project(":core:ui"))
-            export(project(":core:design"))
-            export(project(":core:common"))
+            export(project(":core"))
+            export(project(":core"))
+            export(project(":core"))
         }
     }
 
@@ -48,24 +50,26 @@ kotlin {
             implementation(project(":feature:map"))
             implementation(project(":feature:profile"))
             implementation(project(":feature:settings"))
+            implementation(project(":feature:shop"))
+            implementation(project(":feature:notifications"))
 
             // Data Modules
-            implementation(project(":data:auth"))
-            implementation(project(":data:room"))
-            implementation(project(":data:photo"))
-            implementation(project(":data:user"))
-            implementation(project(":data:local"))
+            implementation(project(":data"))
+            implementation(project(":data"))
+            implementation(project(":data"))
+            implementation(project(":data"))
+            implementation(project(":data"))
 
             // Core Modules
-            implementation(project(":core:ui"))
-            implementation(project(":core:design"))
-            implementation(project(":core:common"))
-            implementation(project(":core:network"))
-            implementation(project(":core:database"))
-            implementation(project(":core:analytics"))
-            implementation(project(":core:notification"))
-            implementation(project(":core:camera"))
-            implementation(project(":core:image"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
 
             // Compose
             implementation(compose.runtime)
@@ -111,11 +115,13 @@ kotlin {
             api(project(":feature:map"))
             api(project(":feature:profile"))
             api(project(":feature:settings"))
+            api(project(":feature:shop"))
+            api(project(":feature:notifications"))
 
             // Export core modules for iOS framework
-            api(project(":core:ui"))
-            api(project(":core:design"))
-            api(project(":core:common"))
+            api(project(":core"))
+            api(project(":core"))
+            api(project(":core"))
         }
 
         commonTest.dependencies {
