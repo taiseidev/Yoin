@@ -54,11 +54,13 @@ import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
 import com.yoin.feature.room.viewmodel.RoomSettingsViewModel
 import com.yoin.feature.settings.ui.ChangePasswordScreen
 import com.yoin.feature.settings.ui.ContactFormScreen
+import com.yoin.feature.settings.ui.DeleteAccountScreen
 import com.yoin.feature.settings.ui.HelpFaqScreen
 import com.yoin.feature.settings.ui.NotificationSettingsScreen
 import com.yoin.feature.settings.ui.PremiumPlanScreen
 import com.yoin.feature.settings.viewmodel.ChangePasswordViewModel
 import com.yoin.feature.settings.viewmodel.ContactFormViewModel
+import com.yoin.feature.settings.viewmodel.DeleteAccountViewModel
 import com.yoin.feature.settings.viewmodel.HelpFaqViewModel
 import com.yoin.feature.settings.viewmodel.NotificationSettingsViewModel
 import com.yoin.feature.settings.viewmodel.PremiumPlanViewModel
@@ -720,15 +722,21 @@ class ChangePasswordScreenVoyager : Screen {
 }
 
 /**
- * アカウント削除画面（プレースホルダー）
+ * アカウント削除画面
  */
 class DeleteAccountScreenVoyager : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        PlaceholderScreen(
-            title = "アカウント削除",
-            onNavigateBack = { navigator.pop() }
+        val viewModel: DeleteAccountViewModel = koinInject()
+
+        DeleteAccountScreen(
+            viewModel = viewModel,
+            onNavigateBack = { navigator.pop() },
+            onNavigateToLogin = {
+                // ログイン画面に遷移し、スタックをクリア
+                navigator.replaceAll(LoginScreenVoyager())
+            }
         )
     }
 }
