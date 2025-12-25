@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -14,7 +12,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "DataLocal"
+            baseName = "Data"
             isStatic = true
         }
     }
@@ -26,7 +24,6 @@ kotlin {
 
             // Core
             implementation(project(":core"))
-            implementation(project(":core"))
 
             // Koin
             implementation(libs.koin.core)
@@ -36,6 +33,9 @@ kotlin {
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
+
+            // DateTime
+            implementation(libs.kotlinx.datetime)
         }
 
         commonTest.dependencies {
@@ -46,7 +46,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.yoin.data.local"
+    namespace = "com.yoin.data"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

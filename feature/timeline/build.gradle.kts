@@ -17,32 +17,36 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Core
-            implementation(project(":core:ui"))
-            implementation(project(":core:design"))
-            implementation(project(":core:image"))
+            implementation(project(":core"))
 
             // Domain
-            implementation(project(":domain:photo"))
-            implementation(project(":domain:room"))
+            implementation(project(":domain"))
 
             // Compose
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-
-            // Navigation
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            // Voyager Navigation
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.koin)
+
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeViewModel)
+
+            // Date/Time
+            implementation(libs.kotlinx.datetime)
         }
 
         commonTest.dependencies {

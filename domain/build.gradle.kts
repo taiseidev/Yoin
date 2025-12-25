@@ -1,9 +1,6 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -14,28 +11,21 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "DataLocal"
+            baseName = "Domain"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            // Domain
-            implementation(project(":domain"))
-
             // Core
             implementation(project(":core"))
-            implementation(project(":core"))
-
-            // Koin
-            implementation(libs.koin.core)
-
-            // Kotlinx Serialization
-            implementation(libs.kotlinx.serialization.json)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
+
+            // DateTime
+            api(libs.kotlinx.datetime)
         }
 
         commonTest.dependencies {
@@ -46,7 +36,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.yoin.data.local"
+    namespace = "com.yoin.domain"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

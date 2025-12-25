@@ -31,32 +31,16 @@ dependencyResolutionManagement {
 // App module
 include(":app")
 
-// Core modules
-include(":core:common")
-include(":core:design")
-include(":core:ui")
-include(":core:network")
-include(":core:database")
-include(":core:analytics")
-include(":core:notification")
-include(":core:camera")
-include(":core:image")
+// Core module (unified)
+include(":core")
 
-// Domain modules
-include(":domain:common")
-include(":domain:auth")
-include(":domain:room")
-include(":domain:photo")
-include(":domain:user")
+// Domain module (unified)
+include(":domain")
 
-// Data modules
-include(":data:local")
-include(":data:auth")
-include(":data:room")
-include(":data:photo")
-include(":data:user")
+// Data module (unified)
+include(":data")
 
-// Feature modules
+// Feature modules (kept separate for independence)
 include(":feature:onboarding")
 include(":feature:auth")
 include(":feature:home")
@@ -66,4 +50,6 @@ include(":feature:timeline")
 include(":feature:map")
 include(":feature:profile")
 include(":feature:settings")
+include(":feature:shop")
+include(":feature:notifications")
 

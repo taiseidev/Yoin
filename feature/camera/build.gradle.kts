@@ -15,12 +15,12 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Core
-            implementation(project(":core:ui"))
-            implementation(project(":core:design"))
-            implementation(project(":core:camera"))
+            implementation(project(":core"))
+            implementation(project(":core"))
+            implementation(project(":core"))
 
             // Domain
-            implementation(project(":domain:photo"))
+            implementation(project(":domain"))
 
             // Compose
             implementation(compose.runtime)
@@ -34,10 +34,18 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            // Voyager Navigation
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.koin)
+
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeViewModel)
+
+            // Kotlinx DateTime
+            implementation(libs.kotlinx.datetime)
         }
 
         commonTest.dependencies {

@@ -17,12 +17,12 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Core
-            implementation(project(":core:ui"))
-            implementation(project(":core:design"))
+            implementation(project(":core"))
+            implementation(project(":core"))
 
             // Domain
-            implementation(project(":domain:room"))
-            implementation(project(":domain:photo"))
+            implementation(project(":domain"))
+            implementation(project(":domain"))
 
             // Compose
             implementation(compose.runtime)
@@ -32,7 +32,10 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
-            // Navigation
+            // Voyager Navigation
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.koin)
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodelCompose)

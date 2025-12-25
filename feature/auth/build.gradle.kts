@@ -15,11 +15,11 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Core
-            implementation(project(":core:ui"))
-            implementation(project(":core:design"))
+            implementation(project(":core"))
+            implementation(project(":core"))
 
             // Domain
-            implementation(project(":domain:auth"))
+            implementation(project(":domain"))
 
             // Compose
             implementation(compose.runtime)

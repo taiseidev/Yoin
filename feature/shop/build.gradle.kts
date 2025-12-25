@@ -16,12 +16,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // Domain
-            implementation(project(":domain"))
-
-            // Data
-            implementation(project(":data"))
-
             // Core
             implementation(project(":core"))
             implementation(project(":core"))
@@ -34,24 +28,19 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
-            // Lifecycle
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-
-            // Voyager Navigation
+            // Navigation
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
+
+            // Lifecycle
+            implementation(libs.androidx.lifecycle.viewmodelCompose)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
 
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeViewModel)
-        }
-
-        androidMain.dependencies {
-            // UI Tooling for Android Studio Preview
-            implementation(compose.uiTooling)
         }
 
         commonTest.dependencies {
@@ -61,7 +50,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.yoin.feature.onboarding"
+    namespace = "com.yoin.feature.shop"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
