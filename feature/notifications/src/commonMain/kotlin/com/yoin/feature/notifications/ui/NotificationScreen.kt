@@ -7,14 +7,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
@@ -77,20 +77,7 @@ fun NotificationScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // ステータスバー風の時刻表示
-            Text(
-                text = "9:41",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
-                color = YoinColors.TextPrimary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(56.dp))
 
             // ナビゲーションバー
             Row(
@@ -100,14 +87,15 @@ fun NotificationScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = 20.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable {
-                        viewModel.handleIntent(NotificationContract.Intent.OnBackPressed)
-                    }
-                )
+                IconButton(
+                    onClick = { viewModel.handleIntent(NotificationContract.Intent.OnBackPressed) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = YoinColors.TextPrimary
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(16.dp))
 
@@ -122,16 +110,16 @@ fun NotificationScreen(
                 Spacer(modifier = Modifier.weight(1f))
 
                 // 設定アイコン
-                Text(
-                    text = "⚙",
-                    fontSize = 20.sp,
-                    color = YoinColors.TextSecondary,
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .clickable {
-                            onNavigateToSettings()
-                        }
-                )
+                IconButton(
+                    onClick = onNavigateToSettings,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = "Settings",
+                        tint = YoinColors.TextSecondary
+                    )
+                }
 
                 // すべて既読ボタン
                 Text(

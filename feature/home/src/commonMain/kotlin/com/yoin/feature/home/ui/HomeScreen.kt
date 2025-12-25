@@ -8,6 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CameraRoll
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -170,20 +175,7 @@ private fun HomeHeader(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            // ステータスバー領域（9:41表示）
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(YoinSpacing.xxl),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    color = YoinColors.TextPrimary,
-                    letterSpacing = (-0.15).sp
-                )
-            }
+            Spacer(modifier = Modifier.height(YoinSpacing.lg))
 
             // ヘッダーコンテンツ
             Row(
@@ -198,6 +190,7 @@ private fun HomeHeader(
                     text = "Yoin.",
                     fontSize = YoinFontSizes.displaySmall.value.sp,
                     fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.Bold,
                     color = YoinColors.TextSecondary,
                     letterSpacing = 0.07.sp
                 )
@@ -210,9 +203,11 @@ private fun HomeHeader(
                         .clickable(onClick = onNotificationClick),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "🔔",
-                        fontSize = YoinFontSizes.labelLarge.value.sp
+                    Icon(
+                        imageVector = Icons.Filled.Notifications,
+                        contentDescription = "Notifications",
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(YoinSizes.iconMedium)
                     )
 
                     // 通知バッジ
@@ -259,6 +254,7 @@ private fun TripSection(
             Text(
                 text = title,
                 fontSize = YoinFontSizes.bodyMedium.value.sp,
+                fontWeight = FontWeight.Bold,
                 color = YoinColors.TextPrimary,
                 letterSpacing = (-0.31).sp
             )
@@ -364,8 +360,14 @@ private fun TripCard(
                             horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            Icon(
+                                imageVector = Icons.Filled.AccessTime,
+                                contentDescription = "Development time",
+                                tint = YoinColors.Primary,
+                                modifier = Modifier.size(YoinSizes.iconSmall)
+                            )
                             Text(
-                                text = "残り${days}日で現像 📸",
+                                text = "残り${days}日で現像",
                                 fontSize = YoinFontSizes.labelSmall.value.sp,
                                 color = YoinColors.Primary
                             )
@@ -378,9 +380,11 @@ private fun TripCard(
                             horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = "🎞",
-                                fontSize = YoinFontSizes.labelSmall.value.sp
+                            Icon(
+                                imageVector = Icons.Filled.CameraRoll,
+                                contentDescription = "Photo count",
+                                tint = YoinColors.Primary,
+                                modifier = Modifier.size(YoinSizes.iconSmall)
                             )
                             Text(
                                 text = "${count}枚の思い出",

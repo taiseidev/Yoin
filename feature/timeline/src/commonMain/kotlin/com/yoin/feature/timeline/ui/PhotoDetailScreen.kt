@@ -5,13 +5,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -141,30 +147,12 @@ private fun ColumnScope.PhotoContent(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            // ステータスバー風の時刻表示
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Black.copy(alpha = 0.3f))
-                    .padding(top = YoinSpacing.lg, bottom = YoinSpacing.sm)
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.Surface,
-                    letterSpacing = (-0.15).sp,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
             // ヘッダーコントロール
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Black.copy(alpha = 0.3f))
-                    .padding(horizontal = YoinSpacing.md, vertical = YoinSpacing.md),
+                    .padding(start = YoinSpacing.md, end = YoinSpacing.md, top = YoinSpacing.xxl, bottom = YoinSpacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -177,10 +165,11 @@ private fun ColumnScope.PhotoContent(
                         .clickable(onClick = onBackPressed),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "←",
-                        fontSize = YoinFontSizes.labelLarge.value.sp,
-                        color = YoinColors.Surface
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "戻る",
+                        tint = YoinColors.Surface,
+                        modifier = Modifier.size(YoinSizes.iconMedium)
                     )
                 }
 
@@ -193,9 +182,11 @@ private fun ColumnScope.PhotoContent(
                         .clickable(onClick = onDownloadPressed),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "📥",
-                        fontSize = YoinFontSizes.bodyMedium.value.sp
+                    Icon(
+                        imageVector = Icons.Filled.Download,
+                        contentDescription = "ダウンロード",
+                        tint = YoinColors.Surface,
+                        modifier = Modifier.size(YoinSizes.iconMedium)
                     )
                 }
             }
@@ -290,9 +281,11 @@ private fun PhotoInfoBottomSheet(
                 horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "📅",
-                    fontSize = YoinFontSizes.headingSmall.value.sp
+                Icon(
+                    imageVector = Icons.Filled.CalendarToday,
+                    contentDescription = "日時",
+                    tint = YoinColors.TextPrimary,
+                    modifier = Modifier.size(YoinSizes.iconMedium)
                 )
                 Text(
                     text = photo.dateTime,
@@ -309,9 +302,11 @@ private fun PhotoInfoBottomSheet(
                     horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "📍",
-                        fontSize = YoinFontSizes.headingSmall.value.sp
+                    Icon(
+                        imageVector = Icons.Filled.LocationOn,
+                        contentDescription = "位置",
+                        tint = YoinColors.TextPrimary,
+                        modifier = Modifier.size(YoinSizes.iconMedium)
                     )
                     Text(
                         text = photo.location,
@@ -340,10 +335,11 @@ private fun PhotoInfoBottomSheet(
                     onClick = onPreviousPressed,
                     enabled = currentIndex > 0
                 ) {
-                    Text(
-                        text = "←",
-                        fontSize = YoinFontSizes.bodyMedium.value.sp,
-                        color = if (currentIndex > 0) YoinColors.TextSecondary else YoinColors.SurfaceVariant
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBackIos,
+                        contentDescription = "前へ",
+                        tint = if (currentIndex > 0) YoinColors.TextSecondary else YoinColors.SurfaceVariant,
+                        modifier = Modifier.size(YoinSizes.iconMedium)
                     )
                 }
 
@@ -384,10 +380,11 @@ private fun PhotoInfoBottomSheet(
                     onClick = onNextPressed,
                     enabled = currentIndex < totalPhotos - 1
                 ) {
-                    Text(
-                        text = "→",
-                        fontSize = YoinFontSizes.bodyMedium.value.sp,
-                        color = if (currentIndex < totalPhotos - 1) YoinColors.TextSecondary else YoinColors.SurfaceVariant
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForwardIos,
+                        contentDescription = "次へ",
+                        tint = if (currentIndex < totalPhotos - 1) YoinColors.TextSecondary else YoinColors.SurfaceVariant,
+                        modifier = Modifier.size(YoinSizes.iconMedium)
                     )
                 }
             }

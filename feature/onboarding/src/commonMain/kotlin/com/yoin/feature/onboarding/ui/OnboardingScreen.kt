@@ -16,8 +16,14 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CameraRoll
+import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -88,20 +94,7 @@ fun OnboardingScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ステータスバー風の時刻表示
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = YoinSpacing.xxl, bottom = YoinSpacing.sm)
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             // スキップボタン
             Row(
@@ -217,13 +210,13 @@ private fun OnboardingPageContent(
     pageIndex: Int,
     modifier: Modifier = Modifier,
 ) {
-    // 各ページの絵文字を定義
-    val emoji = when (pageIndex) {
-        0 -> "📷" // 見えない状態で撮影
-        1 -> "👥" // 仲間とシェア
-        2 -> "⏰" // 翌朝9時に現像
-        3 -> "🎞️" // フィルムカメラ体験
-        else -> "📸"
+    // 各ページのアイコンを定義
+    val icon = when (pageIndex) {
+        0 -> Icons.Filled.PhotoCamera // 見えない状態で撮影
+        1 -> Icons.Filled.People // 仲間とシェア
+        2 -> Icons.Filled.AccessTime // 翌朝9時に現像
+        3 -> Icons.Filled.CameraRoll // フィルムカメラ体験
+        else -> Icons.Filled.PhotoCamera
     }
 
     // 各ページの背景色を定義（コーラル/ピーチ系の優しい色）
@@ -240,7 +233,7 @@ private fun OnboardingPageContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // 絵文字アイコンを表示
+        // アイコンを表示
         Box(
             modifier = Modifier
                 .size(220.dp)
@@ -248,9 +241,11 @@ private fun OnboardingPageContent(
                 .background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = emoji,
-                fontSize = 88.sp
+            Icon(
+                imageVector = icon,
+                contentDescription = page.title,
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(88.dp)
             )
         }
 

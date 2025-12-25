@@ -7,6 +7,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraRoll
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -77,27 +84,20 @@ fun RegisterScreen(
                 .padding(horizontal = YoinSpacing.xxl),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ステータスバー風の時刻表示
-            Text(
-                text = "9:41",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                fontWeight = FontWeight.Medium,
-                color = YoinColors.TextPrimary,
-                modifier = Modifier.padding(top = YoinSpacing.xxl)
-            )
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
-            Spacer(modifier = Modifier.height(YoinSpacing.massive))
-
-            // ロゴアイコン（緑の角丸四角背景 + フィルム絵文字）
+            // ロゴアイコン（コーラル背景 + フィルムアイコン）
             Box(
                 modifier = Modifier
                     .size(YoinSizes.logoSmall)
                     .background(YoinColors.Primary, RoundedCornerShape(YoinSpacing.lg)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "🎞️",
-                    fontSize = YoinSizes.iconXLarge.value.sp
+                Icon(
+                    imageVector = Icons.Filled.CameraRoll,
+                    contentDescription = "Yoin Logo",
+                    tint = Color.White,
+                    modifier = Modifier.size(YoinSizes.iconXLarge)
                 )
             }
 
@@ -138,9 +138,11 @@ fun RegisterScreen(
                 onValueChange = { viewModel.onIntent(RegisterContract.Intent.OnNameChanged(it)) },
                 label = { Text("名前") },
                 leadingIcon = {
-                    Text(
-                        text = "👤",
-                        fontSize = 18.sp
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Name",
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(YoinSizes.iconSmall)
                     )
                 },
                 isError = state.nameError != null,
@@ -163,9 +165,11 @@ fun RegisterScreen(
                 onValueChange = { viewModel.onIntent(RegisterContract.Intent.OnEmailChanged(it)) },
                 label = { Text("メールアドレス") },
                 leadingIcon = {
-                    Text(
-                        text = "📧",
-                        fontSize = 18.sp
+                    Icon(
+                        imageVector = Icons.Filled.Email,
+                        contentDescription = "Email",
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(YoinSizes.iconSmall)
                     )
                 },
                 isError = state.emailError != null,
@@ -188,19 +192,22 @@ fun RegisterScreen(
                 onValueChange = { viewModel.onIntent(RegisterContract.Intent.OnPasswordChanged(it)) },
                 label = { Text("パスワード") },
                 leadingIcon = {
-                    Text(
-                        text = "🔒",
-                        fontSize = 18.sp
+                    Icon(
+                        imageVector = Icons.Filled.Lock,
+                        contentDescription = "Password",
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(YoinSizes.iconSmall)
                     )
                 },
                 trailingIcon = {
-                    Text(
-                        text = if (state.isPasswordVisible) "👁" else "👁",
-                        fontSize = 18.sp,
-                        modifier = Modifier.clickable {
-                            viewModel.onIntent(RegisterContract.Intent.OnPasswordVisibilityToggled)
-                        }
-                    )
+                    IconButton(onClick = { viewModel.onIntent(RegisterContract.Intent.OnPasswordVisibilityToggled) }) {
+                        Icon(
+                            imageVector = if (state.isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (state.isPasswordVisible) "Hide password" else "Show password",
+                            tint = YoinColors.TextSecondary,
+                            modifier = Modifier.size(YoinSizes.iconSmall)
+                        )
+                    }
                 },
                 visualTransformation = if (state.isPasswordVisible) {
                     VisualTransformation.None
@@ -227,19 +234,22 @@ fun RegisterScreen(
                 onValueChange = { viewModel.onIntent(RegisterContract.Intent.OnConfirmPasswordChanged(it)) },
                 label = { Text("パスワード（確認）") },
                 leadingIcon = {
-                    Text(
-                        text = "🔒",
-                        fontSize = 18.sp
+                    Icon(
+                        imageVector = Icons.Filled.Lock,
+                        contentDescription = "Confirm Password",
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(YoinSizes.iconSmall)
                     )
                 },
                 trailingIcon = {
-                    Text(
-                        text = if (state.isConfirmPasswordVisible) "👁" else "👁",
-                        fontSize = 18.sp,
-                        modifier = Modifier.clickable {
-                            viewModel.onIntent(RegisterContract.Intent.OnConfirmPasswordVisibilityToggled)
-                        }
-                    )
+                    IconButton(onClick = { viewModel.onIntent(RegisterContract.Intent.OnConfirmPasswordVisibilityToggled) }) {
+                        Icon(
+                            imageVector = if (state.isConfirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (state.isConfirmPasswordVisible) "Hide password" else "Show password",
+                            tint = YoinColors.TextSecondary,
+                            modifier = Modifier.size(YoinSizes.iconSmall)
+                        )
+                    }
                 },
                 visualTransformation = if (state.isConfirmPasswordVisible) {
                     VisualTransformation.None

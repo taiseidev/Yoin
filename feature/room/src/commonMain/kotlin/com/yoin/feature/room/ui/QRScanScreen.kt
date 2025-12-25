@@ -23,8 +23,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -256,15 +260,17 @@ private fun QRScanHeader(onClosePressed: () -> Unit) {
             .padding(top = YoinSpacing.massive, start = YoinSpacing.lg, end = YoinSpacing.lg, bottom = YoinSpacing.lg)
     ) {
         // 閉じるボタン
-        Text(
-            text = "×",
-            fontSize = YoinFontSizes.displaySmall.value.sp,
-            color = Color.White,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .clickable(onClick = onClosePressed)
-                .padding(YoinSpacing.sm)
-        )
+        IconButton(
+            onClick = onClosePressed,
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "閉じる",
+                tint = Color.White,
+                modifier = Modifier.size(YoinSizes.iconLarge)
+            )
+        }
 
         // タイトル
         Text(

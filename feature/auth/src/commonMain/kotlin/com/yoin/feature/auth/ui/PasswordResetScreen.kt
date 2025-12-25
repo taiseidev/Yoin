@@ -17,10 +17,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SnackbarHost
@@ -95,16 +100,7 @@ fun PasswordResetScreen(
                 .padding(horizontal = YoinSpacing.xxl),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ステータスバー風の時刻表示
-            Text(
-                text = "9:41",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                fontWeight = FontWeight.Medium,
-                color = YoinColors.TextPrimary,
-                modifier = Modifier.padding(top = YoinSpacing.xxl)
-            )
-
-            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             // ナビゲーションバー
             Row(
@@ -112,13 +108,15 @@ fun PasswordResetScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = YoinFontSizes.headingMedium.value.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable {
-                        viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
-                    }
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = YoinColors.TextPrimary,
+                    modifier = Modifier
+                        .size(YoinSizes.iconMedium)
+                        .clickable {
+                            viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
+                        }
                 )
 
                 Spacer(modifier = Modifier.width(YoinSpacing.lg))
@@ -147,9 +145,11 @@ fun PasswordResetScreen(
                     .background(YoinColors.AccentPeach, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "🔑",
-                    fontSize = YoinSizes.iconXLarge.value.sp
+                Icon(
+                    imageVector = Icons.Filled.VpnKey,
+                    contentDescription = "Password Reset",
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(YoinSizes.iconXLarge)
                 )
             }
 
@@ -293,9 +293,11 @@ private fun PasswordResetEmailField(
                 )
             },
             leadingIcon = {
-                Text(
-                    text = "📧",
-                    fontSize = 18.sp
+                Icon(
+                    imageVector = Icons.Filled.Email,
+                    contentDescription = "Email",
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(YoinSizes.iconSmall)
                 )
             },
             isError = error != null,

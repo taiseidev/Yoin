@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -106,9 +108,11 @@ fun RoomCreatedScreen(
                     verticalArrangement = Arrangement.spacedBy(YoinSpacing.xxl)
                 ) {
                     // 成功アイコン
-                    Text(
-                        text = "✅",
-                        fontSize = YoinSizes.logoSmall.value.sp
+                    Icon(
+                        imageVector = Icons.Filled.CheckCircle,
+                        contentDescription = "成功",
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(YoinSizes.logoSmall)
                     )
 
                     // 成功メッセージ
@@ -198,27 +202,11 @@ private fun RoomCreatedHeader() {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            // ステータスバー領域
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(YoinSpacing.xxl),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
             // ヘッダーコンテンツ
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
+                    .padding(start = YoinSpacing.lg, end = YoinSpacing.lg, top = YoinSpacing.xxl, bottom = YoinSpacing.md),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -273,11 +261,22 @@ private fun RoomInfoCard(roomInfo: RoomCreatedContract.RoomInfo) {
                 color = YoinColors.TextSecondary
             )
 
-            Text(
-                text = "📍 ${roomInfo.destination}",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                color = YoinColors.TextSecondary
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.LocationOn,
+                    contentDescription = "場所",
+                    tint = YoinColors.TextSecondary,
+                    modifier = Modifier.size(YoinSizes.iconSmall)
+                )
+                Text(
+                    text = roomInfo.destination,
+                    fontSize = YoinFontSizes.labelLarge.value.sp,
+                    color = YoinColors.TextSecondary
+                )
+            }
         }
     }
 }

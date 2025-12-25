@@ -8,13 +8,19 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -81,20 +87,7 @@ fun MapFullscreenScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // ステータスバー風の時刻表示
-            Text(
-                text = "9:41",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
-                color = YoinColors.TextPrimary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = YoinSpacing.xxl)
-            )
-
-            Spacer(modifier = Modifier.height(YoinSpacing.lg))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl + YoinSpacing.lg))
 
             // ヘッダー
             MapHeader(
@@ -214,12 +207,13 @@ private fun MapHeader(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // 戻るボタン
-            Text(
-                text = "←",
-                fontSize = YoinFontSizes.headingSmall.value.sp,
-                color = YoinColors.TextPrimary,
-                modifier = Modifier.clickable(onClick = onBackPressed)
-            )
+            IconButton(onClick = onBackPressed) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "戻る",
+                    tint = YoinColors.TextPrimary
+                )
+            }
 
             // タイトル
             Text(
@@ -230,12 +224,13 @@ private fun MapHeader(
             )
 
             // メニューボタン
-            Text(
-                text = "...",
-                fontSize = YoinFontSizes.headingSmall.value.sp,
-                color = YoinColors.TextPrimary,
-                modifier = Modifier.clickable(onClick = onMenuPressed)
-            )
+            IconButton(onClick = onMenuPressed) {
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = "メニュー",
+                    tint = YoinColors.TextPrimary
+                )
+            }
         }
     }
 }
@@ -367,52 +362,62 @@ private fun MapControls(
         verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
     ) {
         // ズームインボタン
-        ControlButton(
-            text = "+",
-            onClick = onZoomInPressed
-        )
+        Surface(
+            shape = RoundedCornerShape(YoinSpacing.sm),
+            color = YoinColors.OnPrimary,
+            shadowElevation = 2.dp,
+            modifier = Modifier
+                .size(YoinSizes.buttonHeightSmall)
+                .clickable(onClick = onZoomInPressed)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "ズームイン",
+                    tint = YoinColors.TextPrimary,
+                    modifier = Modifier.size(YoinSizes.iconMedium)
+                )
+            }
+        }
 
         // ズームアウトボタン
-        ControlButton(
-            text = "-",
-            onClick = onZoomOutPressed
-        )
+        Surface(
+            shape = RoundedCornerShape(YoinSpacing.sm),
+            color = YoinColors.OnPrimary,
+            shadowElevation = 2.dp,
+            modifier = Modifier
+                .size(YoinSizes.buttonHeightSmall)
+                .clickable(onClick = onZoomOutPressed)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.Filled.Remove,
+                    contentDescription = "ズームアウト",
+                    tint = YoinColors.TextPrimary,
+                    modifier = Modifier.size(YoinSizes.iconMedium)
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
         // 現在地ボタン
-        ControlButton(
-            text = "📍",
-            onClick = onCurrentLocationPressed
-        )
-    }
-}
-
-/**
- * コントロールボタン
- */
-@Composable
-private fun ControlButton(
-    text: String,
-    onClick: () -> Unit
-) {
-    Surface(
-        shape = RoundedCornerShape(YoinSpacing.sm),
-        color = YoinColors.OnPrimary,
-        shadowElevation = 2.dp,
-        modifier = Modifier
-            .size(YoinSizes.buttonHeightSmall)
-            .clickable(onClick = onClick)
-    ) {
-        Box(
-            contentAlignment = Alignment.Center
+        Surface(
+            shape = RoundedCornerShape(YoinSpacing.sm),
+            color = YoinColors.OnPrimary,
+            shadowElevation = 2.dp,
+            modifier = Modifier
+                .size(YoinSizes.buttonHeightSmall)
+                .clickable(onClick = onCurrentLocationPressed)
         ) {
-            Text(
-                text = text,
-                fontSize = YoinFontSizes.headingSmall.value.sp,
-                fontWeight = FontWeight.Bold,
-                color = YoinColors.TextPrimary
-            )
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.Filled.MyLocation,
+                    contentDescription = "現在地",
+                    tint = YoinColors.TextPrimary,
+                    modifier = Modifier.size(YoinSizes.iconMedium)
+                )
+            }
         }
     }
 }
@@ -497,9 +502,11 @@ private fun PhotoDetailCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
                 ) {
-                    Text(
-                        text = "📍",
-                        fontSize = YoinFontSizes.labelSmall.value.sp
+                    Icon(
+                        imageVector = Icons.Filled.LocationOn,
+                        contentDescription = "位置",
+                        tint = YoinColors.Error,
+                        modifier = Modifier.size(YoinSizes.iconSmall)
                     )
                     Text(
                         text = photo.location,

@@ -8,13 +8,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -152,38 +158,22 @@ private fun RoomDetailAfterHeader(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            // ステータスバー領域
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(YoinSpacing.xxl),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.TextPrimary,
-                    letterSpacing = (-0.15).sp
-                )
-            }
-
             // ヘッダーコンテンツ
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
+                    .padding(start = YoinSpacing.lg, end = YoinSpacing.lg, top = YoinSpacing.xxl, bottom = YoinSpacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable(onClick = onBackPressed)
-                )
+                IconButton(onClick = onBackPressed) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "戻る",
+                        tint = YoinColors.TextPrimary
+                    )
+                }
 
                 // タイトルと情報
                 Column(
@@ -226,12 +216,23 @@ private fun RoomDetailAfterHeader(
                     modifier = Modifier.height(YoinSizes.iconLarge),
                     contentPadding = PaddingValues(horizontal = YoinSpacing.lg, vertical = YoinSpacing.xs + 2.dp)
                 ) {
-                    Text(
-                        text = "⬇ 全保存",
-                        fontSize = YoinFontSizes.labelSmall.value.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = YoinColors.Surface
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Download,
+                            contentDescription = "ダウンロード",
+                            tint = YoinColors.Surface,
+                            modifier = Modifier.size(YoinSizes.iconSmall)
+                        )
+                        Text(
+                            text = "全保存",
+                            fontSize = YoinFontSizes.labelSmall.value.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = YoinColors.Surface
+                        )
+                    }
                 }
             }
 
@@ -389,12 +390,23 @@ private fun PhotoCard(
                     }
 
                     Column {
-                        Text(
-                            text = "📷 ${photo.photographerName}",
-                            fontSize = YoinFontSizes.labelLarge.value.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = YoinColors.TextPrimary
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.PhotoCamera,
+                                contentDescription = "撮影者",
+                                tint = YoinColors.TextPrimary,
+                                modifier = Modifier.size(YoinSizes.iconSmall)
+                            )
+                            Text(
+                                text = photo.photographerName,
+                                fontSize = YoinFontSizes.labelLarge.value.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = YoinColors.TextPrimary
+                            )
+                        }
                         Text(
                             text = photo.timestamp,
                             fontSize = YoinFontSizes.caption.value.sp,
@@ -408,10 +420,11 @@ private fun PhotoCard(
                     onClick = onDownloadClicked,
                     modifier = Modifier.size(YoinSizes.iconLarge)
                 ) {
-                    Text(
-                        text = if (photo.isDownloaded) "✓" else "⬇",
-                        fontSize = YoinFontSizes.bodyMedium.value.sp,
-                        color = if (photo.isDownloaded) YoinColors.AccentCoral else YoinColors.Primary
+                    Icon(
+                        imageVector = if (photo.isDownloaded) Icons.Filled.CheckCircle else Icons.Filled.Download,
+                        contentDescription = if (photo.isDownloaded) "ダウンロード済み" else "ダウンロード",
+                        tint = if (photo.isDownloaded) YoinColors.AccentCoral else YoinColors.Primary,
+                        modifier = Modifier.size(YoinSizes.iconMedium)
                     )
                 }
             }
@@ -430,9 +443,11 @@ private fun PhotoCard(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
                 ) {
-                    Text(
-                        text = "📸",
-                        fontSize = 48.sp
+                    Icon(
+                        imageVector = Icons.Filled.PhotoCamera,
+                        contentDescription = "写真",
+                        tint = YoinColors.TextSecondary,
+                        modifier = Modifier.size(YoinSizes.logoSmall)
                     )
                     Text(
                         text = "Photo #${photo.id}",
@@ -449,9 +464,11 @@ private fun PhotoCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
             ) {
-                Text(
-                    text = "📍",
-                    fontSize = YoinFontSizes.labelLarge.value.sp
+                Icon(
+                    imageVector = Icons.Filled.LocationOn,
+                    contentDescription = "位置",
+                    tint = YoinColors.TextSecondary,
+                    modifier = Modifier.size(YoinSizes.iconSmall)
                 )
                 Text(
                     text = photo.location,
@@ -478,9 +495,11 @@ private fun MapPlaceholder() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
         ) {
-            Text(
-                text = "🗺️",
-                fontSize = 64.sp
+            Icon(
+                imageVector = Icons.Filled.Map,
+                contentDescription = "地図",
+                tint = YoinColors.TextSecondary,
+                modifier = Modifier.size(YoinSizes.logoLarge)
             )
             Text(
                 text = "マップビュー",

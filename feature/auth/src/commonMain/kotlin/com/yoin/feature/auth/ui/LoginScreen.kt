@@ -17,10 +17,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraRoll
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -106,27 +114,20 @@ fun LoginScreen(
                 .padding(horizontal = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ステータスバー風の時刻表示
-            Text(
-                text = "9:41",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                fontWeight = FontWeight.Medium,
-                color = YoinColors.TextPrimary,
-                modifier = Modifier.padding(top = YoinSpacing.xxl)
-            )
+            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
 
-            Spacer(modifier = Modifier.height(YoinSpacing.massive))
-
-            // ロゴアイコン（コーラル背景 + フィルム絵文字）
+            // ロゴアイコン（コーラル背景 + フィルムアイコン）
             Box(
                 modifier = Modifier
                     .size(YoinSizes.logoMedium)
                     .background(YoinColors.Primary, RoundedCornerShape(YoinSpacing.xxl)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "🎞",
-                    fontSize = YoinSizes.iconXLarge.value.sp
+                Icon(
+                    imageVector = Icons.Filled.CameraRoll,
+                    contentDescription = "Yoin Logo",
+                    tint = Color.White,
+                    modifier = Modifier.size(YoinSizes.iconXLarge)
                 )
             }
 
@@ -430,9 +431,11 @@ fun EmailField(
                 )
             },
             leadingIcon = {
-                Text(
-                    text = "📧",
-                    fontSize = 18.sp
+                Icon(
+                    imageVector = Icons.Filled.Email,
+                    contentDescription = "Email",
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(YoinSizes.iconSmall)
                 )
             },
             isError = error != null,
@@ -489,18 +492,22 @@ private fun PasswordField(
                 )
             },
             leadingIcon = {
-                Text(
-                    text = "🔒",
-                    fontSize = 18.sp
+                Icon(
+                    imageVector = Icons.Filled.Lock,
+                    contentDescription = "Password",
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(YoinSizes.iconSmall)
                 )
             },
             trailingIcon = {
-                Text(
-                    text = if (isPasswordVisible) "👁" else "👁",
-                    fontSize = 18.sp,
-                    color = YoinColors.TextSecondary,
-                    modifier = Modifier.clickable(onClick = onPasswordVisibilityToggled)
-                )
+                IconButton(onClick = onPasswordVisibilityToggled) {
+                    Icon(
+                        imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        contentDescription = if (isPasswordVisible) "Hide password" else "Show password",
+                        tint = YoinColors.TextSecondary,
+                        modifier = Modifier.size(YoinSizes.iconSmall)
+                    )
+                }
             },
             visualTransformation = if (isPasswordVisible) {
                 VisualTransformation.None

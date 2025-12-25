@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraRoll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -93,7 +96,7 @@ private fun SplashContent(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // アイコン部分（白い角丸背景 + フィルム絵文字）
+            // アイコン部分（白い角丸背景 + フィルムアイコン）
             Box(
                 modifier = Modifier
                     .size(YoinSizes.logoLarge)
@@ -101,9 +104,11 @@ private fun SplashContent(
                     .background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "🎞",
-                    fontSize = 64.sp
+                Icon(
+                    imageVector = Icons.Filled.CameraRoll,
+                    contentDescription = "Yoin Film Camera Icon",
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(64.dp)
                 )
             }
 

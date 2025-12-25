@@ -6,13 +6,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.PhotoCamera
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -154,41 +159,25 @@ private fun PhotoConfirmHeader(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // ステータスバー時刻（中央）
-            Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center
+            // 閉じるボタン（左）
+            Surface(
+                modifier = Modifier.size(YoinSizes.buttonHeightSmall),
+                color = Color(0xFF374151),
+                shape = CircleShape
             ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = Color.White
-                )
+                IconButton(onClick = onCloseClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "閉じる",
+                        tint = Color.White
+                    )
+                }
             }
-        }
 
-        // 閉じるボタン（左）
-        Surface(
-            modifier = Modifier
-                .size(YoinSizes.buttonHeightSmall)
-                .align(Alignment.CenterStart),
-            color = Color(0xFF374151),
-            shape = CircleShape
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable(onClick = onCloseClick),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "✕",
-                    fontSize = YoinFontSizes.headingSmall.value.sp,
-                    color = Color.White
-                )
-            }
+            Spacer(modifier = Modifier.weight(1f))
+
+            // 空のスペース
+            Box(modifier = Modifier.size(YoinSizes.buttonHeightSmall))
         }
 
         // タイトル（右）
@@ -239,9 +228,11 @@ private fun PhotoPreview(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
             ) {
-                Text(
-                    text = "📷",
-                    fontSize = YoinSpacing.massive.value.sp
+                Icon(
+                    imageVector = Icons.Filled.PhotoCamera,
+                    contentDescription = "写真",
+                    tint = Color.White.copy(alpha = 0.5f),
+                    modifier = Modifier.size(YoinSizes.logoMedium)
                 )
                 Text(
                     text = "撮影した写真",
@@ -273,9 +264,11 @@ private fun PhotoInfo(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
         ) {
-            Text(
-                text = "📍",
-                fontSize = YoinFontSizes.bodyMedium.value.sp
+            Icon(
+                imageVector = Icons.Filled.LocationOn,
+                contentDescription = "位置",
+                tint = Color.White,
+                modifier = Modifier.size(YoinSizes.iconSmall)
             )
             Text(
                 text = location ?: "位置情報なし",
@@ -289,9 +282,11 @@ private fun PhotoInfo(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
         ) {
-            Text(
-                text = "🕐",
-                fontSize = YoinFontSizes.bodyMedium.value.sp
+            Icon(
+                imageVector = Icons.Filled.AccessTime,
+                contentDescription = "時刻",
+                tint = Color.White,
+                modifier = Modifier.size(YoinSizes.iconSmall)
             )
             Text(
                 text = timestamp,
@@ -385,12 +380,23 @@ private fun WarningMessage() {
             modifier = Modifier.padding(bottom = YoinSpacing.md)
         )
 
-        Text(
-            text = "⚠️ 保存後は削除できません",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
-            color = Color(0xFF9CA3AF),
-            textAlign = TextAlign.Center
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Warning,
+                contentDescription = "警告",
+                tint = Color(0xFF9CA3AF),
+                modifier = Modifier.size(YoinSizes.iconSmall)
+            )
+            Text(
+                text = "保存後は削除できません",
+                fontSize = YoinFontSizes.labelSmall.value.sp,
+                color = Color(0xFF9CA3AF),
+                textAlign = TextAlign.Center
+            )
+        }
 
         Spacer(modifier = Modifier.height(YoinSpacing.xs))
 

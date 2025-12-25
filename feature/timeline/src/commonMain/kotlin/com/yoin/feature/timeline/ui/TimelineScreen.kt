@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -529,9 +530,11 @@ private fun PhotoItem(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "📷",
-                fontSize = YoinFontSizes.displayMedium.value.sp
+            Icon(
+                imageVector = Icons.Filled.PhotoCamera,
+                contentDescription = "写真",
+                tint = YoinColors.TextSecondary,
+                modifier = Modifier.size(YoinSizes.iconXLarge)
             )
         }
 //        when (painter.state) {
@@ -625,9 +628,11 @@ private fun EmptyState(selectedTab: TimelineContract.AlbumTab) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
         ) {
-            Text(
-                text = "📸",
-                fontSize = 48.sp
+            Icon(
+                imageVector = Icons.Filled.PhotoCamera,
+                contentDescription = "写真なし",
+                tint = YoinColors.TextSecondary,
+                modifier = Modifier.size(YoinSizes.logoMedium)
             )
             Text(
                 text = when (selectedTab) {

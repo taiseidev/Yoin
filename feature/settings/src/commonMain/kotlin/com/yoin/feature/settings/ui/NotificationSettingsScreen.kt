@@ -6,14 +6,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
@@ -64,21 +64,7 @@ fun NotificationSettingsScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // ステータスバー風の時刻表示
-            Text(
-                text = "9:41",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
-                color = YoinColors.TextPrimary,
-                letterSpacing = (-0.15).sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(56.dp))
 
             // ナビゲーションバー
             Row(
@@ -88,14 +74,15 @@ fun NotificationSettingsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = 20.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable {
-                        viewModel.handleIntent(NotificationSettingsContract.Intent.OnBackPressed)
-                    }
-                )
+                IconButton(
+                    onClick = { viewModel.handleIntent(NotificationSettingsContract.Intent.OnBackPressed) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = YoinColors.TextPrimary
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(16.dp))
 
@@ -127,7 +114,7 @@ fun NotificationSettingsScreen(
                 // プッシュ通知（マスタースイッチ）
                 SettingCard {
                     SettingItemWithSwitch(
-                        icon = "🔔",
+                        iconVector = Icons.Filled.Notifications,
                         title = "プッシュ通知",
                         description = "すべての通知を受け取る",
                         checked = state.settings.pushNotificationEnabled,
@@ -251,7 +238,7 @@ fun NotificationSettingsScreen(
 
                 // 情報バナー
                 InfoBanner(
-                    icon = "💡",
+                    icon = Icons.Filled.Lightbulb,
                     message = "現像完了通知はオフにできません。\n大切な思い出をお届けします。"
                 )
 
@@ -311,7 +298,7 @@ private fun SettingCard(content: @Composable () -> Unit) {
  */
 @Composable
 private fun SettingItemWithSwitch(
-    icon: String? = null,
+    iconVector: androidx.compose.ui.graphics.vector.ImageVector? = null,
     title: String,
     description: String? = null,
     checked: Boolean,
@@ -325,11 +312,14 @@ private fun SettingItemWithSwitch(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // アイコン
-        icon?.let {
-            Text(
-                text = it,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(end = 12.dp)
+        iconVector?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = title,
+                tint = if (enabled) YoinColors.TextPrimary else YoinColors.TextSecondary,
+                modifier = Modifier
+                    .size(24.dp)
+                    .padding(end = 12.dp)
             )
         }
 
@@ -340,6 +330,7 @@ private fun SettingItemWithSwitch(
             Text(
                 text = title,
                 fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
                 color = if (enabled) YoinColors.TextPrimary else YoinColors.TextSecondary
             )
 
@@ -377,7 +368,7 @@ private fun SettingItemWithSwitch(
  */
 @Composable
 private fun InfoBanner(
-    icon: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector = Icons.Filled.Info,
     message: String
 ) {
     Surface(
@@ -389,10 +380,13 @@ private fun InfoBanner(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            Text(
-                text = icon,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(end = 8.dp)
+            Icon(
+                imageVector = icon,
+                contentDescription = "Info",
+                tint = YoinColors.TextPrimary,
+                modifier = Modifier
+                    .size(16.dp)
+                    .padding(end = 8.dp)
             )
 
             Text(

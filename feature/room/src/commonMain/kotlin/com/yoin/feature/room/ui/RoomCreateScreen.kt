@@ -10,12 +10,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -269,37 +270,22 @@ private fun RoomCreateHeader(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            // ステータスバー領域
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(YoinSpacing.xxl),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
             // ヘッダーコンテンツ
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
+                    .padding(start = YoinSpacing.lg, end = YoinSpacing.lg, top = YoinSpacing.xxl, bottom = YoinSpacing.md),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = YoinFontSizes.headingSmall.value.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable(onClick = onBackPressed)
-                )
+                IconButton(onClick = onBackPressed) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "戻る",
+                        tint = YoinColors.TextPrimary
+                    )
+                }
 
                 // タイトル
                 Text(

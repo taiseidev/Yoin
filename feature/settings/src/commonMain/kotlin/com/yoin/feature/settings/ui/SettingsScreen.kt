@@ -16,8 +16,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -31,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -126,25 +128,7 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            // ステータスバー風の時刻表示
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(YoinColors.Surface)
-                    .padding(top = YoinSpacing.xxl)
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.TextPrimary,
-                    letterSpacing = (-0.15).sp,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(YoinSpacing.lg))
+            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             // ヘッダー
             Box(
@@ -327,10 +311,11 @@ private fun UserProfileCard(
             }
 
             // 矢印アイコン
-            Text(
-                text = "›",
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                color = YoinColors.TextSecondary
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = YoinColors.TextSecondary,
+                modifier = Modifier.size(YoinSizes.iconSmall)
             )
         }
     }
@@ -361,9 +346,11 @@ private fun PlanCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // アイコン
-            Text(
-                text = "👑",
-                fontSize = YoinFontSizes.headingSmall.value.sp
+            Icon(
+                imageVector = Icons.Filled.Star,
+                contentDescription = "Premium Plan",
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(YoinSizes.iconMedium)
             )
 
             // プラン情報
@@ -385,10 +372,11 @@ private fun PlanCard(
             }
 
             // 矢印アイコン
-            Text(
-                text = "›",
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                color = YoinColors.Primary
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(YoinSizes.iconSmall)
             )
         }
     }
@@ -421,9 +409,11 @@ private fun GeneralSettingsCard(
                 horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "🔔",
-                    fontSize = YoinFontSizes.headingSmall.value.sp
+                Icon(
+                    imageVector = Icons.Filled.Notifications,
+                    contentDescription = "Notifications",
+                    tint = YoinColors.TextPrimary,
+                    modifier = Modifier.size(YoinSizes.iconMedium)
                 )
                 Text(
                     text = "通知設定",
@@ -431,10 +421,11 @@ private fun GeneralSettingsCard(
                     color = YoinColors.TextPrimary,
                     modifier = Modifier.weight(1f)
                 )
-                Text(
-                    text = "›",
-                    fontSize = YoinFontSizes.bodyMedium.value.sp,
-                    color = YoinColors.TextSecondary
+                Icon(
+                    imageVector = Icons.Filled.ChevronRight,
+                    contentDescription = "Navigate",
+                    tint = YoinColors.TextSecondary,
+                    modifier = Modifier.size(YoinSizes.iconSmall)
                 )
             }
 
@@ -452,9 +443,11 @@ private fun GeneralSettingsCard(
                 horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "🌙",
-                    fontSize = YoinFontSizes.headingSmall.value.sp
+                Icon(
+                    imageVector = Icons.Filled.DarkMode,
+                    contentDescription = "Dark Mode",
+                    tint = YoinColors.TextPrimary,
+                    modifier = Modifier.size(YoinSizes.iconMedium)
                 )
                 Text(
                     text = "ダークモード",
@@ -498,7 +491,7 @@ private fun SupportCard(
         Column {
             // ヘルプ
             SettingItem(
-                icon = "❓",
+                icon = Icons.Filled.Help,
                 label = "ヘルプ",
                 onClick = onHelpPressed
             )
@@ -511,7 +504,7 @@ private fun SupportCard(
 
             // お問い合わせ
             SettingItem(
-                icon = "💬",
+                icon = Icons.Filled.ContactSupport,
                 label = "お問い合わせ",
                 onClick = onContactPressed
             )
@@ -524,7 +517,7 @@ private fun SupportCard(
 
             // 利用規約
             SettingItem(
-                icon = "📄",
+                icon = Icons.Filled.Article,
                 label = "利用規約",
                 onClick = onTermsPressed
             )
@@ -537,7 +530,7 @@ private fun SupportCard(
 
             // プライバシーポリシー
             SettingItem(
-                icon = "🔒",
+                icon = Icons.Filled.Lock,
                 label = "プライバシーポリシー",
                 onClick = onPrivacyPolicyPressed,
                 showDivider = false
@@ -551,7 +544,7 @@ private fun SupportCard(
  */
 @Composable
 private fun SettingItem(
-    icon: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     label: String,
     onClick: () -> Unit,
     showDivider: Boolean = true
@@ -564,9 +557,11 @@ private fun SettingItem(
         horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = icon,
-            fontSize = YoinFontSizes.headingSmall.value.sp
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            tint = YoinColors.TextPrimary,
+            modifier = Modifier.size(YoinSizes.iconMedium)
         )
         Text(
             text = label,
@@ -574,10 +569,11 @@ private fun SettingItem(
             color = YoinColors.TextPrimary,
             modifier = Modifier.weight(1f)
         )
-        Text(
-            text = "›",
-            fontSize = YoinFontSizes.bodyMedium.value.sp,
-            color = YoinColors.TextSecondary
+        Icon(
+            imageVector = Icons.Filled.ChevronRight,
+            contentDescription = "Navigate",
+            tint = YoinColors.TextSecondary,
+            modifier = Modifier.size(YoinSizes.iconSmall)
         )
     }
 }

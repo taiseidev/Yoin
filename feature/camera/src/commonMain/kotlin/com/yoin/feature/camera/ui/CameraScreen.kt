@@ -6,13 +6,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -141,41 +145,25 @@ private fun CameraHeader(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // ステータスバー時刻（中央）
-            Box(
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.Center
+            // 閉じるボタン（左）
+            Surface(
+                modifier = Modifier.size(YoinSizes.buttonHeightSmall),
+                color = Color(0xFF374151),
+                shape = CircleShape
             ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = Color.White
-                )
+                IconButton(onClick = onCloseClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "閉じる",
+                        tint = Color.White
+                    )
+                }
             }
-        }
 
-        // 閉じるボタン（左）
-        Surface(
-            modifier = Modifier
-                .size(YoinSizes.buttonHeightSmall)
-                .align(Alignment.CenterStart),
-            color = Color(0xFF374151),
-            shape = CircleShape
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable(onClick = onCloseClick),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "✕",
-                    fontSize = YoinFontSizes.headingSmall.value.sp,
-                    color = Color.White
-                )
-            }
+            Spacer(modifier = Modifier.weight(1f))
+
+            // 空のスペース
+            Box(modifier = Modifier.size(YoinSizes.buttonHeightSmall))
         }
 
         // 残り枚数（右）
@@ -250,9 +238,11 @@ private fun LocationSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
         ) {
-            Text(
-                text = "📍",
-                fontSize = YoinFontSizes.bodyMedium.value.sp
+            Icon(
+                imageVector = Icons.Filled.LocationOn,
+                contentDescription = "位置",
+                tint = Color.White,
+                modifier = Modifier.size(YoinSizes.iconSmall)
             )
             Text(
                 text = location ?: "位置情報を取得中...",
@@ -293,46 +283,39 @@ private fun CameraControls(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // フラッシュボタン
-            ControlButton(
-                icon = "⚡",
-                onClick = onFlashClick
-            )
+            Surface(
+                modifier = Modifier.size(YoinSizes.buttonHeightLarge),
+                color = Color(0xFF374151),
+                shape = CircleShape
+            ) {
+                IconButton(onClick = onFlashClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Warning,
+                        contentDescription = "フラッシュ",
+                        tint = Color.White,
+                        modifier = Modifier.size(YoinSizes.iconLarge)
+                    )
+                }
+            }
 
             // シャッターボタン
             ShutterButton(onClick = onShutterClick)
 
             // カメラ切り替えボタン
-            ControlButton(
-                icon = "🔄",
-                onClick = onSwitchClick
-            )
-        }
-    }
-}
-
-/**
- * コントロールボタン
- */
-@Composable
-private fun ControlButton(
-    icon: String,
-    onClick: () -> Unit
-) {
-    Surface(
-        modifier = Modifier.size(YoinSizes.buttonHeightLarge),
-        color = Color(0xFF374151),
-        shape = CircleShape
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(onClick = onClick),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = icon,
-                fontSize = YoinFontSizes.headingSmall.value.sp
-            )
+            Surface(
+                modifier = Modifier.size(YoinSizes.buttonHeightLarge),
+                color = Color(0xFF374151),
+                shape = CircleShape
+            ) {
+                IconButton(onClick = onSwitchClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Refresh,
+                        contentDescription = "カメラ切り替え",
+                        tint = Color.White,
+                        modifier = Modifier.size(YoinSizes.iconLarge)
+                    )
+                }
+            }
         }
     }
 }
@@ -377,12 +360,23 @@ private fun WarningMessage() {
             modifier = Modifier.padding(bottom = YoinSpacing.md)
         )
 
-        Text(
-            text = "⚠️ 撮り直しはできません",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
-            color = Color(0xFF9CA3AF),
-            textAlign = TextAlign.Center
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Warning,
+                contentDescription = "警告",
+                tint = Color(0xFF9CA3AF),
+                modifier = Modifier.size(YoinSizes.iconSmall)
+            )
+            Text(
+                text = "撮り直しはできません",
+                fontSize = YoinFontSizes.labelSmall.value.sp,
+                color = Color(0xFF9CA3AF),
+                textAlign = TextAlign.Center
+            )
+        }
 
         Spacer(modifier = Modifier.height(YoinSpacing.xs))
 
