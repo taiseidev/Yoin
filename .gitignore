@@ -48,4 +48,3 @@ secrets/
 *.swo
 *~
 .claude/settings.local.json
-.claude/mcp.json

@@ -55,20 +55,11 @@ kotlin {
 
             // Data Modules
             implementation(project(":data"))
-            implementation(project(":data"))
-            implementation(project(":data"))
-            implementation(project(":data"))
-            implementation(project(":data"))
+
+            // Domain Modules
+            implementation(project(":domain"))
 
             // Core Modules
-            implementation(project(":core"))
-            implementation(project(":core"))
-            implementation(project(":core"))
-            implementation(project(":core"))
-            implementation(project(":core"))
-            implementation(project(":core"))
-            implementation(project(":core"))
-            implementation(project(":core"))
             implementation(project(":core"))
 
             // Compose
@@ -101,6 +92,9 @@ kotlin {
 
             // UI Tooling for Android Studio Preview
             implementation(compose.uiTooling)
+
+            // Stripe (Android only)
+            implementation(libs.stripe.android)
         }
 
         iosMain.dependencies {

@@ -32,6 +32,7 @@ object YoinColors {
     val AccentPeach = Color(0xFFFFCCB8)    // #ffccb8 - 淡いピーチ
     val AccentCoral = Color(0xFFFF8B7A)    // #ff8b7a - アクセント
     val AccentGray = Color(0xFFF5F5F5)     // #f5f5f5 - 背景グレー
+    val AccentGold = Color(0xFFCBB485)     // #cbb485 - ゴールドベージュ（上品なアクセント）
 
     // Additional colors
     val Error = Color(0xFFFF3B30)          // #ff3b30 - エラー

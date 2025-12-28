@@ -17,9 +17,16 @@ kotlin {
     }
 
     sourceSets {
+        all {
+            languageSettings.optIn("kotlin.time.ExperimentalTime")
+        }
+
         commonMain.dependencies {
             // Core
             implementation(project(":core"))
+
+            // Koin
+            implementation(libs.koin.core)
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
