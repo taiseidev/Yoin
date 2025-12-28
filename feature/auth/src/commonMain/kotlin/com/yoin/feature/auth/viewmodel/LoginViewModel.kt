@@ -2,6 +2,9 @@ package com.yoin.feature.auth.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.yoin.domain.auth.model.AuthResult
+import com.yoin.domain.auth.usecase.CreateGuestUserUseCase
+import com.yoin.domain.auth.usecase.LoginWithEmailUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,11 +15,11 @@ import kotlinx.coroutines.launch
 
 /**
  * ログイン画面のScreenModel
- *
- * 注意: 現在はUI実装のみで、実際の認証ロジックは未実装です。
- * 各ボタンをタップするとホーム画面に遷移します（仮実装）。
  */
-class LoginViewModel : ScreenModel {
+class LoginViewModel(
+    private val loginWithEmailUseCase: LoginWithEmailUseCase,
+    private val createGuestUserUseCase: CreateGuestUserUseCase
+) : ScreenModel {
 
     private val _state = MutableStateFlow(LoginContract.State())
     val state: StateFlow<LoginContract.State> = _state.asStateFlow()
@@ -80,9 +83,15 @@ class LoginViewModel : ScreenModel {
 
             _state.update { it.copy(isLoading = true, error = null) }
 
-            // TODO: メール/パスワードログイン実装
-            // 現在は仮実装として、そのままホーム画面に遷移
-            _effect.send(LoginContract.Effect.NavigateToHome)
+            // UseCaseでログイン処理を実行
+            when (val result = loginWithEmailUseCase(currentState.email, currentState.password)) {
+                is AuthResult.Success -> {
+                    _effect.send(LoginContract.Effect.NavigateToHome)
+                }
+                is AuthResult.Error -> {
+                    _state.update { it.copy(error = result.message) }
+                }
+            }
 
             _state.update { it.copy(isLoading = false) }
         }
@@ -128,9 +137,15 @@ class LoginViewModel : ScreenModel {
         screenModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
-            // TODO: ゲストログイン実装
-            // 現在は仮実装として、そのままホーム画面に遷移
-            _effect.send(LoginContract.Effect.NavigateToHome)
+            // UseCaseでゲストユーザーを作成
+            when (val result = createGuestUserUseCase("ゲスト")) {
+                is AuthResult.Success -> {
+                    _effect.send(LoginContract.Effect.NavigateToHome)
+                }
+                is AuthResult.Error -> {
+                    _state.update { it.copy(error = result.message) }
+                }
+            }
 
             _state.update { it.copy(isLoading = false) }
         }

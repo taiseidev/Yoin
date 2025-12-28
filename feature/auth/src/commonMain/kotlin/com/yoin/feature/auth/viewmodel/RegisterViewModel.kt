@@ -2,6 +2,8 @@ package com.yoin.feature.auth.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.yoin.domain.auth.model.AuthResult
+import com.yoin.domain.auth.usecase.RegisterWithEmailUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,9 @@ import kotlinx.coroutines.launch
  * - 新規登録処理の実行
  * - ソーシャルログイン処理
  */
-class RegisterViewModel : ScreenModel {
+class RegisterViewModel(
+    private val registerWithEmailUseCase: RegisterWithEmailUseCase
+) : ScreenModel {
 
     private val _state = MutableStateFlow(RegisterContract.State())
     val state: StateFlow<RegisterContract.State> = _state.asStateFlow()
@@ -38,6 +42,7 @@ class RegisterViewModel : ScreenModel {
             is RegisterContract.Intent.OnConfirmPasswordChanged -> onConfirmPasswordChanged(intent.confirmPassword)
             is RegisterContract.Intent.OnPasswordVisibilityToggled -> onPasswordVisibilityToggled()
             is RegisterContract.Intent.OnConfirmPasswordVisibilityToggled -> onConfirmPasswordVisibilityToggled()
+            is RegisterContract.Intent.OnNextPressed -> onNextPressed()
             is RegisterContract.Intent.OnRegisterPressed -> onRegisterPressed()
             is RegisterContract.Intent.OnGoogleRegisterPressed -> onGoogleRegisterPressed()
             is RegisterContract.Intent.OnAppleRegisterPressed -> onAppleRegisterPressed()
@@ -67,6 +72,33 @@ class RegisterViewModel : ScreenModel {
 
     private fun onConfirmPasswordVisibilityToggled() {
         _state.update { it.copy(isConfirmPasswordVisible = !it.isConfirmPasswordVisible) }
+    }
+
+    private fun onNextPressed() {
+        screenModelScope.launch {
+            val currentState = _state.value
+            var hasError = false
+
+            // 名前のバリデーション
+            if (currentState.name.isBlank()) {
+                _state.update { it.copy(nameError = "名前を入力してください") }
+                hasError = true
+            }
+
+            // メールアドレスのバリデーション
+            if (currentState.email.isBlank()) {
+                _state.update { it.copy(emailError = "メールアドレスを入力してください") }
+                hasError = true
+            } else if (!currentState.email.contains("@")) {
+                _state.update { it.copy(emailError = "有効なメールアドレスを入力してください") }
+                hasError = true
+            }
+
+            if (hasError) return@launch
+
+            // パスワード設定画面へ遷移
+            _effect.send(RegisterContract.Effect.NavigateToPasswordScreen)
+        }
     }
 
     private fun onRegisterPressed() {
@@ -109,15 +141,21 @@ class RegisterViewModel : ScreenModel {
 
             if (hasError) return@launch
 
-            // 登録処理を実行（モック）
+            // 登録処理を実行
             _state.update { it.copy(isLoading = true) }
-            delay(1500) // API呼び出しをシミュレート
 
-            // モック：登録成功
-            _state.update { it.copy(isLoading = false) }
-            _effect.send(RegisterContract.Effect.ShowSuccess("アカウントを作成しました"))
-            delay(500)
-            _effect.send(RegisterContract.Effect.NavigateToHome)
+            when (val result = registerWithEmailUseCase(currentState.email, currentState.password, currentState.name)) {
+                is AuthResult.Success -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _effect.send(RegisterContract.Effect.ShowSuccess("アカウントを作成しました"))
+                    delay(500)
+                    _effect.send(RegisterContract.Effect.NavigateToHome)
+                }
+                is AuthResult.Error -> {
+                    _state.update { it.copy(isLoading = false) }
+                    _effect.send(RegisterContract.Effect.ShowSuccess(result.message))
+                }
+            }
         }
     }
 
