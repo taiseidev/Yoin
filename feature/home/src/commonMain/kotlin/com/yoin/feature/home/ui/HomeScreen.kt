@@ -3,33 +3,30 @@ package com.yoin.feature.home.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
-import com.yoin.core.design.theme.YoinFontSizes
+import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.home.viewmodel.HomeContract
 import com.yoin.feature.home.viewmodel.HomeViewModel
-import com.yoin.core.ui.preview.PhonePreview
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -103,28 +100,23 @@ fun HomeScreen(
                         .fillMaxSize()
                         .weight(1f),
                     contentPadding = PaddingValues(
-                        start = YoinSpacing.lg,
-                        end = YoinSpacing.lg,
-                        top = YoinSpacing.xxxl,
-                        bottom = 96.dp // ボトムナビゲーションバーのスペース確保
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 16.dp,
+                        bottom = 100.dp // ボトムナビゲーションバーのスペース確保
                     ),
-                    verticalArrangement = Arrangement.spacedBy(YoinSpacing.xxxl)
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
                     // 進行中の旅セクション
                     if (state.ongoingTrips.isNotEmpty()) {
                         item {
-                            TripSection(
-                                title = "進行中の旅",
-                                trips = state.ongoingTrips,
-                                onViewAllClick = {
-                                    viewModel.onIntent(
-                                        HomeContract.Intent.OnViewAllTapped(
-                                            HomeContract.TripSection.ONGOING
-                                        )
-                                    )
-                                },
-                                onTripClick = { tripId ->
-                                    viewModel.onIntent(HomeContract.Intent.OnTripTapped(tripId))
+                            SectionHeader(title = "進行中の旅")
+                        }
+                        items(state.ongoingTrips) { trip ->
+                            TripCard(
+                                trip = trip,
+                                onClick = {
+                                    viewModel.onIntent(HomeContract.Intent.OnTripTapped(trip.id))
                                 }
                             )
                         }
@@ -133,20 +125,23 @@ fun HomeScreen(
                     // 現像済みセクション
                     if (state.completedTrips.isNotEmpty()) {
                         item {
-                            TripSection(
-                                title = "現像済み",
-                                trips = state.completedTrips,
-                                onViewAllClick = {
-                                    viewModel.onIntent(
-                                        HomeContract.Intent.OnViewAllTapped(
-                                            HomeContract.TripSection.COMPLETED
-                                        )
-                                    )
-                                },
-                                onTripClick = { tripId ->
-                                    viewModel.onIntent(HomeContract.Intent.OnTripTapped(tripId))
+                            Spacer(modifier = Modifier.height(8.dp))
+                            SectionHeader(title = "現像済み")
+                        }
+                        items(state.completedTrips) { trip ->
+                            TripCard(
+                                trip = trip,
+                                onClick = {
+                                    viewModel.onIntent(HomeContract.Intent.OnTripTapped(trip.id))
                                 }
                             )
+                        }
+                    }
+
+                    // 空状態
+                    if (state.ongoingTrips.isEmpty() && state.completedTrips.isEmpty()) {
+                        item {
+                            EmptyState()
                         }
                     }
                 }
@@ -169,125 +164,59 @@ private fun HomeHeader(
     hasNotification: Boolean,
     onNotificationClick: () -> Unit
 ) {
-    Surface(
-        color = YoinColors.Surface,
-        shadowElevation = 1.dp
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.height(YoinSpacing.lg))
+        // ロゴ
+        Text(
+            text = "Yoin",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = YoinColors.TextPrimary
+        )
 
-            // ヘッダーコンテンツ
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm + YoinSpacing.xs),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        // 通知アイコン
+        Box {
+            IconButton(
+                onClick = onNotificationClick,
+                modifier = Modifier.size(40.dp)
             ) {
-                // ロゴ
-                Text(
-                    text = "Yoin.",
-                    fontSize = YoinFontSizes.displaySmall.value.sp,
-                    fontStyle = FontStyle.Italic,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextSecondary,
-                    letterSpacing = 0.07.sp
+                Icon(
+                    imageVector = Icons.Filled.Notifications,
+                    contentDescription = "Notifications",
+                    tint = YoinColors.TextSecondary,
+                    modifier = Modifier.size(24.dp)
                 )
-
-                // 通知アイコン
-                Box(
-                    modifier = Modifier
-                        .size(YoinSizes.iconXLarge)
-                        .background(YoinColors.Background, RoundedCornerShape(YoinSpacing.sm + YoinSpacing.xs))
-                        .clickable(onClick = onNotificationClick),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Notifications,
-                        contentDescription = "Notifications",
-                        tint = YoinColors.Primary,
-                        modifier = Modifier.size(YoinSizes.iconMedium)
-                    )
-
-                    // 通知バッジ
-                    if (hasNotification) {
-                        Box(
-                            modifier = Modifier
-                                .size(YoinSizes.indicatorSmall)
-                                .offset(x = YoinSpacing.sm, y = (-YoinSpacing.sm))
-                                .background(YoinColors.Error, CircleShape)
-                                .align(Alignment.TopEnd)
-                        )
-                    }
-                }
             }
 
-            // 区切り線
-            HorizontalDivider(
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
+            // 通知バッジ
+            if (hasNotification) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .offset(x = 26.dp, y = 8.dp)
+                        .background(YoinColors.AccentCoral, CircleShape)
+                )
+            }
         }
     }
 }
 
 /**
- * 旅行セクション
+ * セクションヘッダー
  */
 @Composable
-private fun TripSection(
-    title: String,
-    trips: List<HomeContract.TripItem>,
-    onViewAllClick: () -> Unit,
-    onTripClick: (String) -> Unit
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(YoinSpacing.lg)
-    ) {
-        // セクションヘッダー
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = title,
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                fontWeight = FontWeight.Bold,
-                color = YoinColors.TextPrimary,
-                letterSpacing = (-0.31).sp
-            )
-
-            // すべてボタン
-            Row(
-                modifier = Modifier.clickable(onClick = onViewAllClick),
-                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "すべて",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    color = YoinColors.TextSecondary,
-                    letterSpacing = (-0.15).sp
-                )
-                Text(
-                    text = "›",
-                    fontSize = YoinFontSizes.bodyMedium.value.sp,
-                    color = YoinColors.TextSecondary
-                )
-            }
-        }
-
-        // 旅行カードリスト
-        trips.forEach { trip ->
-            TripCard(
-                trip = trip,
-                onClick = { onTripClick(trip.id) }
-            )
-        }
-    }
+private fun SectionHeader(title: String) {
+    Text(
+        text = title,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+        color = YoinColors.TextPrimary
+    )
 }
 
 /**
@@ -303,106 +232,111 @@ private fun TripCard(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         color = YoinColors.Surface,
-        shape = RoundedCornerShape(YoinSpacing.md),
-        border = BorderStroke(0.65.dp, YoinColors.SurfaceVariant)
+        shape = RoundedCornerShape(12.dp),
+        shadowElevation = 1.dp
     ) {
-        Column(
-            modifier = Modifier.padding(YoinSpacing.lg + 1.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md)
+            // 絵文字アイコン
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(YoinColors.SurfaceVariant, RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
             ) {
-                // 絵文字
                 Text(
                     text = trip.emoji,
-                    fontSize = YoinFontSizes.displayMedium.value.sp,
-                    modifier = Modifier.size(YoinSizes.iconLarge)
+                    fontSize = 24.sp
+                )
+            }
+
+            // メイン情報
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                // タイトル
+                Text(
+                    text = trip.title,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = YoinColors.TextPrimary
                 )
 
-                // メイン情報
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
-                ) {
-                    // タイトル
-                    Text(
-                        text = trip.title,
-                        fontSize = YoinFontSizes.bodyMedium.value.sp,
-                        color = YoinColors.TextPrimary,
-                        letterSpacing = (-0.31).sp
-                    )
+                // 日付・場所
+                Text(
+                    text = "${trip.dateRange} • ${trip.location}",
+                    fontSize = 13.sp,
+                    color = YoinColors.TextSecondary
+                )
 
-                    // 日付・場所
-                    Text(
-                        text = "${trip.dateRange} • ${trip.location}",
-                        fontSize = YoinFontSizes.labelSmall.value.sp,
-                        color = YoinColors.TextSecondary
-                    )
-
-                    // プログレスバー（進行中の場合）
-                    if (trip.progress != null) {
-                        Spacer(modifier = Modifier.height(YoinSpacing.xs))
+                // プログレスバー（進行中の場合）
+                trip.progress?.let { progress ->
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
                         LinearProgressIndicator(
-                            progress = { trip.progress },
+                            progress = { progress },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(YoinSizes.indicatorSmall)
+                                .height(4.dp)
                                 .clip(RoundedCornerShape(100.dp)),
                             color = YoinColors.Primary,
                             trackColor = YoinColors.SurfaceVariant
                         )
                     }
+                }
 
-                    // 残り日数または写真枚数
-                    trip.daysUntilDevelopment?.let { days ->
-                        Spacer(modifier = Modifier.height(YoinSpacing.xs))
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.AccessTime,
-                                contentDescription = "Development time",
-                                tint = YoinColors.Primary,
-                                modifier = Modifier.size(YoinSizes.iconSmall)
-                            )
-                            Text(
-                                text = "残り${days}日で現像",
-                                fontSize = YoinFontSizes.labelSmall.value.sp,
-                                color = YoinColors.Primary
-                            )
-                        }
-                    }
-
-                    trip.photoCount?.let { count ->
-                        Spacer(modifier = Modifier.height(YoinSpacing.xs))
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.CameraRoll,
-                                contentDescription = "Photo count",
-                                tint = YoinColors.Primary,
-                                modifier = Modifier.size(YoinSizes.iconSmall)
-                            )
-                            Text(
-                                text = "${count}枚の思い出",
-                                fontSize = YoinFontSizes.labelSmall.value.sp,
-                                color = YoinColors.Primary
-                            )
-                        }
+                // 残り日数
+                trip.daysUntilDevelopment?.let { days ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AccessTime,
+                            contentDescription = null,
+                            tint = YoinColors.Primary,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Text(
+                            text = "残り${days}日で現像",
+                            fontSize = 12.sp,
+                            color = YoinColors.Primary
+                        )
                     }
                 }
 
-                // メンバーアバター（進行中の場合）
-                if (trip.additionalMemberCount > 0) {
-                    MemberAvatars(
-                        avatars = trip.memberAvatars,
-                        additionalCount = trip.additionalMemberCount
-                    )
+                // 写真枚数（完了済みの場合）
+                trip.photoCount?.let { count ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.CameraRoll,
+                            contentDescription = null,
+                            tint = YoinColors.Primary,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Text(
+                            text = "${count}枚の思い出",
+                            fontSize = 12.sp,
+                            color = YoinColors.Primary
+                        )
+                    }
                 }
+            }
+
+            // メンバーアバター（進行中の場合）
+            if (trip.additionalMemberCount > 0) {
+                MemberAvatars(
+                    count = trip.additionalMemberCount
+                )
             }
         }
     }
@@ -412,155 +346,110 @@ private fun TripCard(
  * メンバーアバター
  */
 @Composable
-private fun MemberAvatars(
-    avatars: List<String>,
-    additionalCount: Int
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy((-YoinSpacing.sm))
+private fun MemberAvatars(count: Int) {
+    Box(
+        modifier = Modifier
+            .size(32.dp)
+            .background(YoinColors.Primary, CircleShape),
+        contentAlignment = Alignment.Center
     ) {
-        // アバター画像（最大3つ）
-        avatars.take(3).forEachIndexed { index, _ ->
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .border(2.dp, YoinColors.Surface, CircleShape)
-                    .background(
-                        when (index) {
-                            0 -> YoinColors.AccentPeach
-                            1 -> YoinColors.AccentCoral
-                            else -> YoinColors.Primary
-                        },
-                        CircleShape
-                    )
-            )
-        }
-
-        // +N表示
-        if (additionalCount > 0) {
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .border(2.dp, YoinColors.Surface, CircleShape)
-                    .background(YoinColors.Primary, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "+$additionalCount",
-                    fontSize = YoinFontSizes.caption.value.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Normal
-                )
-            }
-        }
-    }
-}
-
-/**
- * プレビュー: ホームヘッダー
- */
-@PhonePreview
-@Composable
-private fun HomeHeaderPreview() {
-    MaterialTheme {
-        HomeHeader(
-            hasNotification = true,
-            onNotificationClick = {}
+        Text(
+            text = "+$count",
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.White
         )
     }
 }
 
 /**
- * プレビュー: メンバーアバター
+ * 空状態
  */
-@PhonePreview
 @Composable
-private fun MemberAvatarsPreview() {
-    MaterialTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(YoinColors.Background)
-                .padding(16.dp)
-        ) {
-            MemberAvatars(
-                avatars = listOf("", "", ""),
-                additionalCount = 3
-            )
-        }
+private fun EmptyState() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 64.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Filled.CameraRoll,
+            contentDescription = null,
+            modifier = Modifier.size(80.dp),
+            tint = YoinColors.TextSecondary.copy(alpha = 0.5f)
+        )
+        Text(
+            text = "旅はまだありません",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+            color = YoinColors.TextPrimary
+        )
+        Text(
+            text = "新しい旅を作成してみましょう",
+            fontSize = 14.sp,
+            color = YoinColors.TextSecondary
+        )
     }
 }
 
 /**
- * プレビュー: 旅行カード
+ * プレビュー: ホーム画面
  */
 @PhonePreview
 @Composable
-private fun TripCardPreview() {
+private fun HomeScreenPreview() {
     MaterialTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(YoinColors.Background)
-                .padding(16.dp)
         ) {
-            TripCard(
-                trip = HomeContract.TripItem(
-                    id = "1",
-                    title = "沖縄旅行",
-                    emoji = "🏝️",
-                    dateRange = "12/25 - 12/28",
-                    location = "沖縄県",
-                    progress = 0.6f,
-                    daysUntilDevelopment = 3,
-                    memberAvatars = listOf("", ""),
-                    additionalMemberCount = 2
-                ),
-                onClick = {}
-            )
-        }
-    }
-}
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                item {
+                    SectionHeader(title = "進行中の旅")
+                }
 
-/**
- * プレビュー: 旅行セクション
- */
-@PhonePreview
-@Composable
-private fun TripSectionPreview() {
-    MaterialTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(YoinColors.Background)
-                .padding(16.dp)
-        ) {
-            TripSection(
-                title = "進行中の旅",
-                trips = listOf(
-                    HomeContract.TripItem(
-                        id = "1",
-                        title = "沖縄旅行",
-                        emoji = "🏝️",
-                        dateRange = "12/25 - 12/28",
-                        location = "沖縄県",
-                        progress = 0.6f,
-                        daysUntilDevelopment = 3,
-                        memberAvatars = listOf("", ""),
-                        additionalMemberCount = 2
-                    ),
-                    HomeContract.TripItem(
-                        id = "2",
-                        title = "京都散策",
-                        emoji = "🍁",
-                        dateRange = "11/15 - 11/17",
-                        location = "京都府",
-                        photoCount = 42
+                item {
+                    TripCard(
+                        trip = HomeContract.TripItem(
+                            id = "1",
+                            emoji = "🏔️",
+                            title = "北海道旅行2025",
+                            dateRange = "7/1〜7/5",
+                            location = "札幌",
+                            progress = 0.6f,
+                            daysUntilDevelopment = 3,
+                            memberAvatars = emptyList(),
+                            additionalMemberCount = 3
+                        ),
+                        onClick = {}
                     )
-                ),
-                onViewAllClick = {},
-                onTripClick = {}
-            )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SectionHeader(title = "現像済み")
+                }
+
+                item {
+                    TripCard(
+                        trip = HomeContract.TripItem(
+                            id = "2",
+                            emoji = "🏖️",
+                            title = "沖縄旅行2025",
+                            dateRange = "5/1〜5/4",
+                            location = "沖縄",
+                            photoCount = 48
+                        ),
+                        onClick = {}
+                    )
+                }
+            }
         }
     }
 }

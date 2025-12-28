@@ -13,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -26,10 +28,16 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.koin.compose.koinInject
 import com.yoin.feature.auth.ui.LoginScreen
 import com.yoin.feature.auth.ui.PasswordResetScreen
+import com.yoin.feature.auth.ui.RegisterMethodScreen
+import com.yoin.feature.auth.ui.RegisterPasswordScreen
 import com.yoin.feature.auth.ui.RegisterScreen
+import com.yoin.feature.auth.ui.WelcomeScreen
 import com.yoin.feature.auth.viewmodel.LoginViewModel
 import com.yoin.feature.auth.viewmodel.PasswordResetViewModel
+import com.yoin.feature.auth.viewmodel.RegisterMethodViewModel
+import com.yoin.feature.auth.viewmodel.RegisterPasswordViewModel
 import com.yoin.feature.auth.viewmodel.RegisterViewModel
+import com.yoin.feature.auth.viewmodel.WelcomeViewModel
 import com.yoin.feature.camera.ui.CameraScreen
 import com.yoin.feature.camera.ui.PhotoConfirmScreen
 import com.yoin.feature.camera.viewmodel.CameraViewModel
@@ -123,14 +131,38 @@ class OnboardingScreenVoyager : Screen {
         OnboardingScreen(
             viewModel = viewModel,
             onNavigateToLogin = {
-                navigator.replace(LoginScreenVoyager())
+                navigator.replace(WelcomeScreenVoyager())
             }
         )
     }
 }
 
 /**
- * ログイン画面
+ * ウェルカム画面（ログイン方法選択）
+ */
+class WelcomeScreenVoyager : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel: WelcomeViewModel = koinScreenModel()
+
+        WelcomeScreen(
+            viewModel = viewModel,
+            onNavigateToEmailLogin = {
+                navigator.push(LoginScreenVoyager())
+            },
+            onNavigateToRegister = {
+                navigator.push(RegisterMethodScreenVoyager())
+            },
+            onNavigateToHome = {
+                navigator.replace(MainScreenVoyager())
+            }
+        )
+    }
+}
+
+/**
+ * ログイン画面（メールログイン）
  */
 class LoginScreenVoyager : Screen {
     @Composable
@@ -143,11 +175,11 @@ class LoginScreenVoyager : Screen {
             onNavigateToHome = {
                 navigator.replace(MainScreenVoyager())
             },
-            onNavigateToRegister = {
-                navigator.push(RegisterScreenVoyager())
-            },
             onNavigateToPasswordReset = {
                 navigator.push(PasswordResetScreenVoyager())
+            },
+            onNavigateBack = {
+                navigator.pop()
             }
         )
     }
@@ -172,20 +204,67 @@ class PasswordResetScreenVoyager : Screen {
 }
 
 /**
- * 新規登録画面
+ * 新規登録方法選択画面
+ */
+class RegisterMethodScreenVoyager : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel: RegisterMethodViewModel = koinScreenModel()
+
+        RegisterMethodScreen(
+            viewModel = viewModel,
+            onNavigateToEmailRegister = {
+                navigator.push(RegisterScreenVoyager())
+            },
+            onNavigateToHome = {
+                navigator.replace(MainScreenVoyager())
+            },
+            onNavigateBack = {
+                navigator.pop()
+            }
+        )
+    }
+}
+
+/**
+ * 新規登録画面（基本情報入力）
  */
 class RegisterScreenVoyager : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: RegisterViewModel = koinScreenModel()
+        val state by viewModel.state.collectAsState()
 
         RegisterScreen(
+            viewModel = viewModel,
+            onNavigateToPasswordScreen = {
+                // Pass name and email to password screen
+                navigator.push(RegisterPasswordScreenVoyager(state.name, state.email))
+            },
+            onNavigateBack = {
+                navigator.pop()
+            }
+        )
+    }
+}
+
+/**
+ * 新規登録画面（パスワード設定）
+ */
+data class RegisterPasswordScreenVoyager(val name: String, val email: String) : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = RegisterPasswordViewModel(name, email)
+
+        RegisterPasswordScreen(
             viewModel = viewModel,
             onNavigateToHome = {
                 navigator.replace(MainScreenVoyager())
             },
-            onNavigateToLogin = {
+            onNavigateBack = {
                 navigator.pop()
             }
         )
@@ -340,10 +419,10 @@ data class JoinConfirmScreenVoyager(val roomId: String) : Screen {
             roomId = roomId,
             viewModel = viewModel,
             onNavigateToLogin = {
-                navigator.push(LoginScreenVoyager())
+                navigator.push(WelcomeScreenVoyager())
             },
             onNavigateToRegister = {
-                navigator.push(RegisterScreenVoyager())
+                navigator.push(RegisterMethodScreenVoyager())
             },
             onNavigateToRoomDetail = { roomId ->
                 navigator.replace(TripDetailScreenVoyager(roomId))

@@ -127,7 +127,7 @@ fun OnboardingScreen(
                 )
             }
 
-            // ページインジケーター
+            // ページインジケーター（ゴールドアクセント）
             Row(
                 modifier = Modifier.padding(vertical = YoinSpacing.xl),
                 horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
@@ -140,7 +140,7 @@ fun OnboardingScreen(
                             .clip(CircleShape)
                             .background(
                                 if (isSelected) {
-                                    YoinColors.Primary
+                                    YoinColors.AccentGold
                                 } else {
                                     YoinColors.AccentPeach
                                 }
@@ -219,12 +219,12 @@ private fun OnboardingPageContent(
         else -> Icons.Filled.PhotoCamera
     }
 
-    // 各ページの背景色を定義（コーラル/ピーチ系の優しい色）
+    // 各ページの背景色を定義（コーラル/ピーチ系とゴールド系の組み合わせ）
     val backgroundColor = when (pageIndex) {
         0 -> Color(0xFFFFF5F0) // ほんのりピーチ
-        1 -> Color(0xFFFFECE6) // 薄いコーラル
-        2 -> Color(0xFFFFF0EB) // 明るいピーチ
-        3 -> YoinColors.AccentPeach // 淡いピーチ
+        1 -> YoinColors.AccentGold // ゴールドベージュ
+        2 -> YoinColors.AccentPeach // 淡いピーチ
+        3 -> YoinColors.AccentGold // ゴールドベージュ
         else -> Color(0xFFFFF5F0)
     }
 

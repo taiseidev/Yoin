@@ -3,7 +3,9 @@ package com.yoin.app
 import androidx.compose.runtime.Composable
 import com.yoin.app.navigation.YoinNavHost
 import com.yoin.core.design.theme.YoinTheme
-import com.yoin.data.local.di.localDataModule
+import com.yoin.data.client.di.dataClientModule
+import com.yoin.data.di.dataModule
+import com.yoin.domain.di.domainModule
 import com.yoin.feature.auth.di.authModule
 import com.yoin.feature.camera.di.cameraModule
 import com.yoin.feature.home.di.homeModule
@@ -32,7 +34,11 @@ fun App() {
             // DIモジュールの登録
             modules(
                 // データ層
-                localDataModule,
+                dataClientModule,
+                dataModule,
+
+                // ドメイン層
+                domainModule,
 
                 // フィーチャー層
                 onboardingModule,

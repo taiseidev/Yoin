@@ -2,6 +2,7 @@ package com.yoin.feature.room.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.yoin.domain.room.usecase.CreateRoomUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import kotlin.random.Random
 
 /**
@@ -20,7 +22,9 @@ import kotlin.random.Random
  * - Intent: ユーザーアクション
  * - Effect: 一時的なイベント（ピッカー表示、ナビゲーション）
  */
-class RoomCreateViewModel : ScreenModel {
+class RoomCreateViewModel(
+    private val createRoomUseCase: CreateRoomUseCase
+) : ScreenModel {
     private val _state = MutableStateFlow(RoomCreateContract.State())
     val state: StateFlow<RoomCreateContract.State> = _state.asStateFlow()
 
@@ -131,15 +135,29 @@ class RoomCreateViewModel : ScreenModel {
             _state.value = _state.value.copy(isLoading = true)
 
             try {
-                // TODO: 実際のルーム作成API呼び出し
-                delay(1000)
+                // 日付文字列をLocalDateに変換
+                val startDate = LocalDate.parse(state.startDate)
+                val endDate = LocalDate.parse(state.endDate)
 
-                // 仮実装：ランダムIDを生成
-                val roomId = "room_${Random.nextInt(100000, 999999)}"
+                val result = createRoomUseCase(
+                    name = state.tripTitle,
+                    destination = state.destination,
+                    iconEmoji = state.emoji,
+                    startDate = startDate,
+                    endDate = endDate
+                )
 
-                _state.value = _state.value.copy(isLoading = false)
-                _effect.emit(RoomCreateContract.Effect.ShowSuccess("ルームを作成しました"))
-                _effect.emit(RoomCreateContract.Effect.NavigateToRoomDetail(roomId))
+                result.fold(
+                    onSuccess = { room ->
+                        _state.value = _state.value.copy(isLoading = false)
+                        _effect.emit(RoomCreateContract.Effect.ShowSuccess("ルームを作成しました"))
+                        _effect.emit(RoomCreateContract.Effect.NavigateToRoomDetail(room.id))
+                    },
+                    onFailure = { error ->
+                        _state.value = _state.value.copy(isLoading = false)
+                        _effect.emit(RoomCreateContract.Effect.ShowError(error.message ?: "ルームの作成に失敗しました"))
+                    }
+                )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(isLoading = false)
                 _effect.emit(RoomCreateContract.Effect.ShowError(e.message ?: "ルームの作成に失敗しました"))

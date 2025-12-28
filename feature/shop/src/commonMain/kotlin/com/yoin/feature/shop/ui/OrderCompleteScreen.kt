@@ -24,11 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
+import com.yoin.core.design.theme.YoinTheme
 import com.yoin.core.ui.component.YoinSimpleAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.shop.viewmodel.OrderCompleteContract
 import com.yoin.feature.shop.viewmodel.OrderCompleteViewModel
 import kotlinx.coroutines.flow.collectLatest
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * 注文完了画面
@@ -434,7 +436,7 @@ private fun DeliveryStatusCard(onClick: () -> Unit) {
 /**
  * プレビュー
  */
-@PhonePreview
+@Preview
 @Composable
 private fun OrderCompleteScreenPreview() {
     MaterialTheme {
