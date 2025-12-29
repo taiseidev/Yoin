@@ -30,7 +30,7 @@ import com.yoin.core.design.theme.YoinColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
- * Modern Film Design に基づくタブコンポーネント
+ * Yoin タブコンポーネント
  *
  * @param tabs タブラベルリスト
  * @param selectedIndex 選択中のタブインデックス
@@ -51,7 +51,7 @@ fun YoinTabRow(
         modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(YoinColors.ModernBackground)
+            .background(YoinColors.Surface)
     ) {
         // タブ行
         Row(
@@ -94,7 +94,7 @@ private fun YoinTab(
                 interactionSource = interactionSource,
                 indication = ripple(
                     bounded = true,
-                    color = YoinColors.ModernAccentPrimary.copy(alpha = 0.3f)
+                    color = YoinColors.Primary.copy(alpha = 0.3f)
                 ),
                 onClick = onClick
             ),
@@ -104,7 +104,7 @@ private fun YoinTab(
             text = label,
             fontSize = 14.sp,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-            color = if (selected) YoinColors.ModernTextPrimary else YoinColors.ModernTextSecondary
+            color = if (selected) YoinColors.Primary else YoinColors.TextSecondary
         )
     }
 }
@@ -136,7 +136,7 @@ private fun TabIndicator(
                 .offset(x = animatedOffset)
                 .width(indicatorWidth)
                 .height(3.dp)
-                .background(YoinColors.ModernAccentPrimary)
+                .background(YoinColors.Primary)
         )
     }
 }
@@ -153,7 +153,7 @@ private fun TabIndicator(
 private fun YoinTabRowPreview2Tabs() {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
-    Column(modifier = Modifier.background(YoinColors.ModernBackground)) {
+    Column(modifier = Modifier.background(YoinColors.Background)) {
         YoinTabRow(
             tabs = listOf("アカウント", "プライバシー"),
             selectedIndex = selectedIndex,
@@ -170,7 +170,7 @@ private fun YoinTabRowPreview2Tabs() {
 private fun YoinTabRowPreview3Tabs() {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
-    Column(modifier = Modifier.background(YoinColors.ModernBackground)) {
+    Column(modifier = Modifier.background(YoinColors.Background)) {
         YoinTabRow(
             tabs = listOf("全て", "フィルムカメラ", "動画"),
             selectedIndex = selectedIndex,
@@ -187,7 +187,7 @@ private fun YoinTabRowPreview3Tabs() {
 private fun YoinTabRowPreview4Tabs() {
     var selectedIndex by remember { mutableIntStateOf(1) }
 
-    Column(modifier = Modifier.background(YoinColors.ModernBackground)) {
+    Column(modifier = Modifier.background(YoinColors.Background)) {
         YoinTabRow(
             tabs = listOf("すべて", "旅行別", "お気に入り", "アーカイブ"),
             selectedIndex = selectedIndex,
@@ -202,10 +202,10 @@ private fun YoinTabRowPreview4Tabs() {
 @Preview
 @Composable
 private fun YoinTabRowPreviewSelectionStates() {
-    Column(modifier = Modifier.background(YoinColors.ModernBackground)) {
+    Column(modifier = Modifier.background(YoinColors.Background)) {
         Text(
             text = "1番目選択",
-            color = YoinColors.ModernTextSecondary,
+            color = YoinColors.TextSecondary,
             fontSize = 12.sp,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
@@ -219,7 +219,7 @@ private fun YoinTabRowPreviewSelectionStates() {
 
         Text(
             text = "2番目選択",
-            color = YoinColors.ModernTextSecondary,
+            color = YoinColors.TextSecondary,
             fontSize = 12.sp,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
@@ -233,7 +233,7 @@ private fun YoinTabRowPreviewSelectionStates() {
 
         Text(
             text = "3番目選択",
-            color = YoinColors.ModernTextSecondary,
+            color = YoinColors.TextSecondary,
             fontSize = 12.sp,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )

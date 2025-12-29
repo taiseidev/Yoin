@@ -8,111 +8,145 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 /**
- * Yoinアプリのカラーパレット
- * sassyアプリのデザインに基づくコーラル/ピーチカラースキーム
+ * Yoinアプリのカラーパレット - Modern Cinematic with Amber Accent
+ *
+ * 写真を最大限に引き立てるダークベースのスタイリッシュなデザイン
+ * - 純黒背景で写真を際立たせる
+ * - iOSダークモード準拠のグレースケール
+ * - アンバー/琥珀色のアクセントで「余韻」を表現
+ *   - 夕暮れの残光（旅の終わりの美しさ）
+ *   - フィルム写真の温かみ（ノスタルジック）
+ *   - 記憶の中で輝く瞬間（柔らかく儚い）
+ * - 高コントラストでプロフェッショナルな視認性
  */
 object YoinColors {
-    // Primary colors - コーラル/ピーチ系
-    val Primary = Color(0xFFFF8B7A)        // #ff8b7a - コーラルピンク
-    val PrimaryVariant = Color(0xFFFF6B5A) // #ff6b5a - 濃いコーラル
-    val PrimaryLight = Color(0xFFFFAB9A)   // #ffab9a - 明るいコーラル
+    // Background colors - ダークでモダン、写真を引き立てる
+    val Background = Color(0xFF000000)        // #000000 - 純黒（写真を最大限引き立てる）
+    val Surface = Color(0xFF1C1C1E)           // #1c1c1e - iOS準拠のダークサーフェス
+    val SurfaceVariant = Color(0xFF2C2C2E)    // #2c2c2e - 少し明るいダークグレー
+    val SurfaceBright = Color(0xFF3A3A3C)     // #3a3a3c - 明るいダークグレー（強調用）
 
-    // Background colors - 明るく清潔感のある背景
-    val Background = Color(0xFFFFFBF8)     // #fffbf8 - オフホワイト背景
-    val Surface = Color(0xFFFFFFFF)        // #ffffff - カード背景
-    val SurfaceVariant = Color(0xFFFFF5F0) // #fff5f0 - ほんのりピーチ
+    // Text colors - ハイコントラスト
+    val TextPrimary = Color(0xFFFFFFFF)       // #ffffff - 純白（最高の視認性）
+    val TextSecondary = Color(0xFF8E8E93)     // #8e8e93 - iOS準拠のセカンダリグレー
+    val TextTertiary = Color(0xFF636366)      // #636366 - iOS準拠のターシャリグレー
+    val OnPrimary = Color(0xFF000000)         // #000000 - 黒文字（明るい背景上）
 
-    // Text colors
-    val TextPrimary = Color(0xFF2C2C2C)    // #2c2c2c - メインテキスト
-    val TextSecondary = Color(0xFF666666)  // #666666 - セカンダリテキスト
-    val TextTertiary = Color(0xFF999999)   // #999999 - 非選択・ヒント
-    val OnPrimary = Color(0xFFFFFFFF)      // 白文字
+    // Primary colors - アンバー/琥珀色（「余韻」の温かい記憶、夕暮れの残光）
+    val Primary = Color(0xFFFF6B35)           // #ff6b35 - アンバーオレンジ（夕暮れの残光）
+    val PrimaryVariant = Color(0xFFE85A24)    // #e85a24 - 濃いアンバー（情熱的な記憶）
+    val PrimaryLight = Color(0xFFFF8C5A)      // #ff8c5a - 明るいアンバー（柔らかい余韻）
 
-    // Accent colors - サブカラー
-    val AccentPeach = Color(0xFFFFCCB8)    // #ffccb8 - 淡いピーチ
-    val AccentCoral = Color(0xFFFF8B7A)    // #ff8b7a - アクセント
-    val AccentGray = Color(0xFFF5F5F5)     // #f5f5f5 - 背景グレー
-    val AccentGold = Color(0xFFCBB485)     // #cbb485 - ゴールドベージュ（上品なアクセント）
+    // Accent colors - ノスタルジックで温かみのある色彩
+    val AccentCopper = Color(0xFFD4886C)      // #d4886c - コッパー（フィルム写真の温かみ）
+    val AccentRoseGold = Color(0xFFE8A598)    // #e8a598 - ローズゴールド（儚い余韻）
+    val AccentSepia = Color(0xFFB87F6A)       // #b87f6a - セピア（記憶の色褪せ）
+    val AccentGray = Color(0xFF48484A)        // #48484a - ミディアムグレー
 
-    // Additional colors
-    val Error = Color(0xFFFF3B30)          // #ff3b30 - エラー
-    val OnError = Color(0xFFFFFFFF)
-    val Success = Color(0xFF34C759)        // #34c759 - 成功
-    val Warning = Color(0xFFFFCC00)        // #ffcc00 - 警告
+    // Additional colors - iOS準拠
+    val Error = Color(0xFFFF453A)             // #ff453a - iOS準拠のレッド
+    val OnError = Color(0xFF000000)           // #000000 - 黒文字
+    val Success = Color(0xFF32D74B)           // #32d74b - iOS準拠のグリーン
+    val Warning = Color(0xFFFF9500)           // #ff9500 - iOS準拠のオレンジ
 
-    // Modern Film Design colors
-    val ModernBackground = Color(0xFF000000)    // #000000 - モダン背景
-    val ModernTextPrimary = Color(0xFFFFFFFF)   // #ffffff - 選択中テキスト
-    val ModernTextSecondary = Color(0xFF8E8E93) // #8e8e93 - 非選択テキスト
-    val ModernAccentPrimary = Color(0xFFFF6B35) // #ff6b35 - アクセント（インジケーター）
+    // Legacy colors - 互換性のため残す
+    @Deprecated("Use Primary instead", ReplaceWith("Primary"))
+    val AccentPeach = Primary
+    @Deprecated("Use Primary instead", ReplaceWith("Primary"))
+    val AccentCoral = Primary
 }
 
 /**
- * ライトテーマのカラースキーム
- * sassyアプリのデザインに基づくコーラルカラー
+ * ダークテーマのカラースキーム（メイン）
+ * 写真アプリとして最適化されたモダンシネマティックデザイン
  */
-private val LightColorScheme = lightColorScheme(
+private val DarkColorScheme = darkColorScheme(
+    // Primary
     primary = YoinColors.Primary,
     onPrimary = YoinColors.OnPrimary,
-    primaryContainer = YoinColors.AccentPeach,
-    onPrimaryContainer = YoinColors.TextPrimary,
+    primaryContainer = YoinColors.PrimaryVariant,
+    onPrimaryContainer = YoinColors.OnPrimary,
 
-    secondary = YoinColors.PrimaryLight,
-    onSecondary = YoinColors.OnPrimary,
+    // Secondary
+    secondary = YoinColors.AccentCopper,
+    onSecondary = Color(0xFFFFFFFF),
     secondaryContainer = YoinColors.SurfaceVariant,
     onSecondaryContainer = YoinColors.TextPrimary,
 
+    // Tertiary
+    tertiary = YoinColors.AccentRoseGold,
+    onTertiary = Color(0xFF000000),
+
+    // Background
     background = YoinColors.Background,
     onBackground = YoinColors.TextPrimary,
 
+    // Surface
     surface = YoinColors.Surface,
     onSurface = YoinColors.TextPrimary,
     surfaceVariant = YoinColors.SurfaceVariant,
     onSurfaceVariant = YoinColors.TextSecondary,
 
+    // Error
     error = YoinColors.Error,
     onError = YoinColors.OnError,
 
-    tertiary = YoinColors.AccentCoral,
-    onTertiary = YoinColors.OnPrimary,
+    // Outline
+    outline = YoinColors.SurfaceVariant,
+    outlineVariant = YoinColors.AccentGray,
 )
 
 /**
- * ダークテーマのカラースキーム
- * 現在はライトテーマをベースに調整
+ * ライトテーマのカラースキーム（サブ）
+ * ダークテーマを基本とするが、ライトモード対応
  */
-private val DarkColorScheme = darkColorScheme(
-    primary = YoinColors.Primary,
-    onPrimary = Color(0xFF1C1B1F),
-    primaryContainer = Color(0xFF8B4A3A),
-    onPrimaryContainer = Color(0xFFFFDDD6),
+private val LightColorScheme = lightColorScheme(
+    // Primary
+    primary = YoinColors.PrimaryVariant,
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = YoinColors.PrimaryLight,
+    onPrimaryContainer = Color(0xFF1A1A1A),
 
-    secondary = YoinColors.PrimaryLight,
-    onSecondary = Color(0xFF1C1B1F),
-    secondaryContainer = Color(0xFF3E2723),
-    onSecondaryContainer = Color(0xFFFFCCB8),
+    // Secondary
+    secondary = YoinColors.AccentCopper,
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFF5F5F5),
+    onSecondaryContainer = Color(0xFF1A1A1A),
 
-    background = Color(0xFF1C1B1F),
-    onBackground = Color(0xFFE6E1E5),
+    // Tertiary
+    tertiary = YoinColors.AccentRoseGold,
+    onTertiary = Color(0xFF000000),
 
-    surface = Color(0xFF1C1B1F),
-    onSurface = Color(0xFFE6E1E5),
-    surfaceVariant = Color(0xFF2C2420),
-    onSurfaceVariant = Color(0xFFCAC4D0),
+    // Background
+    background = Color(0xFFFFFFFF),
+    onBackground = Color(0xFF1A1A1A),
 
-    error = YoinColors.Error,
-    onError = Color(0xFF000000),
+    // Surface
+    surface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFF1A1A1A),
+    surfaceVariant = Color(0xFFF5F5F5),
+    onSurfaceVariant = Color(0xFF666666),
+
+    // Error
+    error = Color(0xFFFF3B30),
+    onError = Color(0xFFFFFFFF),
+
+    // Outline
+    outline = Color(0xFFE0E0E0),
+    outlineVariant = Color(0xFFF0F0F0),
 )
 
 /**
  * Yoinアプリのマテリアルテーマ
  *
- * @param darkTheme ダークテーマを使用するかどうか（デフォルトはシステム設定に従う）
+ * デフォルトでダークテーマを使用（写真アプリとして最適）
+ *
+ * @param darkTheme ダークテーマを使用するかどうか（デフォルト: true - 写真を引き立てるため）
  * @param content テーマを適用するコンテンツ
  */
 @Composable
 fun YoinTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true, // 写真アプリとしてダークテーマをデフォルトに
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) {
