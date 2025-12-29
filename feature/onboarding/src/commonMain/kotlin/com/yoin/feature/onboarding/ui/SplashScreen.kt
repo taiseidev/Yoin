@@ -1,50 +1,43 @@
 package com.yoin.feature.onboarding.ui
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
-import com.yoin.core.design.theme.YoinFontSizes
-import com.yoin.core.design.theme.YoinSizes
-import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.preview.ComprehensivePreview
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.domain.common.model.InitializationState
 import com.yoin.feature.onboarding.viewmodel.SplashContract
 import com.yoin.feature.onboarding.viewmodel.SplashViewModel
+import kotlinx.coroutines.delay
 
 /**
- * スプラッシュ画面
- * sassyアプリのデザインに基づく:
- * - コーラル/ピーチのグラデーション背景
- * - 中央に白い角丸の枠でフィルムアイコン（🎞）
- * - アプリ名「Yoin.」（白、太字、36px）
- * - サブタイトル「旅の思い出を、フィルムで。」（白90%透明度、16px）
- * - 下部にページインジケーター（3つのドット）
+ * スプラッシュ画面 - Modern Cinematic Design
+ *
+ * デザインコンセプト:
+ * - シネマティックなアンバーグラデーション背景
+ * - フェードイン/スケールアニメーション
+ * - ミニマルで洗練されたデザイン
+ * - 「余韻」を感じさせる演出
  */
 @Composable
 fun SplashScreen(
@@ -80,14 +73,45 @@ fun SplashScreen(
 private fun SplashContent(
     initializationState: InitializationState
 ) {
+    // アニメーション状態
+    var isVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(100)
+        isVisible = true
+    }
+
+    // アニメーション値
+    val logoScale by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0.8f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "logoScale"
+    )
+
+    val logoAlpha by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0f,
+        animationSpec = tween(durationMillis = 800),
+        label = "logoAlpha"
+    )
+
+    val textAlpha by animateFloatAsState(
+        targetValue = if (isVisible) 1f else 0f,
+        animationSpec = tween(durationMillis = 1000, delayMillis = 300),
+        label = "textAlpha"
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        YoinColors.Primary,      // コーラルピンク
-                        YoinColors.PrimaryLight  // 明るいコーラル
+                        Color.Black,
+                        YoinColors.Primary.copy(alpha = 0.3f),
+                        YoinColors.PrimaryVariant.copy(alpha = 0.2f)
                     )
                 )
             ),
@@ -96,70 +120,69 @@ private fun SplashContent(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // アイコン部分（白い角丸背景 + フィルムアイコン）
+            // アイコン部分（グラデーション背景 + フィルムアイコン）
             Box(
                 modifier = Modifier
-                    .size(YoinSizes.logoLarge)
-                    .clip(RoundedCornerShape(YoinSpacing.xxxl))
-                    .background(Color.White),
+                    .size(120.dp)
+                    .scale(logoScale)
+                    .alpha(logoAlpha)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.PrimaryVariant
+                            )
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
+                // ラジアルグラデーションオーバーレイ
+                Box(
+                    modifier = Modifier
+                        .size(120.dp)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.2f),
+                                    Color.Transparent
+                                )
+                            ),
+                            CircleShape
+                        )
+                )
+
                 Icon(
                     imageVector = Icons.Filled.CameraRoll,
                     contentDescription = "Yoin Film Camera Icon",
-                    tint = YoinColors.Primary,
-                    modifier = Modifier.size(64.dp)
+                    tint = Color.White,
+                    modifier = Modifier.size(60.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(YoinSpacing.huge))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // アプリ名
             Text(
                 text = "Yoin.",
-                fontSize = YoinFontSizes.displayLarge.value.sp,
+                fontSize = 48.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = Color.White,
+                letterSpacing = (-1).sp,
+                modifier = Modifier.alpha(textAlpha)
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.md))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // サブタイトル
             Text(
-                text = "旅の思い出を、フィルムで。",
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                color = Color.White.copy(alpha = 0.9f)
+                text = "余韻を残す旅の記録",
+                fontSize = 16.sp,
+                color = Color.White.copy(alpha = 0.8f),
+                fontStyle = FontStyle.Italic,
+                letterSpacing = 1.sp,
+                modifier = Modifier.alpha(textAlpha)
             )
-        }
-
-        // ページインジケーター（下部）
-        PageIndicator(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = YoinSpacing.massive)
-        )
-    }
-}
-
-@Composable
-private fun PageIndicator(
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-    ) {
-        repeat(3) { index ->
-            Box(
-                modifier = Modifier
-                    .size(YoinSizes.indicatorSmall)
-                    .clip(CircleShape)
-                    .background(
-                        if (index == 0) Color.White else Color.White.copy(alpha = 0.5f)
-                    )
-            )
-            if (index < 2) {
-                Spacer(modifier = Modifier.size(YoinSpacing.sm))
-            }
         }
     }
 }

@@ -1,50 +1,33 @@
 package com.yoin.feature.onboarding.ui
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.CameraRoll
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.PhotoCamera
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.yoin.core.design.theme.YoinColors
-import com.yoin.core.design.theme.YoinFontSizes
-import com.yoin.core.design.theme.YoinSizes
-import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.domain.common.model.OnboardingPage
 import com.yoin.feature.onboarding.viewmodel.OnboardingContract
@@ -52,7 +35,18 @@ import com.yoin.feature.onboarding.viewmodel.OnboardingViewModel
 import kotlinx.coroutines.launch
 
 /**
- * オンボーディング画面
+ * オンボーディングページデータ
+ */
+data class OnboardingPageData(
+    val title: String,
+    val description: String,
+    val imageUrl: String,
+    val icon: ImageVector,
+    val gradientColors: List<Color>
+)
+
+/**
+ * オンボーディング画面 - Modern Cinematic Design
  *
  * Yoinの特徴を4ページで紹介:
  * 1. 見えない状態で撮影
@@ -78,29 +72,72 @@ fun OnboardingScreen(
         }
     }
 
-    val pagerState = rememberPagerState(pageCount = { state.pages.size })
+    val pagerState = rememberPagerState(pageCount = { 4 })
 
     // pager の状態が変わったら ViewModel に通知
     LaunchedEffect(pagerState.currentPage) {
         viewModel.handleIntent(OnboardingContract.Intent.PageChanged(pagerState.currentPage))
     }
 
+    // オンボーディングページのデータ
+    val pages = remember {
+        listOf(
+            OnboardingPageData(
+                title = "見えない状態で撮影",
+                description = "フィルムカメラのように、撮った写真はすぐには見られません。\nその瞬間を大切に、一枚一枚を撮影しましょう。",
+                imageUrl = "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800", // フィルムカメラ
+                icon = Icons.Filled.PhotoCamera,
+                gradientColors = listOf(
+                    Color.Black,
+                    YoinColors.Primary.copy(alpha = 0.3f)
+                )
+            ),
+            OnboardingPageData(
+                title = "仲間とシェア",
+                description = "旅の仲間を招待して、一緒に写真を撮影。\n全員の写真が集まって、特別なアルバムになります。",
+                imageUrl = "https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=800", // 友達と旅行
+                icon = Icons.Filled.People,
+                gradientColors = listOf(
+                    Color.Black,
+                    YoinColors.AccentRoseGold.copy(alpha = 0.3f)
+                )
+            ),
+            OnboardingPageData(
+                title = "翌朝9時に現像",
+                description = "旅行が終わった翌朝9時、写真が「現像」されます。\n待つ時間が、期待と余韻を生み出します。",
+                imageUrl = "https://images.unsplash.com/photo-1501619951397-5ba40d0f75da?w=800", // 朝の風景
+                icon = Icons.Filled.Schedule,
+                gradientColors = listOf(
+                    Color.Black,
+                    YoinColors.AccentCopper.copy(alpha = 0.3f)
+                )
+            ),
+            OnboardingPageData(
+                title = "フィルムカメラ体験",
+                description = "デジタルなのに、アナログの温かさ。\nYoin.で、特別な旅の思い出を残しましょう。",
+                imageUrl = "https://images.unsplash.com/photo-1452588511530-6a5bfb92e297?w=800", // ビンテージカメラ
+                icon = Icons.Filled.CameraRoll,
+                gradientColors = listOf(
+                    Color.Black,
+                    YoinColors.AccentSepia.copy(alpha = 0.3f)
+                )
+            )
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.Black)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
-
             // スキップボタン
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = YoinSpacing.xl, vertical = YoinSpacing.sm),
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
@@ -108,9 +145,9 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = "スキップ",
-                        fontSize = YoinFontSizes.bodySmall.value.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Medium,
-                        color = YoinColors.TextSecondary
+                        color = Color.White.copy(alpha = 0.7f)
                     )
                 }
             }
@@ -121,31 +158,46 @@ fun OnboardingScreen(
                 modifier = Modifier.weight(1f)
             ) { page ->
                 OnboardingPageContent(
-                    page = state.pages[page],
-                    pageIndex = page,
+                    pageData = pages[page],
                     modifier = Modifier.fillMaxSize()
                 )
             }
 
-            // ページインジケーター（ゴールドアクセント）
+            // ページインジケーター
             Row(
-                modifier = Modifier.padding(vertical = YoinSpacing.xl),
-                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                repeat(state.pages.size) { index ->
-                    val isSelected = index == state.currentPage
+                repeat(4) { index ->
+                    val isSelected = index == pagerState.currentPage
                     Box(
                         modifier = Modifier
-                            .size(if (isSelected) YoinSizes.indicatorLarge else YoinSizes.indicatorSmall)
-                            .clip(CircleShape)
+                            .size(if (isSelected) 32.dp else 8.dp, 8.dp)
+                            .clip(RoundedCornerShape(4.dp))
                             .background(
                                 if (isSelected) {
-                                    YoinColors.Primary
+                                    Brush.horizontalGradient(
+                                        colors = listOf(
+                                            YoinColors.Primary,
+                                            YoinColors.PrimaryVariant
+                                        )
+                                    )
                                 } else {
-                                    YoinColors.AccentRoseGold
+                                    Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color.White.copy(alpha = 0.3f),
+                                            Color.White.copy(alpha = 0.3f)
+                                        )
+                                    )
                                 }
                             )
                     )
+                    if (index < 3) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                 }
             }
 
@@ -153,47 +205,75 @@ fun OnboardingScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = YoinSpacing.xxl, vertical = YoinSpacing.huge)
+                    .padding(horizontal = 20.dp, vertical = 24.dp)
             ) {
-                if (state.isLastPage) {
-                    Button(
-                        onClick = { viewModel.handleIntent(OnboardingContract.Intent.GetStarted) },
+                if (pagerState.currentPage == 3) {
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(YoinSizes.buttonHeightLarge),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = YoinColors.Primary,
-                            contentColor = Color.White
-                        ),
-                        shape = RoundedCornerShape(YoinSpacing.lg)
+                            .height(56.dp)
+                            .clip(RoundedCornerShape(28.dp))
+                            .background(
+                                Brush.horizontalGradient(
+                                    colors = listOf(
+                                        YoinColors.Primary,
+                                        YoinColors.PrimaryVariant
+                                    )
+                                )
+                            )
                     ) {
-                        Text(
-                            text = "はじめる",
-                            fontSize = YoinFontSizes.bodyLarge.value.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        Button(
+                            onClick = { viewModel.handleIntent(OnboardingContract.Intent.GetStarted) },
+                            modifier = Modifier.fillMaxSize(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(0.dp, 0.dp, 0.dp)
+                        ) {
+                            Text(
+                                text = "はじめる",
+                                fontSize = 17.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        }
                     }
                 } else {
-                    Button(
-                        onClick = {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(state.currentPage + 1)
-                            }
-                        },
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(YoinSizes.buttonHeightLarge),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = YoinColors.Primary,
-                            contentColor = Color.White
-                        ),
-                        shape = RoundedCornerShape(YoinSpacing.lg)
+                            .height(56.dp)
+                            .clip(RoundedCornerShape(28.dp))
+                            .border(
+                                width = 2.dp,
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        YoinColors.Primary,
+                                        YoinColors.PrimaryVariant
+                                    )
+                                ),
+                                shape = RoundedCornerShape(28.dp)
+                            )
                     ) {
-                        Text(
-                            text = "次へ",
-                            fontSize = YoinFontSizes.bodyLarge.value.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        Button(
+                            onClick = {
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                }
+                            },
+                            modifier = Modifier.fillMaxSize(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Transparent
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(0.dp, 0.dp, 0.dp)
+                        ) {
+                            Text(
+                                text = "次へ",
+                                fontSize = 17.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        }
                     }
                 }
             }
@@ -202,73 +282,94 @@ fun OnboardingScreen(
 }
 
 /**
- * 各ページのコンテンツ
+ * 各ページのコンテンツ - Modern Cinematic Design
  */
 @Composable
 private fun OnboardingPageContent(
-    page: OnboardingPage,
-    pageIndex: Int,
+    pageData: OnboardingPageData,
     modifier: Modifier = Modifier,
 ) {
-    // 各ページのアイコンを定義
-    val icon = when (pageIndex) {
-        0 -> Icons.Filled.PhotoCamera // 見えない状態で撮影
-        1 -> Icons.Filled.People // 仲間とシェア
-        2 -> Icons.Filled.AccessTime // 翌朝9時に現像
-        3 -> Icons.Filled.CameraRoll // フィルムカメラ体験
-        else -> Icons.Filled.PhotoCamera
-    }
-
-    // 各ページの背景色を定義（アンバー/琥珀色のグラデーション）
-    val backgroundColor = when (pageIndex) {
-        0 -> YoinColors.Surface // ダークグレー
-        1 -> YoinColors.SurfaceVariant // 少し明るいダークグレー
-        2 -> YoinColors.Surface // ダークグレー
-        3 -> YoinColors.SurfaceVariant // 少し明るいダークグレー
-        else -> YoinColors.Surface
-    }
-
-    Column(
-        modifier = modifier.padding(horizontal = YoinSpacing.xxxl),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = modifier
     ) {
-        // アイコンを表示
+        // 背景画像
+        AsyncImage(
+            model = pageData.imageUrl,
+            contentDescription = pageData.title,
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // グラデーションオーバーレイ
         Box(
             modifier = Modifier
-                .size(220.dp)
-                .clip(RoundedCornerShape(YoinSpacing.xxxl))
-                .background(backgroundColor),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = pageData.gradientColors + listOf(
+                            Color.Black.copy(alpha = 0.8f)
+                        )
+                    )
+                )
+        )
+
+        // コンテンツ
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = page.title,
-                tint = YoinColors.Primary,
-                modifier = Modifier.size(88.dp)
+            // アイコン
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                YoinColors.Primary.copy(alpha = 0.3f),
+                                YoinColors.PrimaryVariant.copy(alpha = 0.3f)
+                            )
+                        )
+                    )
+                    .border(2.dp, Color.White.copy(alpha = 0.3f), CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = pageData.icon,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // タイトル
+            Text(
+                text = pageData.title,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                lineHeight = 40.sp,
+                letterSpacing = (-0.5).sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 説明
+            Text(
+                text = pageData.description,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                color = Color.White.copy(alpha = 0.9f),
+                lineHeight = 24.sp,
+                fontStyle = FontStyle.Italic
             )
         }
-
-        Spacer(modifier = Modifier.height(YoinSpacing.huge))
-
-        Text(
-            text = page.title,
-            fontSize = YoinFontSizes.headingLarge.value.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = YoinColors.TextPrimary,
-            lineHeight = 34.sp
-        )
-
-        Spacer(modifier = Modifier.height(YoinSpacing.md))
-
-        Text(
-            text = page.description,
-            fontSize = YoinFontSizes.bodyMedium.value.sp,
-            textAlign = TextAlign.Center,
-            color = YoinColors.TextSecondary,
-            lineHeight = 24.sp
-        )
     }
 }
 
