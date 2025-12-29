@@ -154,7 +154,7 @@ fun RoomSettingsScreen(
                     Box(
                         modifier = Modifier
                             .size(120.dp)
-                            .background(YoinColors.AccentPeach, CircleShape),
+                            .background(YoinColors.Primary, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
