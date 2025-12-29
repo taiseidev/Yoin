@@ -1,25 +1,32 @@
 package com.yoin.core.ui.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yoin.core.design.theme.YoinColors
 
 /**
- * Yoinアプリのボトムナビゲーションバー
+ * Yoinアプリのボトムナビゲーションバー - Modern Cinematic Design
  *
- * Figmaデザイン「01_home」に基づいた実装:
+ * デザイン仕様:
  * - 5つのアイテム: ホーム、アルバム、中央のFAB、Shop、設定
- * - 中央のFABは大きな丸いボタン（茶色/ブラウン系）
- * - 通常のタブはアイコン+ラベル（グレー）
- * - 白背景
+ * - 中央のFABはアンバーグラデーション（Primary -> PrimaryVariant）
+ * - 選択されたアイテム: アンバー色 + インジケーター
+ * - 未選択: TextSecondary
+ * - ダークサーフェス背景（#1C1C1E）
  *
  * @param selectedRoute 現在選択されているルート
  * @param onNavigate ナビゲーションアイテムがクリックされたときのコールバック
@@ -43,15 +50,15 @@ fun YoinBottomNavigationBar(
 
     Surface(
         modifier = modifier.fillMaxWidth(),
-        color = Color.White,
-        tonalElevation = 3.dp,
-        shadowElevation = 8.dp
+        color = YoinColors.Surface,
+        tonalElevation = 0.dp,
+        shadowElevation = 16.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .height(72.dp)
+                .padding(horizontal = 8.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -65,23 +72,36 @@ fun YoinBottomNavigationBar(
                 )
             }
 
-            // 中央のFABボタン
+            // 中央のFABボタン - Amber Gradient
             Box(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                FloatingActionButton(
-                    onClick = onCreatePost,
-                    containerColor = MaterialTheme.colorScheme.secondary, // YoinColors.Orange
-                    contentColor = Color.White,
-                    shape = CircleShape,
-                    modifier = Modifier.size(56.dp)
+                Box(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Brush.linearGradient(
+                                colors = listOf(
+                                    YoinColors.Primary,
+                                    YoinColors.PrimaryVariant
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "投稿を作成",
-                        modifier = Modifier.size(28.dp)
-                    )
+                    IconButton(
+                        onClick = onCreatePost,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "投稿を作成",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 }
             }
 
@@ -99,7 +119,7 @@ fun YoinBottomNavigationBar(
 }
 
 /**
- * ボトムナビゲーションの個別アイテム
+ * ボトムナビゲーションの個別アイテム - Modern Cinematic Design
  */
 @Composable
 private fun BottomNavItem(
@@ -111,22 +131,48 @@ private fun BottomNavItem(
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        IconButton(onClick = onClick) {
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier.size(48.dp)
+        ) {
             Icon(
                 imageVector = item.icon,
                 contentDescription = item.label,
-                modifier = Modifier.size(24.dp),
-                tint = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
+                modifier = Modifier.size(26.dp),
+                tint = if (isSelected) YoinColors.Primary else YoinColors.TextSecondary
             )
         }
+
+        Spacer(modifier = Modifier.height(2.dp))
+
         Text(
             text = item.label,
-            fontSize = 12.sp,
-            color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
+            fontSize = 11.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+            color = if (isSelected) YoinColors.Primary else YoinColors.TextSecondary
         )
+
+        // 選択インジケーター
+        if (isSelected) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Box(
+                modifier = Modifier
+                    .width(32.dp)
+                    .height(3.dp)
+                    .clip(RoundedCornerShape(1.5.dp))
+                    .background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.PrimaryVariant
+                            )
+                        )
+                    )
+            )
+        }
     }
 }
