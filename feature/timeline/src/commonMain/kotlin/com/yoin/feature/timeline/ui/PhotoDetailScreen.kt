@@ -248,7 +248,7 @@ private fun PhotoInfoBottomSheet(
                 Box(
                     modifier = Modifier
                         .size(YoinSizes.iconXLarge)
-                        .background(YoinColors.AccentPeach, CircleShape),
+                        .background(YoinColors.Primary, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(

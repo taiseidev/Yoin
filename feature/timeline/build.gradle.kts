@@ -47,6 +47,10 @@ kotlin {
 
             // Date/Time
             implementation(libs.kotlinx.datetime)
+
+            // Image Loading
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
 
         commonTest.dependencies {

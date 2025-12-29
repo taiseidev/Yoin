@@ -15,10 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -67,6 +65,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
 import com.yoin.core.design.theme.YoinColors
 import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.design.theme.YoinSizes
@@ -77,15 +78,14 @@ import com.yoin.feature.timeline.viewmodel.TimelineViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 /**
- * タイムライン（アルバム）画面
+ * タイムライン（アルバム）画面 - マガジンレイアウト
  *
- * 高機能アルバムビューアを提供:
- * - タブ切り替え（すべて/旅行別/お気に入り）
- * - 検索機能（場所、旅行名、キャプション）
- * - ソート機能（日付昇順/降順、場所順）
- * - お気に入りフィルタ
- * - プルトゥリフレッシュ
- * - 写真グリッド表示（3列）
+ * 革新的な写真中心のデザイン:
+ * - マガジンスタイルのレイアウト（様々なサイズの写真）
+ * - 日付ヘッダーで時系列グループ化
+ * - ミニマルなUI、写真にフォーカス
+ * - 大きなスペーシングで視認性向上
+ * - フルワイドヒーロー、2列、3列の混合レイアウト
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -128,35 +128,24 @@ fun TimelineScreen(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // ヘッダー
-                AlbumHeader(
+                // ミニマルヘッダー
+                MinimalHeader(
                     searchQuery = state.searchQuery,
                     onSearchChange = { query ->
                         viewModel.onIntent(TimelineContract.Intent.OnSearch(query))
                     }
                 )
 
-                // タブ
-                AlbumTabs(
+                // シンプルタブ
+                SimpleTabs(
                     selectedTab = state.selectedTab,
                     onTabChange = { tab ->
                         viewModel.onIntent(TimelineContract.Intent.OnTabChange(tab))
                     }
                 )
 
-                // フィルタ/ソートバー
-                FilterSortBar(
-                    sortOption = state.sortOption,
-                    showFavoritesOnly = state.showFavoritesOnly,
-                    onSortChange = { sort ->
-                        viewModel.onIntent(TimelineContract.Intent.OnSortChange(sort))
-                    },
-                    onToggleFavoritesFilter = {
-                        viewModel.onIntent(TimelineContract.Intent.OnToggleFavoritesFilter)
-                    }
-                )
-
                 // 旅行リスト（旅行別タブの時のみ）
+                // お気に入りタブは旅行区分けなしでフラット表示
                 if (state.selectedTab == TimelineContract.AlbumTab.BY_TRIP) {
                     TripList(
                         trips = state.trips,
@@ -165,9 +154,12 @@ fun TimelineScreen(
                             viewModel.onIntent(TimelineContract.Intent.OnTripSelect(tripId))
                         }
                     )
+                } else if (state.selectedTab == TimelineContract.AlbumTab.FAVORITES) {
+                    // お気に入りタブ用のヘッダー
+                    FavoritesHeader()
                 }
 
-                // 写真グリッド
+                // マガジンレイアウト
                 if (state.isLoading && state.photos.isEmpty()) {
                     Box(
                         modifier = Modifier
@@ -180,7 +172,7 @@ fun TimelineScreen(
                 } else if (state.photos.isEmpty()) {
                     EmptyState(selectedTab = state.selectedTab)
                 } else {
-                    PhotoGrid(
+                    MagazineLayout(
                         photos = state.photos,
                         onPhotoClick = { photoId ->
                             viewModel.onIntent(TimelineContract.Intent.OnPhotoClick(photoId))
@@ -196,10 +188,10 @@ fun TimelineScreen(
 }
 
 /**
- * アルバムヘッダー（検索バー付き）
+ * ミニマルヘッダー（検索のみ）
  */
 @Composable
-private fun AlbumHeader(
+private fun MinimalHeader(
     searchQuery: String,
     onSearchChange: (String) -> Unit
 ) {
@@ -207,46 +199,47 @@ private fun AlbumHeader(
         modifier = Modifier
             .fillMaxWidth()
             .background(YoinColors.Surface)
-            .padding(YoinSpacing.lg)
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md)
     ) {
         Text(
             text = "アルバム",
-            fontSize = YoinFontSizes.displaySmall.value.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = YoinColors.TextPrimary
         )
 
-        Spacer(modifier = Modifier.height(YoinSpacing.md))
+        Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
         OutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchChange,
-            placeholder = { Text("場所や旅行名で検索", color = YoinColors.TextSecondary) },
+            placeholder = { Text("検索", color = YoinColors.TextSecondary, fontSize = 14.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "検索",
-                    tint = YoinColors.TextSecondary
+                    tint = YoinColors.TextSecondary,
+                    modifier = Modifier.size(20.dp)
                 )
             },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            shape = RoundedCornerShape(YoinSpacing.md),
+            shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = YoinColors.Background,
                 unfocusedContainerColor = YoinColors.Background,
                 focusedBorderColor = YoinColors.Primary,
-                unfocusedBorderColor = YoinColors.SurfaceVariant
+                unfocusedBorderColor = Color.Transparent
             )
         )
     }
 }
 
 /**
- * アルバムタブ
+ * シンプルタブ
  */
 @Composable
-private fun AlbumTabs(
+private fun SimpleTabs(
     selectedTab: TimelineContract.AlbumTab,
     onTabChange: (TimelineContract.AlbumTab) -> Unit
 ) {
@@ -260,9 +253,11 @@ private fun AlbumTabs(
         indicator = { tabPositions ->
             TabRowDefaults.SecondaryIndicator(
                 modifier = Modifier.tabIndicatorOffset(tabPositions[selectedIndex]),
+                height = 2.dp,
                 color = YoinColors.Primary
             )
-        }
+        },
+        divider = {}
     ) {
         tabs.forEach { tab ->
             Tab(
@@ -275,6 +270,7 @@ private fun AlbumTabs(
                             TimelineContract.AlbumTab.BY_TRIP -> "旅行別"
                             TimelineContract.AlbumTab.FAVORITES -> "お気に入り"
                         },
+                        fontSize = 14.sp,
                         fontWeight = if (tab == selectedTab) FontWeight.Bold else FontWeight.Normal
                     )
                 },
@@ -286,76 +282,28 @@ private fun AlbumTabs(
 }
 
 /**
- * フィルタ/ソートバー
+ * お気に入りタブ用のヘッダー
  */
 @Composable
-private fun FilterSortBar(
-    sortOption: TimelineContract.SortOption,
-    showFavoritesOnly: Boolean,
-    onSortChange: (TimelineContract.SortOption) -> Unit,
-    onToggleFavoritesFilter: () -> Unit
-) {
-    var showSortMenu by remember { mutableStateOf(false) }
-
-    Row(
+private fun FavoritesHeader() {
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(YoinColors.Surface)
-            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .background(YoinColors.Background)
+            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md)
     ) {
-        // お気に入りフィルタ
-        FilterChip(
-            selected = showFavoritesOnly,
-            onClick = onToggleFavoritesFilter,
-            label = { Text("お気に入りのみ", fontSize = YoinFontSizes.labelMedium.value.sp) },
-            leadingIcon = {
-                Icon(
-                    imageVector = if (showFavoritesOnly) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "お気に入り",
-                    modifier = Modifier.size(YoinSizes.iconMedium)
-                )
-            },
-            colors = FilterChipDefaults.filterChipColors(
-                selectedContainerColor = YoinColors.Primary.copy(alpha = 0.2f),
-                selectedLabelColor = YoinColors.Primary,
-                selectedLeadingIconColor = YoinColors.Primary
-            )
+        Text(
+            text = "特別な瞬間",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = YoinColors.Primary
         )
-
-        // ソート
-        Box {
-            TextButton(
-                onClick = { showSortMenu = true }
-            ) {
-                Text(
-                    text = sortOption.displayName,
-                    color = YoinColors.Primary,
-                    fontSize = YoinFontSizes.labelMedium.value.sp
-                )
-                Text(
-                    text = " ▼",
-                    color = YoinColors.Primary,
-                    fontSize = YoinFontSizes.caption.value.sp
-                )
-            }
-
-            DropdownMenu(
-                expanded = showSortMenu,
-                onDismissRequest = { showSortMenu = false }
-            ) {
-                TimelineContract.SortOption.entries.forEach { option ->
-                    DropdownMenuItem(
-                        text = { Text(option.displayName) },
-                        onClick = {
-                            onSortChange(option)
-                            showSortMenu = false
-                        }
-                    )
-                }
-            }
-        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "あなたがお気に入りした写真",
+            fontSize = 12.sp,
+            color = YoinColors.TextSecondary
+        )
     }
 }
 
@@ -372,16 +320,8 @@ private fun TripList(
         modifier = Modifier
             .fillMaxWidth()
             .background(YoinColors.Background)
-            .padding(vertical = YoinSpacing.sm)
+            .padding(vertical = YoinSpacing.md)
     ) {
-        Text(
-            text = "旅行を選択",
-            fontSize = YoinFontSizes.labelLarge.value.sp,
-            fontWeight = FontWeight.Bold,
-            color = YoinColors.TextPrimary,
-            modifier = Modifier.padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.xs)
-        )
-
         LazyRow(
             contentPadding = PaddingValues(horizontal = YoinSpacing.lg),
             horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md)
@@ -418,15 +358,12 @@ private fun TripCard(
     Card(
         onClick = onClick,
         modifier = Modifier
-            .width(140.dp)
-            .height(100.dp),
+            .width(120.dp)
+            .height(80.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) YoinColors.Primary.copy(alpha = 0.1f) else YoinColors.Surface
+            containerColor = if (isSelected) YoinColors.Primary else YoinColors.Surface
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isSelected) YoinSpacing.xs else 1.dp
-        ),
-        shape = RoundedCornerShape(YoinSpacing.md)
+        shape = RoundedCornerShape(12.dp)
     ) {
         if (trip == null) {
             // すべて表示カード
@@ -434,48 +371,33 @@ private fun TripCard(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "すべて",
-                        tint = if (isSelected) YoinColors.Primary else YoinColors.TextSecondary,
-                        modifier = Modifier.size(YoinSizes.iconLarge)
-                    )
-                    Spacer(modifier = Modifier.height(YoinSpacing.xs))
-                    Text(
-                        text = "すべて",
-                        fontSize = YoinFontSizes.labelLarge.value.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (isSelected) YoinColors.Primary else YoinColors.TextPrimary
-                    )
-                }
+                Text(
+                    text = "すべて",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isSelected) Color.White else YoinColors.TextPrimary
+                )
             }
         } else {
             Column(
-                modifier = Modifier.padding(YoinSpacing.sm)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(YoinSpacing.md),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = trip.name,
-                    fontSize = YoinFontSizes.labelMedium.value.sp,
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (isSelected) YoinColors.Primary else YoinColors.TextPrimary,
+                    color = if (isSelected) Color.White else YoinColors.TextPrimary,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(YoinSpacing.xs))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${trip.photoCount}枚",
-                    fontSize = YoinFontSizes.caption.value.sp,
-                    color = YoinColors.TextSecondary
-                )
-                Spacer(modifier = Modifier.height(YoinSpacing.xs))
-                Text(
-//                    text = formatDate(trip.startDate),
-                    text = "2025/06/12",
-                    fontSize = YoinFontSizes.caption.value.sp,
-                    color = YoinColors.TextSecondary
+                    fontSize = 10.sp,
+                    color = if (isSelected) Color.White.copy(alpha = 0.8f) else YoinColors.TextSecondary
                 )
             }
         }
@@ -483,134 +405,393 @@ private fun TripCard(
 }
 
 /**
- * 写真グリッド（3列）
+ * マガジンレイアウト（革新的な写真配置）
+ *
+ * レイアウトパターン:
+ * - フルワイドヒーロー（1枚）
+ * - 2列レイアウト（2枚並び）
+ * - 3列グリッド（3枚並び）
+ *
+ * パターンを交互に配置して視覚的な変化を作る
  */
 @Composable
-private fun PhotoGrid(
+private fun MagazineLayout(
     photos: List<TimelineContract.Photo>,
     onPhotoClick: (String) -> Unit,
     onToggleFavorite: (String) -> Unit
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
-        verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
-        contentPadding = PaddingValues(YoinSpacing.xs),
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(YoinColors.Background)
+            .background(YoinColors.Background),
+        contentPadding = PaddingValues(YoinSpacing.lg),
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.lg)
     ) {
-        items(photos, key = { it.id }) { photo ->
-            PhotoItem(
-                photo = photo,
-                onPhotoClick = { onPhotoClick(photo.id) },
-                onToggleFavorite = { onToggleFavorite(photo.id) }
-            )
+        // 写真をグループ化してパターン配置
+        val photoGroups = groupPhotosForMagazine(photos)
+
+        photoGroups.forEach { group ->
+            when (group) {
+                is PhotoGroup.Hero -> {
+                    item {
+                        HeroPhoto(
+                            photo = group.photo,
+                            onPhotoClick = onPhotoClick,
+                            onToggleFavorite = onToggleFavorite
+                        )
+                    }
+                }
+                is PhotoGroup.TwoColumn -> {
+                    item {
+                        TwoColumnPhotos(
+                            photos = group.photos,
+                            onPhotoClick = onPhotoClick,
+                            onToggleFavorite = onToggleFavorite
+                        )
+                    }
+                }
+                is PhotoGroup.ThreeColumn -> {
+                    item {
+                        ThreeColumnPhotos(
+                            photos = group.photos,
+                            onPhotoClick = onPhotoClick,
+                            onToggleFavorite = onToggleFavorite
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
 /**
- * 写真アイテム
+ * 写真グループ（レイアウトパターン）
  */
-@Composable
-private fun PhotoItem(
-    photo: TimelineContract.Photo,
-    onPhotoClick: () -> Unit,
-    onToggleFavorite: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(YoinSpacing.sm))
-            .background(YoinColors.SurfaceVariant)
-            .clickable(onClick = onPhotoClick)
-    ) {
-        // 写真
-//        val painter = rememberAsyncImagePainter(photo.thumbnailUrl)
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.PhotoCamera,
-                contentDescription = "写真",
-                tint = YoinColors.TextSecondary,
-                modifier = Modifier.size(YoinSizes.iconXLarge)
-            )
-        }
-//        when (painter.state) {
-//            is AsyncImagePainter.State.Loading -> {
-//                Box(
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier.size(24.dp),
-//                        color = YoinColors.Primary
-//                    )
-//                }
-//            }
-//
-//            is AsyncImagePainter.State.Error -> {
-//                Box(
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Text(
-//                        text = "📷",
-//                        fontSize = 32.sp
-//                    )
-//                }
-//            }
-//
-//            else -> {
-//                Image(
-//                    painter = painter,
-//                    contentDescription = photo.location,
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentScale = ContentScale.Crop
-//                )
-//            }
-//        }
+sealed class PhotoGroup {
+    data class Hero(val photo: TimelineContract.Photo) : PhotoGroup()
+    data class TwoColumn(val photos: List<TimelineContract.Photo>) : PhotoGroup()
+    data class ThreeColumn(val photos: List<TimelineContract.Photo>) : PhotoGroup()
+}
 
-        // お気に入りボタン
-        Surface(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(YoinSpacing.xs),
-            color = Color.Black.copy(alpha = 0.5f),
-            shape = CircleShape
-        ) {
-            IconButton(
-                onClick = onToggleFavorite,
-                modifier = Modifier.size(28.dp)
-            ) {
-                Icon(
-                    imageVector = if (photo.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "お気に入り",
-                    tint = if (photo.isFavorite) Color(0xFFFF6B6B) else Color.White,
-                    modifier = Modifier.size(YoinSpacing.lg)
-                )
+/**
+ * 写真をマガジンレイアウト用にグループ化
+ * パターン: Hero → 2列 → 3列 → Hero → ...
+ */
+private fun groupPhotosForMagazine(photos: List<TimelineContract.Photo>): List<PhotoGroup> {
+    val groups = mutableListOf<PhotoGroup>()
+    var index = 0
+
+    while (index < photos.size) {
+        when {
+            // パターン1: ヒーロー写真（1枚）
+            index % 6 == 0 && index < photos.size -> {
+                groups.add(PhotoGroup.Hero(photos[index]))
+                index++
+            }
+            // パターン2: 2列レイアウト（2枚）
+            index % 6 in 1..2 && index + 1 < photos.size -> {
+                groups.add(PhotoGroup.TwoColumn(photos.subList(index, minOf(index + 2, photos.size))))
+                index += 2
+            }
+            // パターン3: 3列グリッド（3枚）
+            index % 6 in 3..5 && index + 2 < photos.size -> {
+                groups.add(PhotoGroup.ThreeColumn(photos.subList(index, minOf(index + 3, photos.size))))
+                index += 3
+            }
+            // 残りの写真
+            else -> {
+                val remaining = photos.size - index
+                when {
+                    remaining == 1 -> {
+                        groups.add(PhotoGroup.Hero(photos[index]))
+                        index++
+                    }
+                    remaining == 2 -> {
+                        groups.add(PhotoGroup.TwoColumn(photos.subList(index, index + 2)))
+                        index += 2
+                    }
+                    else -> {
+                        groups.add(PhotoGroup.ThreeColumn(photos.subList(index, minOf(index + 3, photos.size))))
+                        index += 3
+                    }
+                }
             }
         }
+    }
 
-        // 場所ラベル
-        Surface(
+    return groups
+}
+
+/**
+ * 写真IDに基づいてグラデーションカラーを取得
+ * 様々な旅の雰囲気を表現する色彩
+ */
+private fun getPhotoGradient(photoId: String): Brush {
+    val gradients = listOf(
+        // 夕暮れの海
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFFFF6B35), Color(0xFFE85A24))
+        ),
+        // 夜の街
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFF2C2C2E), Color(0xFF48484A))
+        ),
+        // 森林
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFF34C759), Color(0xFF248A3D))
+        ),
+        // 桜
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFFE8A598), Color(0xFFD4886C))
+        ),
+        // 砂漠
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFFFFB800), Color(0xFFD4886C))
+        ),
+        // 雪山
+        Brush.verticalGradient(
+            colors = listOf(Color(0xFFE6E1E5), Color(0xFF8E8E93))
+        )
+    )
+
+    val index = photoId.hashCode().mod(gradients.size).let { if (it < 0) it + gradients.size else it }
+    return gradients[index]
+}
+
+/**
+ * ヒーロー写真（フルワイド、大きい）
+ */
+@Composable
+private fun HeroPhoto(
+    photo: TimelineContract.Photo,
+    onPhotoClick: (String) -> Unit,
+    onToggleFavorite: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        // 場所ラベル（写真の外側に配置）
+        Text(
+            text = photo.location,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = YoinColors.TextSecondary,
+            modifier = Modifier.padding(bottom = YoinSpacing.xs)
+        )
+
+        Box(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(YoinSpacing.xs),
-            color = Color.Black.copy(alpha = 0.6f),
-            shape = RoundedCornerShape(YoinSpacing.xs)
+                .fillMaxWidth()
+                .aspectRatio(4f / 3f)  // ワイドな比率
+                .clip(RoundedCornerShape(16.dp))
+                .clickable { onPhotoClick(photo.id) }
         ) {
-            Text(
-                text = photo.location,
-                fontSize = YoinFontSizes.caption.value.sp,
-                color = Color.White,
-                modifier = Modifier.padding(horizontal = YoinSpacing.xs + 2.dp, vertical = 2.dp),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            // 実際の写真を表示（URLがあれば）
+            if (photo.imageUrl.isNotEmpty()) {
+                AsyncImage(
+                    model = photo.imageUrl,
+                    contentDescription = photo.location,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                // フォールバック: グラデーション背景
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(getPhotoGradient(photo.id)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.PhotoCamera,
+                        contentDescription = "写真",
+                        tint = Color.White.copy(alpha = 0.3f),
+                        modifier = Modifier.size(64.dp)
+                    )
+                }
+            }
+
+            // お気に入りボタン
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(YoinSpacing.md),
+                color = Color.Black.copy(alpha = 0.5f),
+                shape = CircleShape
+            ) {
+                IconButton(
+                    onClick = { onToggleFavorite(photo.id) },
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Icon(
+                        imageVector = if (photo.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "お気に入り",
+                        tint = if (photo.isFavorite) Color(0xFFFF6B6B) else Color.White,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 2列写真
+ */
+@Composable
+private fun TwoColumnPhotos(
+    photos: List<TimelineContract.Photo>,
+    onPhotoClick: (String) -> Unit,
+    onToggleFavorite: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+    ) {
+        photos.take(2).forEach { photo ->
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(3f / 4f)  // 縦長の比率
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onPhotoClick(photo.id) }
+            ) {
+                // 実際の写真を表示（URLがあれば）
+                if (photo.imageUrl.isNotEmpty()) {
+                    AsyncImage(
+                        model = photo.imageUrl,
+                        contentDescription = photo.location,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    // フォールバック: グラデーション背景
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(getPhotoGradient(photo.id)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PhotoCamera,
+                            contentDescription = "写真",
+                            tint = Color.White.copy(alpha = 0.3f),
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
+                }
+
+                // お気に入りボタン
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(YoinSpacing.sm),
+                    color = Color.Black.copy(alpha = 0.5f),
+                    shape = CircleShape
+                ) {
+                    IconButton(
+                        onClick = { onToggleFavorite(photo.id) },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (photo.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = "お気に入り",
+                            tint = if (photo.isFavorite) Color(0xFFFF6B6B) else Color.White,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+
+                // 場所ラベル
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .padding(YoinSpacing.sm),
+                    color = Color.Black.copy(alpha = 0.6f),
+                    shape = RoundedCornerShape(6.dp)
+                ) {
+                    Text(
+                        text = photo.location,
+                        fontSize = 10.sp,
+                        color = Color.White,
+                        modifier = Modifier.padding(horizontal = YoinSpacing.xs, vertical = 4.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 3列写真（グリッド）
+ */
+@Composable
+private fun ThreeColumnPhotos(
+    photos: List<TimelineContract.Photo>,
+    onPhotoClick: (String) -> Unit,
+    onToggleFavorite: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+    ) {
+        photos.take(3).forEach { photo ->
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(1f)  // 正方形
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { onPhotoClick(photo.id) }
+            ) {
+                // 実際の写真を表示（URLがあれば）
+                if (photo.imageUrl.isNotEmpty()) {
+                    AsyncImage(
+                        model = photo.imageUrl,
+                        contentDescription = photo.location,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    // フォールバック: グラデーション背景
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(getPhotoGradient(photo.id)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PhotoCamera,
+                            contentDescription = "写真",
+                            tint = Color.White.copy(alpha = 0.3f),
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                }
+
+                // お気に入りボタン
+                Surface(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(4.dp),
+                    color = Color.Black.copy(alpha = 0.5f),
+                    shape = CircleShape
+                ) {
+                    IconButton(
+                        onClick = { onToggleFavorite(photo.id) },
+                        modifier = Modifier.size(28.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (photo.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = "お気に入り",
+                            tint = if (photo.isFavorite) Color(0xFFFF6B6B) else Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -628,13 +809,13 @@ private fun EmptyState(selectedTab: TimelineContract.AlbumTab) {
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+            verticalArrangement = Arrangement.spacedBy(YoinSpacing.md)
         ) {
             Icon(
                 imageVector = Icons.Filled.PhotoCamera,
                 contentDescription = "写真なし",
                 tint = YoinColors.TextSecondary,
-                modifier = Modifier.size(YoinSizes.logoMedium)
+                modifier = Modifier.size(80.dp)
             )
             Text(
                 text = when (selectedTab) {
@@ -642,13 +823,13 @@ private fun EmptyState(selectedTab: TimelineContract.AlbumTab) {
                     TimelineContract.AlbumTab.BY_TRIP -> "この旅行の写真がありません"
                     TimelineContract.AlbumTab.FAVORITES -> "お気に入りの写真がありません"
                 },
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = YoinColors.TextPrimary
             )
             Text(
                 text = "写真を撮影してアルバムに追加しましょう",
-                fontSize = YoinFontSizes.labelMedium.value.sp,
+                fontSize = 14.sp,
                 color = YoinColors.TextSecondary
             )
         }
@@ -656,48 +837,47 @@ private fun EmptyState(selectedTab: TimelineContract.AlbumTab) {
 }
 
 /**
- * 日付フォーマット
- */
-//private fun formatDate(timestamp: Long): String {
-//    val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
-//    return sdf.format(Date(timestamp))
-//}
-
-/**
- * プレビュー: アルバムヘッダー
+ * プレビュー: マガジンレイアウト
  */
 @PhonePreview
 @Composable
-private fun AlbumHeaderPreview() {
+private fun MagazineLayoutPreview() {
     MaterialTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(YoinColors.Background)
         ) {
-            AlbumHeader(
-                searchQuery = "",
-                onSearchChange = {}
+            val samplePhotos = listOf(
+                // 京都の寺院
+                TimelineContract.Photo("1", "trip1", "京都の旅", "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800", "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=400", "金閣寺", 35.0394, 135.7292, 1640000000000L, true),
+                // 沖縄の海
+                TimelineContract.Photo("2", "trip2", "沖縄の海", "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800", "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400", "美ら海", 26.6943, 127.8774, 1640100000000L, false),
+                // 京都の街並み
+                TimelineContract.Photo("3", "trip1", "京都の旅", "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800", "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400", "清水寺", 34.9949, 135.7850, 1640200000000L, true),
+                // 北海道の雪景色
+                TimelineContract.Photo("4", "trip3", "北海道", "https://images.unsplash.com/photo-1605648916361-9bc12ad6a569?w=800", "https://images.unsplash.com/photo-1605648916361-9bc12ad6a569?w=400", "札幌", 43.0636, 141.3535, 1640300000000L, false),
+                // 沖縄のビーチ
+                TimelineContract.Photo("5", "trip2", "沖縄の海", "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800", "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=400", "ビーチ", 26.2175, 127.7193, 1640400000000L, true),
+                // 京都の鳥居
+                TimelineContract.Photo("6", "trip1", "京都の旅", "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800", "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400", "伏見稲荷", 34.9671, 135.7727, 1640500000000L, false),
+                // 東京の寺院
+                TimelineContract.Photo("7", "trip4", "東京散歩", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400", "浅草寺", 35.7148, 139.7967, 1640600000000L, true),
+                // 北海道の夜景
+                TimelineContract.Photo("8", "trip3", "北海道", "https://images.unsplash.com/photo-1554797589-7241bb691973?w=800", "https://images.unsplash.com/photo-1554797589-7241bb691973?w=400", "函館山", 41.7513, 140.7019, 1640700000000L, false),
+                // 東京タワー
+                TimelineContract.Photo("9", "trip4", "東京散歩", "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800", "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=400", "東京タワー", 35.6586, 139.7454, 1640800000000L, true),
+                // 沖縄の夕日
+                TimelineContract.Photo("10", "trip2", "沖縄の海", "https://images.unsplash.com/photo-1528127269322-539801943592?w=800", "https://images.unsplash.com/photo-1528127269322-539801943592?w=400", "夕日", 24.3240, 124.0853, 1640900000000L, false),
+                // 奈良の鹿
+                TimelineContract.Photo("11", "trip5", "奈良の鹿", "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800", "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400", "鹿公園", 34.6889, 135.8400, 1641000000000L, true),
+                // 神社
+                TimelineContract.Photo("12", "trip5", "奈良の鹿", "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800", "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=400", "春日大社", 34.6818, 135.8484, 1641100000000L, false)
             )
-        }
-    }
-}
-
-/**
- * プレビュー: アルバムタブ
- */
-@PhonePreview
-@Composable
-private fun AlbumTabsPreview() {
-    MaterialTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(YoinColors.Background)
-        ) {
-            AlbumTabs(
-                selectedTab = TimelineContract.AlbumTab.ALL,
-                onTabChange = {}
+            MagazineLayout(
+                photos = samplePhotos,
+                onPhotoClick = {},
+                onToggleFavorite = {}
             )
         }
     }

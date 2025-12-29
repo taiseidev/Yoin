@@ -379,7 +379,7 @@ private fun PhotoCard(
                     Box(
                         modifier = Modifier
                             .size(YoinSizes.iconLarge)
-                            .background(YoinColors.AccentPeach, CircleShape),
+                            .background(YoinColors.Primary, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -424,7 +424,7 @@ private fun PhotoCard(
                     Icon(
                         imageVector = if (photo.isDownloaded) Icons.Filled.CheckCircle else Icons.Filled.Download,
                         contentDescription = if (photo.isDownloaded) "ダウンロード済み" else "ダウンロード",
-                        tint = if (photo.isDownloaded) YoinColors.AccentCoral else YoinColors.Primary,
+                        tint = if (photo.isDownloaded) YoinColors.Primary else YoinColors.Primary,
                         modifier = Modifier.size(YoinSizes.iconMedium)
                     )
                 }
