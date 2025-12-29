@@ -133,7 +133,7 @@ fun PasswordResetScreen(
             Spacer(modifier = Modifier.height(YoinSpacing.xxl))
 
             HorizontalDivider(
-                color = YoinColors.AccentPeach
+                color = YoinColors.Primary
             )
 
             Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
@@ -142,7 +142,7 @@ fun PasswordResetScreen(
             Box(
                 modifier = Modifier
                     .size(YoinSizes.logoLarge)
-                    .background(YoinColors.AccentPeach, CircleShape),
+                    .background(YoinColors.Primary, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -304,9 +304,9 @@ private fun PasswordResetEmailField(
             enabled = enabled,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.AccentPeach,
+                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
                 errorBorderColor = YoinColors.Error,
-                disabledBorderColor = YoinColors.AccentPeach,
+                disabledBorderColor = YoinColors.Primary,
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White
             ),

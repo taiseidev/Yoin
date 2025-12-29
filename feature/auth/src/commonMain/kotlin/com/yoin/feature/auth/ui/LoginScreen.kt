@@ -274,7 +274,7 @@ fun EmailField(
             isError = error != null,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.AccentGold,
+                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
                 errorBorderColor = YoinColors.Error,
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White
@@ -350,7 +350,7 @@ private fun PasswordField(
             isError = error != null,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.AccentGold,
+                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
                 errorBorderColor = YoinColors.Error,
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White

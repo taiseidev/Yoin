@@ -136,7 +136,7 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(YoinSpacing.md),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = YoinColors.Primary,
-                    unfocusedBorderColor = YoinColors.AccentGold,
+                    unfocusedBorderColor = YoinColors.Primary,
                     unfocusedContainerColor = Color.White,
                     focusedContainerColor = Color.White
                 )
@@ -163,7 +163,7 @@ fun RegisterScreen(
                 shape = RoundedCornerShape(YoinSpacing.md),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = YoinColors.Primary,
-                    unfocusedBorderColor = YoinColors.AccentGold,
+                    unfocusedBorderColor = YoinColors.Primary,
                     unfocusedContainerColor = Color.White,
                     focusedContainerColor = Color.White
                 )

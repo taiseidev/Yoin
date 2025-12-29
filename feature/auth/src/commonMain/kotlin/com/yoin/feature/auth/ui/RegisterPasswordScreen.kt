@@ -146,7 +146,7 @@ fun RegisterPasswordScreen(
                     shape = RoundedCornerShape(YoinSpacing.md),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = YoinColors.Primary,
-                        unfocusedBorderColor = YoinColors.AccentPeach,
+                        unfocusedBorderColor = YoinColors.Primary,
                         unfocusedContainerColor = Color.White,
                         focusedContainerColor = Color.White
                     )
@@ -188,7 +188,7 @@ fun RegisterPasswordScreen(
                     shape = RoundedCornerShape(YoinSpacing.md),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = YoinColors.Primary,
-                        unfocusedBorderColor = YoinColors.AccentPeach,
+                        unfocusedBorderColor = YoinColors.Primary,
                         unfocusedContainerColor = Color.White,
                         focusedContainerColor = Color.White
                     )

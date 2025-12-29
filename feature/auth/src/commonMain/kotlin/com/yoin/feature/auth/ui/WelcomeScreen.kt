@@ -133,7 +133,7 @@ fun WelcomeScreen(
                         containerColor = Color.White,
                         contentColor = YoinColors.TextPrimary
                     ),
-                    border = androidx.compose.foundation.BorderStroke(1.5.dp, YoinColors.AccentGold),
+                    border = androidx.compose.foundation.BorderStroke(1.5.dp, YoinColors.Primary),
                     shape = RoundedCornerShape(YoinSpacing.md),
                     enabled = !state.isLoading
                 ) {
@@ -214,7 +214,7 @@ fun WelcomeScreen(
                 Spacer(modifier = Modifier.height(YoinSpacing.sm))
 
                 // 区切り線（ゴールドアクセント）
-                HorizontalDivider(color = YoinColors.AccentGold)
+                HorizontalDivider(color = YoinColors.Primary)
 
                 Spacer(modifier = Modifier.height(YoinSpacing.sm))
 

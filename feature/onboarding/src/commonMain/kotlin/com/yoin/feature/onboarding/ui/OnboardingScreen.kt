@@ -140,9 +140,9 @@ fun OnboardingScreen(
                             .clip(CircleShape)
                             .background(
                                 if (isSelected) {
-                                    YoinColors.AccentGold
+                                    YoinColors.Primary
                                 } else {
-                                    YoinColors.AccentPeach
+                                    YoinColors.AccentRoseGold
                                 }
                             )
                     )
@@ -219,13 +219,13 @@ private fun OnboardingPageContent(
         else -> Icons.Filled.PhotoCamera
     }
 
-    // 各ページの背景色を定義（コーラル/ピーチ系とゴールド系の組み合わせ）
+    // 各ページの背景色を定義（アンバー/琥珀色のグラデーション）
     val backgroundColor = when (pageIndex) {
-        0 -> Color(0xFFFFF5F0) // ほんのりピーチ
-        1 -> YoinColors.AccentGold // ゴールドベージュ
-        2 -> YoinColors.AccentPeach // 淡いピーチ
-        3 -> YoinColors.AccentGold // ゴールドベージュ
-        else -> Color(0xFFFFF5F0)
+        0 -> YoinColors.Surface // ダークグレー
+        1 -> YoinColors.SurfaceVariant // 少し明るいダークグレー
+        2 -> YoinColors.Surface // ダークグレー
+        3 -> YoinColors.SurfaceVariant // 少し明るいダークグレー
+        else -> YoinColors.Surface
     }
 
     Column(

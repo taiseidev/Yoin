@@ -127,7 +127,7 @@ fun RegisterMethodScreen(
                         containerColor = Color.White,
                         contentColor = YoinColors.TextPrimary
                     ),
-                    border = androidx.compose.foundation.BorderStroke(1.5.dp, YoinColors.AccentGold),
+                    border = androidx.compose.foundation.BorderStroke(1.5.dp, YoinColors.Primary),
                     shape = RoundedCornerShape(YoinSpacing.md),
                     enabled = !state.isLoading
                 ) {
@@ -195,7 +195,7 @@ fun RegisterMethodScreen(
                 ) {
                     HorizontalDivider(
                         modifier = Modifier.weight(1f),
-                        color = YoinColors.AccentGold
+                        color = YoinColors.Primary
                     )
                     Text(
                         text = "または",
@@ -204,7 +204,7 @@ fun RegisterMethodScreen(
                     )
                     HorizontalDivider(
                         modifier = Modifier.weight(1f),
-                        color = YoinColors.AccentGold
+                        color = YoinColors.Primary
                     )
                 }
 
