@@ -222,7 +222,7 @@ private fun CampaignBanner(
                 .background(
                     Brush.radialGradient(
                         colors = listOf(
-                            Color.White.copy(alpha = 0.1f),
+                            Color.White.copy(alpha = 0.15f),
                             Color.Transparent
                         ),
                         radius = 800f
@@ -230,44 +230,38 @@ private fun CampaignBanner(
                 )
         )
 
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.Center
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = campaign.title,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    letterSpacing = (-0.5).sp
-                )
-                Text(
-                    text = campaign.description,
-                    fontSize = 15.sp,
-                    color = Color.White.copy(alpha = 0.9f),
-                    fontWeight = FontWeight.Medium
-                )
-            }
+            // アイコンをMaterial Iconに変更
+            Icon(
+                imageVector = Icons.Filled.LocalOffer,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(32.dp)
+            )
 
-            // 絵文字アイコン（大きく表示）
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(Color.White.copy(alpha = 0.2f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = campaign.emoji,
-                    fontSize = 40.sp
-                )
-            }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = campaign.title,
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                letterSpacing = (-0.5).sp
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = campaign.description,
+                fontSize = 15.sp,
+                color = Color.White.copy(alpha = 0.95f),
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
@@ -297,7 +291,7 @@ private fun TripList(
 }
 
 /**
- * 旅行カード - Modern Cinematic Design
+ * 旅行カード - Modern Cinematic Design with Small Icon
  */
 @Composable
 private fun TripCard(
@@ -335,23 +329,25 @@ private fun TripCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // 絵文字アイコン
+            // Material Iconに変更
             Box(
                 modifier = Modifier
-                    .size(56.dp)
+                    .size(48.dp)
                     .background(
                         if (trip.isSelected) {
                             Color.White.copy(alpha = 0.2f)
                         } else {
-                            YoinColors.Background.copy(alpha = 0.5f)
+                            YoinColors.Primary.copy(alpha = 0.15f)
                         },
                         CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = trip.emoji,
-                    fontSize = 28.sp
+                Icon(
+                    imageVector = Icons.Filled.Photo,
+                    contentDescription = null,
+                    tint = if (trip.isSelected) Color.White else YoinColors.Primary,
+                    modifier = Modifier.size(24.dp)
                 )
             }
 
@@ -383,7 +379,7 @@ private fun TripCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Photo,
+                        imageVector = Icons.Filled.PhotoCamera,
                         contentDescription = null,
                         tint = if (trip.isSelected) Color.White else YoinColors.Primary,
                         modifier = Modifier.size(12.dp)
@@ -455,7 +451,7 @@ private fun ProductGrid(
 }
 
 /**
- * 商品カード - Modern Cinematic Premium Design
+ * 商品カード - Modern Cinematic Premium Design with Real Photos
  */
 @Composable
 private fun ProductCard(
@@ -469,45 +465,34 @@ private fun ProductCard(
             .background(YoinColors.Surface)
             .clickable(onClick = onClick)
     ) {
-        // 商品画像エリア（グラデーション背景）
+        // 商品画像エリア（実際の写真）
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
-                .background(
-                    Brush.verticalGradient(
-                        colors = getProductGradient(product.id)
-                    )
-                )
         ) {
-            // グラデーションオーバーレイ
+            // 商品写真
+            val imageUrl = getProductImageUrl(product.id)
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = product.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            // グラデーションオーバーレイ（写真の視認性向上）
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                Color.Transparent,
-                                YoinColors.Surface.copy(alpha = 0.7f)
-                            ),
-                            startY = 0f,
-                            endY = Float.POSITIVE_INFINITY
+                                Color.Black.copy(alpha = 0.15f),
+                                Color.Black.copy(alpha = 0.4f)
+                            )
                         )
                     )
             )
-
-            // 商品絵文字/アイコン
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = product.emoji,
-                    fontSize = 80.sp,
-                    modifier = Modifier.offset(y = (-10).dp)
-                )
-            }
 
             // 人気No.1バッジ
             if (product.isPopular) {
@@ -587,15 +572,15 @@ private fun ProductCard(
 }
 
 /**
- * 商品IDに基づいてグラデーション色を取得
+ * 商品IDに基づいて商品写真のURLを取得
  */
-private fun getProductGradient(productId: String): List<Color> {
+private fun getProductImageUrl(productId: String): String {
     return when (productId) {
-        "1" -> listOf(Color(0xFFE8A598), Color(0xFFD4886C)) // Rose Gold/Copper - フォトアルバム
-        "2" -> listOf(Color(0xFFD4886C), Color(0xFFB87F6A)) // Copper/Sepia - フォトフレーム
-        "3" -> listOf(Color(0xFFFF6B35), Color(0xFFE85A24)) // Amber - マグカップ
-        "4" -> listOf(Color(0xFF34C759), Color(0xFF248A3D)) // Green - トートバッグ
-        else -> listOf(YoinColors.Surface, YoinColors.SurfaceVariant)
+        "1" -> "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800" // フォトアルバム - 美しいノート/本
+        "2" -> "https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800" // フォトフレーム - 額縁に入った写真
+        "3" -> "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800" // マグカップ - コーヒーカップ
+        "4" -> "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800" // トートバッグ - トートバッグ商品
+        else -> "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800"
     }
 }
 
