@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
@@ -87,10 +88,13 @@ fun TripDetailScreen(
         viewModel.onIntent(TripDetailContract.Intent.OnScreenDisplayed(tripId))
     }
 
+    // タブ状態管理
+    var selectedTabIndex by remember { mutableStateOf(0) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(YoinColors.Surface)
+            .background(YoinColors.Background)
     ) {
         if (state.isLoading) {
             CircularProgressIndicator(
@@ -116,68 +120,97 @@ fun TripDetailScreen(
                         }
                     )
 
-                    // メインコンテンツ
-                    Column(
+                    // タブバー
+                    TabRow(
+                        selectedTabIndex = selectedTabIndex,
+                        containerColor = YoinColors.Surface,
+                        contentColor = YoinColors.Primary,
+                        indicator = { tabPositions ->
+                            if (selectedTabIndex < tabPositions.size) {
+                                Box(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentSize(Alignment.BottomStart)
+                                        .offset(x = tabPositions[selectedTabIndex].left)
+                                        .width(tabPositions[selectedTabIndex].width)
+                                        .height(3.dp)
+                                        .background(
+                                            Brush.horizontalGradient(
+                                                colors = listOf(
+                                                    YoinColors.Primary,
+                                                    YoinColors.PrimaryVariant
+                                                )
+                                            )
+                                        )
+                                )
+                            }
+                        }
+                    ) {
+                        Tab(
+                            selected = selectedTabIndex == 0,
+                            onClick = { selectedTabIndex = 0 },
+                            text = {
+                                Text(
+                                    text = "概要",
+                                    fontSize = 15.sp,
+                                    fontWeight = if (selectedTabIndex == 0) FontWeight.Bold else FontWeight.Medium
+                                )
+                            }
+                        )
+                        Tab(
+                            selected = selectedTabIndex == 1,
+                            onClick = { selectedTabIndex = 1 },
+                            text = {
+                                Text(
+                                    text = "地図",
+                                    fontSize = 15.sp,
+                                    fontWeight = if (selectedTabIndex == 1) FontWeight.Bold else FontWeight.Medium
+                                )
+                            }
+                        )
+                    }
+
+                    // タブコンテンツ
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
-                            .verticalScroll(rememberScrollState())
-                            .padding(bottom = 96.dp) // ボトムナビゲーション + FABのスペース確保
                     ) {
-                        // メンバー一覧
-                        MembersSection(
-                            members = trip.members,
-                            onMembersClick = {
+                        when (selectedTabIndex) {
+                            0 -> OverviewTab(trip = trip, onMembersClick = {
                                 viewModel.onIntent(TripDetailContract.Intent.OnMembersPressed)
-                            }
-                        )
-
-                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
-
-                        // カウントダウンセクション
-                        CountdownSection(
-                            daysUntil = trip.daysUntilDevelopment,
-                            developmentDateTime = trip.developmentDateTime
-                        )
-
-                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
-
-                        // 今日の撮影セクション
-                        TodayPhotosSection(
-                            currentPhotos = trip.todayPhotos,
-                            maxPhotos = trip.maxPhotos,
-                            progress = trip.photoProgress,
-                            remainingPhotos = trip.remainingPhotos
-                        )
-
-                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
-
-                        // 撮影ボタンと地図ボタン
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // 地図ボタン
-                            ActionButton(
-                                icon = "🗺",
-                                label = "地図",
-                                onClick = {
-                                    viewModel.onIntent(TripDetailContract.Intent.OnMapPressed)
-                                }
-                            )
-
-                            Spacer(modifier = Modifier.width(YoinSpacing.xxxl))
-
-                            // 撮影ボタン
-                            CameraButton(
-                                onClick = {
-                                    viewModel.onIntent(TripDetailContract.Intent.OnCameraPressed)
-                                }
-                            )
+                            })
+                            1 -> MapTab(tripId = tripId)
                         }
+                    }
+                }
 
-                        Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+                // フローティング撮影ボタン
+                FloatingActionButton(
+                    onClick = {
+                        viewModel.onIntent(TripDetailContract.Intent.OnCameraPressed)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 88.dp, end = 16.dp), // ボトムナビゲーションの上
+                    containerColor = YoinColors.Primary,
+                    contentColor = Color.White
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.CameraAlt,
+                            contentDescription = "撮影",
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Text(
+                            text = "撮影",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
@@ -305,6 +338,87 @@ private fun TripDetailHeader(
                     }
                 }
             }
+        }
+    }
+}
+
+/**
+ * 概要タブ - Overview Tab
+ */
+@Composable
+private fun OverviewTab(
+    trip: TripDetailContract.TripDetail,
+    onMembersClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 96.dp) // ボトムナビゲーション + FABのスペース
+    ) {
+        // メンバー一覧
+        MembersSection(
+            members = trip.members,
+            onMembersClick = onMembersClick
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // カウントダウンセクション
+        CountdownSection(
+            daysUntil = trip.daysUntilDevelopment,
+            developmentDateTime = trip.developmentDateTime
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 今日の撮影セクション
+        TodayPhotosSection(
+            currentPhotos = trip.todayPhotos,
+            maxPhotos = trip.maxPhotos,
+            progress = trip.photoProgress,
+            remainingPhotos = trip.remainingPhotos
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+/**
+ * 地図タブ - Map Tab
+ */
+@Composable
+private fun MapTab(
+    tripId: String
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(YoinColors.Background),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Map,
+                contentDescription = null,
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(64.dp)
+            )
+            Text(
+                text = "地図機能は開発中です",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = YoinColors.TextSecondary
+            )
+            Text(
+                text = "旅行先の位置情報を地図で\n確認できるようになります",
+                fontSize = 14.sp,
+                color = YoinColors.TextSecondary,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -642,65 +756,6 @@ private fun TodayPhotosSection(
     }
 }
 
-/**
- * アクションボタン（地図、撮影など）- Modern Cinematic Design
- */
-@Composable
-private fun ActionButton(
-    icon: String,
-    label: String,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(72.dp)
-            .clip(CircleShape)
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(
-                        YoinColors.Primary,
-                        YoinColors.PrimaryVariant
-                    )
-                )
-            )
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            // Material Icon に置き換え
-            Icon(
-                imageVector = if (label == "地図") Icons.Filled.Map else Icons.Filled.CameraAlt,
-                contentDescription = label,
-                tint = Color.White,
-                modifier = Modifier.size(28.dp)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = label,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-    }
-}
-
-/**
- * 撮影ボタン
- */
-@Composable
-private fun CameraButton(
-    onClick: () -> Unit
-) {
-    ActionButton(
-        icon = "",
-        label = "撮影",
-        onClick = onClick
-    )
-}
 
 /**
  * プレビュー: メンバーチップ
@@ -790,24 +845,3 @@ private fun TodayPhotosSectionPreview() {
     }
 }
 
-/**
- * プレビュー: アクションボタン
- */
-@PhonePreview
-@Composable
-private fun ActionButtonPreview() {
-    MaterialTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(YoinColors.Surface)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                ActionButton(icon = "🗺", label = "地図", onClick = {})
-                CameraButton(onClick = {})
-            }
-        }
-    }
-}
