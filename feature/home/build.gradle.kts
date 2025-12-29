@@ -16,10 +16,8 @@ kotlin {
         commonMain.dependencies {
             // Core
             implementation(project(":core"))
-            implementation(project(":core"))
 
             // Domain
-            implementation(project(":domain"))
             implementation(project(":domain"))
 
             // Compose
@@ -44,6 +42,10 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeViewModel)
+
+            // Image Loading
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
 
         commonTest.dependencies {

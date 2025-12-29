@@ -1,6 +1,7 @@
 package com.yoin.feature.settings.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -34,6 +36,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -229,134 +235,250 @@ fun SettingsScreen(
 }
 
 /**
- * セクションヘッダー
+ * セクションヘッダー - Modern Cinematic Design
  */
 @Composable
 private fun SectionHeader(title: String) {
-    Text(
-        text = title,
-        fontSize = YoinFontSizes.labelMedium.value.sp,
-        fontWeight = FontWeight.Bold,
-        color = YoinColors.TextSecondary,
-        modifier = Modifier.padding(horizontal = YoinSpacing.lg)
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = YoinSpacing.lg),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = YoinColors.TextSecondary,
+            letterSpacing = 1.sp
+        )
+
+        // アクセントライン
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 12.dp)
+                .height(1.dp)
+                .background(
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            YoinColors.Primary.copy(alpha = 0.3f),
+                            Color.Transparent
+                        )
+                    )
+                )
+        )
+    }
 }
 
 /**
- * ユーザープロフィールカード
+ * ユーザープロフィールカード - Modern Cinematic Design
  */
 @Composable
 private fun UserProfileCard(
     profile: SettingsContract.UserProfile,
     onProfilePressed: () -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = YoinSpacing.lg)
-            .clickable(onClick = onProfilePressed),
-        shape = RoundedCornerShape(YoinSpacing.md),
-        color = YoinColors.Surface,
-        shadowElevation = 1.dp
+            .clip(RoundedCornerShape(20.dp))
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        YoinColors.Surface,
+                        YoinColors.SurfaceVariant
+                    )
+                )
+            )
+            .clickable(onClick = onProfilePressed)
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(YoinSpacing.lg),
-            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // アバター
+            // アバター（大きく強調）
             Box(
                 modifier = Modifier
-                    .size(56.dp)
-                    .background(YoinColors.AccentPeach, CircleShape),
+                    .size(72.dp)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.AccentCopper
+                            )
+                        ),
+                        CircleShape
+                    )
+                    .border(3.dp, YoinColors.Surface, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = profile.initial,
-                    fontSize = YoinFontSizes.headingSmall.value.sp,
+                    fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
+                    color = Color.White
                 )
             }
 
-            // 名前とメール
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+            // 編集ボタン
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(YoinColors.Primary)
+                    .padding(12.dp)
             ) {
-                Text(
-                    text = profile.name,
-                    fontSize = YoinFontSizes.headingSmall.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-                Text(
-                    text = profile.email,
-                    fontSize = YoinFontSizes.labelMedium.value.sp,
-                    color = YoinColors.TextSecondary
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Edit Profile",
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
                 )
             }
+        }
 
-            // 矢印アイコン
-            Icon(
-                imageVector = Icons.Filled.ChevronRight,
-                contentDescription = "Navigate",
-                tint = YoinColors.TextSecondary,
-                modifier = Modifier.size(YoinSizes.iconSmall)
+        // 名前とメール
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = profile.name,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = YoinColors.TextPrimary,
+                letterSpacing = (-0.3).sp
+            )
+            Text(
+                text = profile.email,
+                fontSize = 14.sp,
+                color = YoinColors.TextSecondary,
+                fontStyle = FontStyle.Italic
             )
         }
     }
 }
 
 /**
- * プランカード
+ * プランカード - Modern Cinematic Premium Design
  */
 @Composable
 private fun PlanCard(
     plan: SettingsContract.PlanInfo,
     onPlanPressed: () -> Unit
 ) {
-    Surface(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = YoinSpacing.lg)
-            .clickable(onClick = onPlanPressed),
-        shape = RoundedCornerShape(YoinSpacing.md),
-        color = YoinColors.Surface,
-        shadowElevation = 1.dp
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                if (plan.isPremium) {
+                    Brush.linearGradient(
+                        colors = listOf(
+                            YoinColors.Primary,
+                            YoinColors.PrimaryVariant
+                        )
+                    )
+                } else {
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            YoinColors.Surface,
+                            YoinColors.SurfaceVariant
+                        )
+                    )
+                }
+            )
+            .clickable(onClick = onPlanPressed)
     ) {
+        // グラデーションオーバーレイ
+        if (plan.isPremium) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.radialGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = 0.1f),
+                                Color.Transparent
+                            ),
+                            radius = 600f
+                        )
+                    )
+            )
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(YoinSpacing.lg),
-            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
+                .padding(20.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // アイコン
-            Icon(
-                imageVector = Icons.Filled.Star,
-                contentDescription = "Premium Plan",
-                tint = YoinColors.Primary,
-                modifier = Modifier.size(YoinSizes.iconMedium)
-            )
+            // プレミアムアイコン（大きく表示）
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .background(
+                        if (plan.isPremium) {
+                            Color.White.copy(alpha = 0.2f)
+                        } else {
+                            YoinColors.Background.copy(alpha = 0.5f)
+                        },
+                        CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = "Premium Plan",
+                    tint = if (plan.isPremium) Color.White else YoinColors.Primary,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
 
             // プラン情報
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Text(
-                    text = plan.name,
-                    fontSize = YoinFontSizes.bodySmall.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = plan.name,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (plan.isPremium) Color.White else YoinColors.TextPrimary
+                    )
+                    if (plan.isPremium) {
+                        Box(
+                            modifier = Modifier
+                                .background(Color.White.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+                                .padding(horizontal = 8.dp, vertical = 3.dp)
+                        ) {
+                            Text(
+                                text = "有効",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
                 Text(
                     text = plan.description,
-                    fontSize = YoinFontSizes.labelSmall.value.sp,
-                    color = YoinColors.Primary
+                    fontSize = 13.sp,
+                    color = if (plan.isPremium) {
+                        Color.White.copy(alpha = 0.9f)
+                    } else {
+                        YoinColors.TextSecondary
+                    }
                 )
             }
 
@@ -364,15 +486,15 @@ private fun PlanCard(
             Icon(
                 imageVector = Icons.Filled.ChevronRight,
                 contentDescription = "Navigate",
-                tint = YoinColors.Primary,
-                modifier = Modifier.size(YoinSizes.iconSmall)
+                tint = if (plan.isPremium) Color.White else YoinColors.TextSecondary,
+                modifier = Modifier.size(24.dp)
             )
         }
     }
 }
 
 /**
- * 一般設定カード
+ * 一般設定カード - Modern Cinematic Design
  */
 @Composable
 private fun GeneralSettingsCard(
@@ -380,87 +502,101 @@ private fun GeneralSettingsCard(
     onNotificationPressed: () -> Unit,
     onDarkModeToggled: (Boolean) -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = YoinSpacing.lg),
-        shape = RoundedCornerShape(YoinSpacing.md),
-        color = YoinColors.Surface,
-        shadowElevation = 1.dp
+            .padding(horizontal = YoinSpacing.lg)
+            .clip(RoundedCornerShape(16.dp))
+            .background(YoinColors.Surface),
+        verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
-        Column {
-            // 通知設定
-            Row(
+        // 通知設定
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onNotificationPressed)
+                .padding(horizontal = 20.dp, vertical = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onNotificationPressed)
-                    .padding(YoinSpacing.lg),
-                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
-                verticalAlignment = Alignment.CenterVertically
+                    .size(40.dp)
+                    .background(YoinColors.Primary.copy(alpha = 0.15f), CircleShape),
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Filled.Notifications,
                     contentDescription = "Notifications",
-                    tint = YoinColors.TextPrimary,
-                    modifier = Modifier.size(YoinSizes.iconMedium)
-                )
-                Text(
-                    text = "通知設定",
-                    fontSize = YoinFontSizes.bodySmall.value.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.weight(1f)
-                )
-                Icon(
-                    imageVector = Icons.Filled.ChevronRight,
-                    contentDescription = "Navigate",
-                    tint = YoinColors.TextSecondary,
-                    modifier = Modifier.size(YoinSizes.iconSmall)
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(22.dp)
                 )
             }
-
-            HorizontalDivider(
-                modifier = Modifier.padding(start = 46.dp),
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
+            Text(
+                text = "通知設定",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = YoinColors.TextPrimary,
+                modifier = Modifier.weight(1f)
             )
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = "Navigate",
+                tint = YoinColors.TextSecondary,
+                modifier = Modifier.size(20.dp)
+            )
+        }
 
-            // ダークモード
-            Row(
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 76.dp),
+            color = YoinColors.SurfaceVariant,
+            thickness = 1.dp
+        )
+
+        // ダークモード
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(YoinSpacing.lg),
-                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
-                verticalAlignment = Alignment.CenterVertically
+                    .size(40.dp)
+                    .background(YoinColors.Primary.copy(alpha = 0.15f), CircleShape),
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Filled.DarkMode,
                     contentDescription = "Dark Mode",
-                    tint = YoinColors.TextPrimary,
-                    modifier = Modifier.size(YoinSizes.iconMedium)
-                )
-                Text(
-                    text = "ダークモード",
-                    fontSize = YoinFontSizes.bodySmall.value.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.weight(1f)
-                )
-                Switch(
-                    checked = isDarkModeEnabled,
-                    onCheckedChange = onDarkModeToggled,
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = YoinColors.OnPrimary,
-                        checkedTrackColor = YoinColors.Primary,
-                        uncheckedThumbColor = YoinColors.OnPrimary,
-                        uncheckedTrackColor = YoinColors.SurfaceVariant
-                    )
+                    tint = YoinColors.Primary,
+                    modifier = Modifier.size(22.dp)
                 )
             }
+            Text(
+                text = "ダークモード",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = YoinColors.TextPrimary,
+                modifier = Modifier.weight(1f)
+            )
+            Switch(
+                checked = isDarkModeEnabled,
+                onCheckedChange = onDarkModeToggled,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = YoinColors.Primary,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = YoinColors.SurfaceVariant
+                )
+            )
         }
     }
 }
 
 /**
- * サポートカード
+ * サポートカード - Modern Cinematic Design
  */
 @Composable
 private fun SupportCard(
@@ -469,67 +605,65 @@ private fun SupportCard(
     onTermsPressed: () -> Unit,
     onPrivacyPolicyPressed: () -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = YoinSpacing.lg),
-        shape = RoundedCornerShape(YoinSpacing.md),
-        color = YoinColors.Surface,
-        shadowElevation = 1.dp
+            .padding(horizontal = YoinSpacing.lg)
+            .clip(RoundedCornerShape(16.dp))
+            .background(YoinColors.Surface),
+        verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
-        Column {
-            // ヘルプ
-            SettingItem(
-                icon = Icons.Filled.Help,
-                label = "ヘルプ",
-                onClick = onHelpPressed
-            )
+        // ヘルプ
+        SettingItem(
+            icon = Icons.Filled.Help,
+            label = "ヘルプ",
+            onClick = onHelpPressed
+        )
 
-            HorizontalDivider(
-                modifier = Modifier.padding(start = 46.dp),
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 76.dp),
+            color = YoinColors.SurfaceVariant,
+            thickness = 1.dp
+        )
 
-            // お問い合わせ
-            SettingItem(
-                icon = Icons.Filled.ContactSupport,
-                label = "お問い合わせ",
-                onClick = onContactPressed
-            )
+        // お問い合わせ
+        SettingItem(
+            icon = Icons.Filled.Email,
+            label = "お問い合わせ",
+            onClick = onContactPressed
+        )
 
-            HorizontalDivider(
-                modifier = Modifier.padding(start = 46.dp),
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 76.dp),
+            color = YoinColors.SurfaceVariant,
+            thickness = 1.dp
+        )
 
-            // 利用規約
-            SettingItem(
-                icon = Icons.Filled.Article,
-                label = "利用規約",
-                onClick = onTermsPressed
-            )
+        // 利用規約
+        SettingItem(
+            icon = Icons.Filled.Article,
+            label = "利用規約",
+            onClick = onTermsPressed
+        )
 
-            HorizontalDivider(
-                modifier = Modifier.padding(start = 46.dp),
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 76.dp),
+            color = YoinColors.SurfaceVariant,
+            thickness = 1.dp
+        )
 
-            // プライバシーポリシー
-            SettingItem(
-                icon = Icons.Filled.Lock,
-                label = "プライバシーポリシー",
-                onClick = onPrivacyPolicyPressed,
-                showDivider = false
-            )
-        }
+        // プライバシーポリシー
+        SettingItem(
+            icon = Icons.Filled.Lock,
+            label = "プライバシーポリシー",
+            onClick = onPrivacyPolicyPressed,
+            showDivider = false
+        )
     }
 }
 
 /**
- * 設定項目
+ * 設定項目 - Modern Cinematic Design
  */
 @Composable
 private fun SettingItem(
@@ -542,19 +676,27 @@ private fun SettingItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(YoinSpacing.lg),
-        horizontalArrangement = Arrangement.spacedBy(YoinSpacing.md),
+            .padding(horizontal = 20.dp, vertical = 18.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            tint = YoinColors.TextPrimary,
-            modifier = Modifier.size(YoinSizes.iconMedium)
-        )
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(YoinColors.Primary.copy(alpha = 0.15f), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(22.dp)
+            )
+        }
         Text(
             text = label,
-            fontSize = YoinFontSizes.bodySmall.value.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
             color = YoinColors.TextPrimary,
             modifier = Modifier.weight(1f)
         )
@@ -562,13 +704,13 @@ private fun SettingItem(
             imageVector = Icons.Filled.ChevronRight,
             contentDescription = "Navigate",
             tint = YoinColors.TextSecondary,
-            modifier = Modifier.size(YoinSizes.iconSmall)
+            modifier = Modifier.size(20.dp)
         )
     }
 }
 
 /**
- * アプリ情報セクション
+ * アプリ情報セクション - Modern Cinematic Design
  *
  * アプリのバージョン情報とコピーライトを表示
  */
@@ -577,24 +719,54 @@ private fun AppInfoSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = YoinSpacing.lg),
+            .padding(vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // ロゴ
+        Box(
+            modifier = Modifier
+                .size(60.dp)
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(
+                            YoinColors.Primary.copy(alpha = 0.2f),
+                            Color.Transparent
+                        )
+                    ),
+                    CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Yoin.",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = YoinColors.Primary,
+                letterSpacing = (-0.5).sp
+            )
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
         Text(
-            text = "Yoin",
-            fontSize = YoinFontSizes.bodySmall.value.sp,
-            fontWeight = FontWeight.Medium,
-            color = YoinColors.TextSecondary
+            text = "余韻を残す旅の記録",
+            fontSize = 13.sp,
+            color = YoinColors.TextSecondary,
+            fontStyle = FontStyle.Italic
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             text = "Version 1.0.0",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
             color = YoinColors.TextTertiary
         )
         Text(
-            text = "\u00a9 2024 Yoin Team",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
+            text = "© 2024 Yoin Team",
+            fontSize = 12.sp,
             color = YoinColors.TextTertiary
         )
     }
