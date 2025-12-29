@@ -43,6 +43,10 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeViewModel)
+
+            // Image Loading
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
 
         commonTest.dependencies {

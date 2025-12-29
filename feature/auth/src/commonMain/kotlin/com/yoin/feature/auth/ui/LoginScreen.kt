@@ -2,48 +2,22 @@ package com.yoin.feature.auth.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -53,20 +27,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
-import com.yoin.core.design.theme.YoinFontSizes
-import com.yoin.core.design.theme.YoinSizes
-import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.auth.viewmodel.LoginContract
 import com.yoin.feature.auth.viewmodel.LoginViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 /**
- * メールログイン画面（簡略版）
+ * メールログイン画面 - Modern Cinematic Design
  *
- * 機能:
- * - メール/パスワードログイン
- * - パスワードリセットへの遷移
+ * デザインコンセプト:
+ * - 黒背景 + グラデーション
+ * - 透明度のあるテキストフィールド
+ * - グラデーションボタン
+ * - シネマティックでスタイリッシュなUI
  *
  * @param viewModel LoginViewModel
  * @param onNavigateToHome ホーム画面への遷移コールバック
@@ -103,58 +76,105 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        YoinColors.Primary.copy(alpha = 0.15f),
+                        Color.Black
+                    )
+                )
+            )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 28.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+            Spacer(modifier = Modifier.height(40.dp))
 
-            // ロゴアイコン（コーラル背景 + フィルムアイコン）
+            // ナビゲーションバー
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onNavigateBack) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // ロゴアイコン（グラデーション背景）
             Box(
                 modifier = Modifier
-                    .size(YoinSizes.logoMedium)
-                    .background(YoinColors.Primary, RoundedCornerShape(YoinSpacing.xxl)),
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.PrimaryVariant
+                            )
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
+                // ラジアルグラデーションオーバーレイ
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.2f),
+                                    Color.Transparent
+                                )
+                            ),
+                            CircleShape
+                        )
+                )
+
                 Icon(
                     imageVector = Icons.Filled.CameraRoll,
                     contentDescription = "Yoin Logo",
                     tint = Color.White,
-                    modifier = Modifier.size(YoinSizes.iconXLarge)
+                    modifier = Modifier.size(50.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // タイトル
             Text(
-                text = "Yoin.",
-                fontSize = YoinFontSizes.displayMedium.value.sp,
+                text = "おかえりなさい",
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                color = YoinColors.TextPrimary,
+                color = Color.White,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.sm))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // サブタイトル
             Text(
-                text = "旅の余韻を楽しむ",
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                fontWeight = FontWeight.Normal,
-                color = YoinColors.TextSecondary,
-                textAlign = TextAlign.Center
+                text = "余韻の旅を続けましょう",
+                fontSize = 16.sp,
+                color = Color.White.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+                fontStyle = FontStyle.Italic
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.huge))
+            Spacer(modifier = Modifier.height(48.dp))
 
             // メールアドレス入力
-            EmailField(
+            CinematicEmailField(
                 email = state.email,
                 error = state.emailError,
                 onEmailChanged = { email ->
@@ -162,10 +182,10 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.lg))
+            Spacer(modifier = Modifier.height(20.dp))
 
             // パスワード入力
-            PasswordField(
+            CinematicPasswordField(
                 password = state.password,
                 error = state.passwordError,
                 isPasswordVisible = state.isPasswordVisible,
@@ -177,52 +197,67 @@ fun LoginScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.sm))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // パスワードを忘れた
             Text(
-                text = "パスワードを忘れた",
-                fontSize = YoinFontSizes.labelSmall.value.sp,
+                text = "パスワードをお忘れですか？",
+                fontSize = 14.sp,
                 color = YoinColors.Primary,
                 modifier = Modifier
                     .align(Alignment.End)
                     .clickable {
                         viewModel.handleIntent(LoginContract.Intent.OnForgotPasswordPressed)
-                    }
+                    },
+                fontWeight = FontWeight.Medium
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
+            Spacer(modifier = Modifier.height(40.dp))
 
-            // ログインボタン
-            Button(
-                onClick = {
-                    viewModel.handleIntent(LoginContract.Intent.OnLoginPressed)
-                },
+            // ログインボタン（グラデーション）
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(YoinSizes.buttonHeightLarge),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = YoinColors.Primary
-                ),
-                shape = RoundedCornerShape(YoinSpacing.lg),
-                enabled = !state.isLoading
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.PrimaryVariant
+                            )
+                        )
+                    )
             ) {
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(YoinSizes.iconMedium),
-                        color = Color.White
-                    )
-                } else {
-                    Text(
-                        text = "ログイン",
-                        fontSize = YoinFontSizes.bodyLarge.value.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
+                Button(
+                    onClick = {
+                        viewModel.handleIntent(LoginContract.Intent.OnLoginPressed)
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(28.dp),
+                    enabled = !state.isLoading
+                ) {
+                    if (state.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = "ログイン",
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(YoinSpacing.xl))
+            Spacer(modifier = Modifier.weight(1f))
         }
 
         // スナックバー
@@ -234,10 +269,10 @@ fun LoginScreen(
 }
 
 /**
- * メールアドレス入力フィールド
+ * シネマティックなメールアドレス入力フィールド
  */
 @Composable
-fun EmailField(
+private fun CinematicEmailField(
     email: String,
     error: String?,
     enabled: Boolean = true,
@@ -245,12 +280,13 @@ fun EmailField(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = "メールアドレス",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
-            color = YoinColors.TextSecondary
+            fontSize = 14.sp,
+            color = Color.White.copy(alpha = 0.9f),
+            fontWeight = FontWeight.Medium
         )
 
         OutlinedTextField(
@@ -259,8 +295,8 @@ fun EmailField(
             placeholder = {
                 Text(
                     text = "email@example.com",
-                    fontSize = YoinFontSizes.bodySmall.value.sp,
-                    color = YoinColors.TextTertiary
+                    fontSize = 16.sp,
+                    color = Color.White.copy(alpha = 0.5f)
                 )
             },
             leadingIcon = {
@@ -268,36 +304,41 @@ fun EmailField(
                     imageVector = Icons.Filled.Email,
                     contentDescription = "Email",
                     tint = YoinColors.Primary,
-                    modifier = Modifier.size(YoinSizes.iconSmall)
+                    modifier = Modifier.size(22.dp)
                 )
             },
             isError = error != null,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
+                unfocusedBorderColor = if (error != null) YoinColors.Error else Color.White.copy(alpha = 0.3f),
                 errorBorderColor = YoinColors.Error,
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                cursorColor = YoinColors.Primary,
+                unfocusedContainerColor = Color.White.copy(alpha = 0.05f),
+                focusedContainerColor = Color.White.copy(alpha = 0.1f)
             ),
-            shape = RoundedCornerShape(YoinSpacing.md),
-            modifier = Modifier.fillMaxWidth()
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         if (error != null) {
             Text(
                 text = error,
-                fontSize = YoinFontSizes.labelSmall.value.sp,
-                color = YoinColors.Error
+                fontSize = 13.sp,
+                color = YoinColors.Error,
+                fontWeight = FontWeight.Medium
             )
         }
     }
 }
 
 /**
- * パスワード入力フィールド
+ * シネマティックなパスワード入力フィールド
  */
 @Composable
-private fun PasswordField(
+private fun CinematicPasswordField(
     password: String,
     error: String?,
     isPasswordVisible: Boolean,
@@ -306,12 +347,13 @@ private fun PasswordField(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = "パスワード",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
-            color = YoinColors.TextSecondary
+            fontSize = 14.sp,
+            color = Color.White.copy(alpha = 0.9f),
+            fontWeight = FontWeight.Medium
         )
 
         OutlinedTextField(
@@ -320,8 +362,8 @@ private fun PasswordField(
             placeholder = {
                 Text(
                     text = "••••••••",
-                    fontSize = YoinFontSizes.bodySmall.value.sp,
-                    color = YoinColors.TextTertiary
+                    fontSize = 16.sp,
+                    color = Color.White.copy(alpha = 0.5f)
                 )
             },
             leadingIcon = {
@@ -329,7 +371,7 @@ private fun PasswordField(
                     imageVector = Icons.Filled.Lock,
                     contentDescription = "Password",
                     tint = YoinColors.Primary,
-                    modifier = Modifier.size(YoinSizes.iconSmall)
+                    modifier = Modifier.size(22.dp)
                 )
             },
             trailingIcon = {
@@ -337,8 +379,8 @@ private fun PasswordField(
                     Icon(
                         imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                         contentDescription = if (isPasswordVisible) "Hide password" else "Show password",
-                        tint = YoinColors.TextSecondary,
-                        modifier = Modifier.size(YoinSizes.iconSmall)
+                        tint = Color.White.copy(alpha = 0.7f),
+                        modifier = Modifier.size(22.dp)
                     )
                 }
             },
@@ -350,20 +392,25 @@ private fun PasswordField(
             isError = error != null,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
+                unfocusedBorderColor = if (error != null) YoinColors.Error else Color.White.copy(alpha = 0.3f),
                 errorBorderColor = YoinColors.Error,
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                cursorColor = YoinColors.Primary,
+                unfocusedContainerColor = Color.White.copy(alpha = 0.05f),
+                focusedContainerColor = Color.White.copy(alpha = 0.1f)
             ),
-            shape = RoundedCornerShape(YoinSpacing.md),
-            modifier = Modifier.fillMaxWidth()
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         if (error != null) {
             Text(
                 text = error,
-                fontSize = YoinFontSizes.labelSmall.value.sp,
-                color = YoinColors.Error
+                fontSize = 13.sp,
+                color = YoinColors.Error,
+                fontWeight = FontWeight.Medium
             )
         }
     }
@@ -379,10 +426,9 @@ private fun LoginScreenPreview() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(YoinColors.Surface)
+                .background(Color.Black)
         ) {
-            // プレビュー用の簡易表示
-            Text("Login Screen Preview")
+            Text("Login Screen Preview", color = Color.White)
         }
     }
 }

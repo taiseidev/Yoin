@@ -2,64 +2,38 @@ package com.yoin.feature.auth.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.VpnKey
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
-import com.yoin.core.design.theme.YoinFontSizes
-import com.yoin.core.design.theme.YoinSizes
-import com.yoin.core.design.theme.YoinSpacing
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.auth.viewmodel.PasswordResetContract
 import com.yoin.feature.auth.viewmodel.PasswordResetViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 /**
- * パスワードリセット画面
+ * パスワードリセット画面 - Modern Cinematic Design
  *
- * 機能:
- * - メールアドレス入力
- * - パスワードリセットリンク送信
- * - ログイン画面への戻る
+ * デザインコンセプト:
+ * - 黒背景 + グラデーション
+ * - 透明度のあるテキストフィールド
+ * - グラデーションボタン
+ * - シネマティックでスタイリッシュなUI
  *
  * @param viewModel PasswordResetViewModel
  * @param onNavigateToLogin ログイン画面への遷移コールバック
@@ -80,7 +54,6 @@ fun PasswordResetScreen(
                 is PasswordResetContract.Effect.ShowError -> {
                     snackbarHostState.showSnackbar(effect.message)
                 }
-
                 is PasswordResetContract.Effect.ShowSuccess -> {
                     snackbarHostState.showSnackbar(effect.message)
                 }
@@ -91,103 +64,109 @@ fun PasswordResetScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        YoinColors.Primary.copy(alpha = 0.15f),
+                        Color.Black
+                    )
+                )
+            )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = YoinSpacing.xxl),
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
+            Spacer(modifier = Modifier.height(40.dp))
 
             // ナビゲーションバー
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 戻るボタン
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = YoinColors.TextPrimary,
-                    modifier = Modifier
-                        .size(YoinSizes.iconMedium)
-                        .clickable {
-                            viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
-                        }
-                )
-
-                Spacer(modifier = Modifier.width(YoinSpacing.lg))
-
-                // タイトル
-                Text(
-                    text = "パスワードをリセット",
-                    fontSize = YoinFontSizes.headingSmall.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
+                IconButton(
+                    onClick = {
+                        viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
+            Spacer(modifier = Modifier.height(48.dp))
 
-            HorizontalDivider(
-                color = YoinColors.Primary
-            )
-
-            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
-
-            // 鍵アイコン
+            // 鍵アイコン（グラデーション背景）
             Box(
                 modifier = Modifier
-                    .size(YoinSizes.logoLarge)
-                    .background(YoinColors.Primary, CircleShape),
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.PrimaryVariant
+                            )
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
+                // ラジアルグラデーションオーバーレイ
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.2f),
+                                    Color.Transparent
+                                )
+                            ),
+                            CircleShape
+                        )
+                )
+
                 Icon(
                     imageVector = Icons.Filled.VpnKey,
                     contentDescription = "Password Reset",
-                    tint = YoinColors.Primary,
-                    modifier = Modifier.size(YoinSizes.iconXLarge)
+                    tint = Color.White,
+                    modifier = Modifier.size(50.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // タイトル
             Text(
-                text = "パスワードをお忘れですか？",
-                fontSize = YoinFontSizes.bodyLarge.value.sp,
+                text = "パスワードをリセット",
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                color = YoinColors.TextPrimary,
+                color = Color.White,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.lg))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // 説明文1
+            // 説明文
             Text(
-                text = "登録したメールアドレスを入力してください。",
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                color = YoinColors.TextSecondary,
-                textAlign = TextAlign.Center
+                text = "登録したメールアドレスを入力してください。\nパスワード再設定用のリンクをお送りします。",
+                fontSize = 15.sp,
+                color = Color.White.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center,
+                lineHeight = 22.sp
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.sm))
-
-            // 説明文2
-            Text(
-                text = "パスワード再設定用のリンクをお送りします。",
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                color = YoinColors.TextSecondary,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(YoinSpacing.huge))
+            Spacer(modifier = Modifier.height(48.dp))
 
             // メールアドレス入力
-            PasswordResetEmailField(
+            CinematicPasswordResetEmailField(
                 email = state.email,
                 error = state.emailError,
                 enabled = !state.isLoading && !state.isEmailSent,
@@ -196,62 +175,66 @@ fun PasswordResetScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(YoinSpacing.xxxl))
+            Spacer(modifier = Modifier.height(40.dp))
 
-            // リセットリンク送信ボタン
-            Button(
-                onClick = {
-                    viewModel.handleIntent(PasswordResetContract.Intent.OnSendResetLinkPressed)
-                },
+            // リセットリンク送信ボタン（グラデーション）
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(YoinSizes.buttonHeightLarge),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = YoinColors.Primary,
-                    disabledContainerColor = YoinColors.TextSecondary
-                ),
-                shape = RoundedCornerShape(YoinSpacing.lg),
-                enabled = !state.isLoading && !state.isEmailSent
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.PrimaryVariant
+                            )
+                        )
+                    )
             ) {
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(YoinSizes.iconMedium),
-                        color = Color.White
-                    )
-                } else {
-                    Text(
-                        text = if (state.isEmailSent) "送信完了" else "リセットリンクを送信",
-                        fontSize = YoinFontSizes.bodyLarge.value.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
+                Button(
+                    onClick = {
+                        viewModel.handleIntent(PasswordResetContract.Intent.OnSendResetLinkPressed)
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(28.dp),
+                    enabled = !state.isLoading && !state.isEmailSent
+                ) {
+                    if (state.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = if (state.isEmailSent) "送信完了" else "リセットリンクを送信",
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(YoinSpacing.xxl))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // ログインに戻るリンク
             Text(
-                text = "← ログインに戻る",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
+                text = "ログインに戻る",
+                fontSize = 15.sp,
                 color = YoinColors.Primary,
                 textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Medium,
                 modifier = Modifier.clickable {
                     viewModel.handleIntent(PasswordResetContract.Intent.OnBackToLoginPressed)
                 }
             )
 
             Spacer(modifier = Modifier.weight(1f))
-
-            // ホームインジケーター
-            Box(
-                modifier = Modifier
-                    .width(134.dp)
-                    .height(5.dp)
-                    .background(Color.Black, RoundedCornerShape(100.dp))
-            )
-
-            Spacer(modifier = Modifier.height(YoinSpacing.lg))
         }
 
         // スナックバー
@@ -263,10 +246,10 @@ fun PasswordResetScreen(
 }
 
 /**
- * メールアドレス入力フィールド
+ * シネマティックなメールアドレス入力フィールド
  */
 @Composable
-private fun PasswordResetEmailField(
+private fun CinematicPasswordResetEmailField(
     email: String,
     error: String?,
     enabled: Boolean,
@@ -274,12 +257,13 @@ private fun PasswordResetEmailField(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = "メールアドレス",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
-            color = YoinColors.TextSecondary
+            fontSize = 14.sp,
+            color = Color.White.copy(alpha = 0.9f),
+            fontWeight = FontWeight.Medium
         )
 
         OutlinedTextField(
@@ -288,8 +272,8 @@ private fun PasswordResetEmailField(
             placeholder = {
                 Text(
                     text = "email@example.com",
-                    fontSize = YoinFontSizes.bodySmall.value.sp,
-                    color = YoinColors.TextTertiary
+                    fontSize = 16.sp,
+                    color = Color.White.copy(alpha = 0.5f)
                 )
             },
             leadingIcon = {
@@ -297,28 +281,35 @@ private fun PasswordResetEmailField(
                     imageVector = Icons.Filled.Email,
                     contentDescription = "Email",
                     tint = YoinColors.Primary,
-                    modifier = Modifier.size(YoinSizes.iconSmall)
+                    modifier = Modifier.size(22.dp)
                 )
             },
             isError = error != null,
             enabled = enabled,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
-                unfocusedBorderColor = if (error != null) YoinColors.Error else YoinColors.Primary,
+                unfocusedBorderColor = if (error != null) YoinColors.Error else Color.White.copy(alpha = 0.3f),
                 errorBorderColor = YoinColors.Error,
-                disabledBorderColor = YoinColors.Primary,
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White
+                disabledBorderColor = Color.White.copy(alpha = 0.2f),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                disabledTextColor = Color.White.copy(alpha = 0.6f),
+                cursorColor = YoinColors.Primary,
+                unfocusedContainerColor = Color.White.copy(alpha = 0.05f),
+                focusedContainerColor = Color.White.copy(alpha = 0.1f),
+                disabledContainerColor = Color.White.copy(alpha = 0.03f)
             ),
-            shape = RoundedCornerShape(YoinSpacing.md),
-            modifier = Modifier.fillMaxWidth()
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
 
         if (error != null) {
             Text(
                 text = error,
-                fontSize = YoinFontSizes.labelSmall.value.sp,
-                color = YoinColors.Error
+                fontSize = 13.sp,
+                color = YoinColors.Error,
+                fontWeight = FontWeight.Medium
             )
         }
     }
