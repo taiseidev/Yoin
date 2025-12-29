@@ -1,5 +1,7 @@
 package com.yoin.feature.camera.ui
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,35 +9,44 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
-import com.yoin.core.design.theme.YoinSpacing
-import com.yoin.core.design.theme.YoinSizes
-import com.yoin.core.design.theme.YoinFontSizes
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.camera.viewmodel.CameraContract
 import com.yoin.feature.camera.viewmodel.CameraViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 /**
- * カメラ画面
- *
- * @param tripId 旅行ID
- * @param viewModel CameraViewModel
- * @param onNavigateBack 戻るボタンのコールバック
+ * フィルムプリセット
+ */
+enum class FilmPreset(
+    val displayName: String,
+    val description: String,
+    val colorTint: Color
+) {
+    VELVIA("Velvia", "鮮やかな色彩", Color(0xFFFF6B35)),
+    PORTRA("Portra", "柔らかなトーン", Color(0xFFE8A598)),
+    KODAK("Kodak Gold", "温かみのある", Color(0xFFFFB84D)),
+    CLASSIC("Classic", "ビンテージ風", Color(0xFFB87F6A))
+}
+
+/**
+ * カメラ画面 - インスタントカメラ風UI
  */
 @Composable
 fun CameraScreen(
@@ -45,6 +56,12 @@ fun CameraScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // フィルムプリセット
+    var selectedPreset by remember { mutableStateOf(FilmPreset.VELVIA) }
+
+    // シャッターアニメーション
+    var isShutterAnimating by remember { mutableStateOf(false) }
 
     // Effectの監視
     LaunchedEffect(Unit) {
@@ -57,7 +74,10 @@ fun CameraScreen(
                     onNavigateBack()
                 }
                 is CameraContract.Effect.PhotoCaptured -> {
-                    // TODO: 写真保存の処理
+                    // シャッターアニメーション
+                    isShutterAnimating = true
+                    delay(300)
+                    isShutterAnimating = false
                 }
                 is CameraContract.Effect.NavigateToPreview -> {
                     // TODO: プレビュー画面への遷移
@@ -74,50 +94,56 @@ fun CameraScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1F2937)) // ダークグレー背景
+            .background(Color.Black)
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
             // ヘッダー
-            CameraHeader(
+            InstantCameraHeader(
                 remainingPhotos = state.remainingPhotos,
-                onCloseClick = {
+                onBackClick = {
                     viewModel.onIntent(CameraContract.Intent.OnClosePressed)
                 }
             )
 
-            // カメラプレビュー領域
-            CameraPreview(
+            // ビューファインダー
+            ViewfinderPreview(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
+                    .weight(1f),
+                selectedPreset = selectedPreset,
+                location = state.location
             )
 
-            // 位置情報
-            LocationSection(
-                location = state.location,
-                isLoading = state.isLocationLoading
+            // フィルムプリセット選択
+            FilmPresetSelector(
+                selectedPreset = selectedPreset,
+                onPresetChange = { selectedPreset = it }
             )
 
             // カメラコントロール
-            CameraControls(
-                flashMode = state.flashMode,
-                onFlashClick = {
-                    viewModel.onIntent(CameraContract.Intent.OnFlashToggle)
-                },
+            InstantCameraControls(
                 onShutterClick = {
                     viewModel.onIntent(CameraContract.Intent.OnShutterPressed)
-                },
-                onSwitchClick = {
-                    viewModel.onIntent(CameraContract.Intent.OnCameraSwitch)
                 }
             )
 
-            // 警告メッセージ
-            WarningMessage()
+            // フィルムカメラ風の注意書き
+            FilmCameraNotice()
+        }
 
-            Spacer(modifier = Modifier.height(YoinSpacing.sm))
+        // シャッターアニメーション
+        AnimatedVisibility(
+            visible = isShutterAnimating,
+            enter = fadeIn(animationSpec = tween(100)),
+            exit = fadeOut(animationSpec = tween(200))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+            )
         }
 
         // スナックバー
@@ -129,273 +155,490 @@ fun CameraScreen(
 }
 
 /**
- * カメラヘッダー
+ * インスタントカメラ風ヘッダー
  */
 @Composable
-private fun CameraHeader(
+private fun InstantCameraHeader(
     remainingPhotos: Int,
-    onCloseClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // 閉じるボタン（左）
-            Surface(
-                modifier = Modifier.size(YoinSizes.buttonHeightSmall),
-                color = Color(0xFF374151),
-                shape = CircleShape
-            ) {
-                IconButton(onClick = onCloseClick) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = "閉じる",
-                        tint = Color.White
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            // 空のスペース
-            Box(modifier = Modifier.size(YoinSizes.buttonHeightSmall))
-        }
-
-        // 残り枚数（右）
-        Surface(
-            modifier = Modifier
-                .align(Alignment.CenterEnd),
-            color = Color(0xFF374151),
-            shape = RoundedCornerShape(YoinSpacing.xl)
-        ) {
-            Text(
-                text = "残り ${remainingPhotos}枚",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(horizontal = YoinSpacing.md, vertical = YoinSpacing.sm)
-            )
-        }
-    }
-}
-
-/**
- * カメラプレビュー
- */
-@Composable
-private fun CameraPreview(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .padding(YoinSpacing.lg)
-            .border(
-                width = 2.dp,
-                color = Color(0xFF6B7280),
-                shape = RoundedCornerShape(YoinSpacing.md)
-            )
-            .clip(RoundedCornerShape(YoinSpacing.md)),
-        contentAlignment = Alignment.Center
-    ) {
-        // プレースホルダー
-        Surface(
-            color = Color(0xFF374151),
-            shape = RoundedCornerShape(YoinSpacing.sm),
-            modifier = Modifier.padding(YoinSpacing.lg)
-        ) {
-            Text(
-                text = "カメラプレビュー",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                color = Color.White.copy(alpha = 0.5f),
-                modifier = Modifier.padding(horizontal = YoinSpacing.xxl, vertical = YoinSpacing.md)
-            )
-        }
-    }
-}
-
-/**
- * 位置情報セクション
- */
-@Composable
-private fun LocationSection(
-    location: String?,
-    isLoading: Boolean
+    onBackClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF111827))
-            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+        // 戻るボタン
+        IconButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color.Black.copy(alpha = 0.5f), CircleShape)
         ) {
             Icon(
-                imageVector = Icons.Filled.LocationOn,
-                contentDescription = "位置",
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "戻る",
                 tint = Color.White,
-                modifier = Modifier.size(YoinSizes.iconSmall)
-            )
-            Text(
-                text = location ?: "位置情報を取得中...",
-                fontSize = YoinFontSizes.labelLarge.value.sp,
-                color = Color.White
+                modifier = Modifier.size(24.dp)
             )
         }
 
-        if (isLoading) {
-            Text(
-                text = "取得中...",
-                fontSize = YoinFontSizes.labelSmall.value.sp,
-                color = Color(0xFF9CA3AF)
-            )
-        }
+        // フィルムカウンター（写るんです風）
+        FilmCounter(remainingPhotos = remainingPhotos)
     }
 }
 
 /**
- * カメラコントロール
+ * フィルムカウンター - 写るんです風
  */
 @Composable
-private fun CameraControls(
-    flashMode: CameraContract.FlashMode,
-    onFlashClick: () -> Unit,
-    onShutterClick: () -> Unit,
-    onSwitchClick: () -> Unit
-) {
-    Box(
+private fun FilmCounter(remainingPhotos: Int) {
+    Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFF111827))
-            .padding(vertical = YoinSpacing.xxl)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.Black.copy(alpha = 0.7f))
+            .border(2.dp, Color.White.copy(alpha = 0.3f), RoundedCornerShape(20.dp))
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // フラッシュボタン
-            Surface(
-                modifier = Modifier.size(YoinSizes.buttonHeightLarge),
-                color = Color(0xFF374151),
-                shape = CircleShape
-            ) {
-                IconButton(onClick = onFlashClick) {
-                    Icon(
-                        imageVector = Icons.Filled.Warning,
-                        contentDescription = "フラッシュ",
-                        tint = Color.White,
-                        modifier = Modifier.size(YoinSizes.iconLarge)
-                    )
-                }
-            }
+        Icon(
+            imageVector = Icons.Filled.PhotoCamera,
+            contentDescription = null,
+            tint = YoinColors.Primary,
+            modifier = Modifier.size(20.dp)
+        )
 
-            // シャッターボタン
-            ShutterButton(onClick = onShutterClick)
+        Text(
+            text = "$remainingPhotos",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Monospace,
+            color = Color.White,
+            letterSpacing = 1.sp
+        )
 
-            // カメラ切り替えボタン
-            Surface(
-                modifier = Modifier.size(YoinSizes.buttonHeightLarge),
-                color = Color(0xFF374151),
-                shape = CircleShape
-            ) {
-                IconButton(onClick = onSwitchClick) {
-                    Icon(
-                        imageVector = Icons.Filled.Refresh,
-                        contentDescription = "カメラ切り替え",
-                        tint = Color.White,
-                        modifier = Modifier.size(YoinSizes.iconLarge)
-                    )
-                }
-            }
-        }
-    }
-}
-
-/**
- * シャッターボタン
- */
-@Composable
-private fun ShutterButton(
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(YoinSizes.logoSmall)
-            .background(Color.White, CircleShape)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .size(68.dp)
-                .background(YoinColors.Primary, CircleShape)
+        Text(
+            text = "shots",
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.White.copy(alpha = 0.7f),
+            letterSpacing = 0.5.sp
         )
     }
 }
 
 /**
- * 警告メッセージ
+ * ビューファインダープレビュー
  */
 @Composable
-private fun WarningMessage() {
+private fun ViewfinderPreview(
+    modifier: Modifier = Modifier,
+    selectedPreset: FilmPreset,
+    location: String?
+) {
+    Box(
+        modifier = modifier
+            .padding(16.dp)
+    ) {
+        // カメラプレビューエリア
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFF2C2C2E)),
+            contentAlignment = Alignment.Center
+        ) {
+            // プレースホルダー
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.CameraAlt,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.3f),
+                    modifier = Modifier.size(48.dp)
+                )
+                Text(
+                    text = "Camera Preview",
+                    fontSize = 14.sp,
+                    color = Color.White.copy(alpha = 0.3f),
+                    fontFamily = FontFamily.Monospace
+                )
+            }
+        }
+
+        // ビューファインダーフレーム（4隅）
+        ViewfinderCorners()
+
+        // フィルムプリセット表示
+        Surface(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(12.dp),
+            color = Color.Black.copy(alpha = 0.7f),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .background(selectedPreset.colorTint, CircleShape)
+                )
+                Text(
+                    text = selectedPreset.displayName,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    fontFamily = FontFamily.Monospace
+                )
+            }
+        }
+
+        // 位置情報表示
+        if (!location.isNullOrEmpty()) {
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(12.dp),
+                color = Color.Black.copy(alpha = 0.7f),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.LocationOn,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Text(
+                        text = location,
+                        fontSize = 12.sp,
+                        color = Color.White
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * ビューファインダーの4隅フレーム
+ */
+@Composable
+private fun BoxScope.ViewfinderCorners() {
+    val cornerLength = 40.dp
+    val cornerWidth = 3.dp
+    val cornerColor = Color.White.copy(alpha = 0.6f)
+
+    // 左上
+    Box(
+        modifier = Modifier
+            .align(Alignment.TopStart)
+            .padding(20.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .width(cornerLength)
+                .height(cornerWidth)
+                .background(cornerColor)
+        )
+        Box(
+            modifier = Modifier
+                .width(cornerWidth)
+                .height(cornerLength)
+                .background(cornerColor)
+        )
+    }
+
+    // 右上
+    Box(
+        modifier = Modifier
+            .align(Alignment.TopEnd)
+            .padding(20.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .width(cornerLength)
+                .height(cornerWidth)
+                .background(cornerColor)
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .width(cornerWidth)
+                .height(cornerLength)
+                .background(cornerColor)
+        )
+    }
+
+    // 左下
+    Box(
+        modifier = Modifier
+            .align(Alignment.BottomStart)
+            .padding(20.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .width(cornerLength)
+                .height(cornerWidth)
+                .background(cornerColor)
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .width(cornerWidth)
+                .height(cornerLength)
+                .background(cornerColor)
+        )
+    }
+
+    // 右下
+    Box(
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(20.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .width(cornerLength)
+                .height(cornerWidth)
+                .background(cornerColor)
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .width(cornerWidth)
+                .height(cornerLength)
+                .background(cornerColor)
+        )
+    }
+}
+
+/**
+ * フィルムプリセット選択
+ */
+@Composable
+private fun FilmPresetSelector(
+    selectedPreset: FilmPreset,
+    onPresetChange: (FilmPreset) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF111827))
-            .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.sm),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color.Black)
+            .padding(vertical = 16.dp)
     ) {
-        HorizontalDivider(
-            color = Color(0xFF374151),
-            thickness = 1.dp,
-            modifier = Modifier.padding(bottom = YoinSpacing.md)
-        )
-
         Row(
-            horizontalArrangement = Arrangement.spacedBy(YoinSpacing.xs),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Filled.Warning,
-                contentDescription = "警告",
-                tint = Color(0xFF9CA3AF),
-                modifier = Modifier.size(YoinSizes.iconSmall)
+                imageVector = Icons.Filled.Palette,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(20.dp)
             )
             Text(
-                text = "撮り直しはできません",
-                fontSize = YoinFontSizes.labelSmall.value.sp,
-                color = Color(0xFF9CA3AF),
-                textAlign = TextAlign.Center
+                text = "Film Preset",
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                letterSpacing = 1.sp
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = selectedPreset.description,
+                fontSize = 12.sp,
+                color = Color.White.copy(alpha = 0.6f)
             )
         }
 
-        Spacer(modifier = Modifier.height(YoinSpacing.xs))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            FilmPreset.entries.forEach { preset ->
+                FilmPresetChip(
+                    preset = preset,
+                    isSelected = preset == selectedPreset,
+                    onClick = { onPresetChange(preset) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
 
+/**
+ * フィルムプリセットチップ
+ */
+@Composable
+private fun FilmPresetChip(
+    preset: FilmPreset,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .height(60.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                if (isSelected) {
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            preset.colorTint,
+                            preset.colorTint.copy(alpha = 0.7f)
+                        )
+                    )
+                } else {
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF2C2C2E),
+                            Color(0xFF1C1C1E)
+                        )
+                    )
+                }
+            )
+            .border(
+                width = if (isSelected) 2.dp else 1.dp,
+                color = if (isSelected) Color.White else Color.White.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(8.dp),
+        contentAlignment = Alignment.Center
+    ) {
         Text(
-            text = "大切に1枚を撮りましょう",
-            fontSize = YoinFontSizes.labelSmall.value.sp,
-            color = Color(0xFF6B7280),
-            textAlign = TextAlign.Center
+            text = preset.displayName,
+            fontSize = 12.sp,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            fontFamily = FontFamily.Monospace
         )
+    }
+}
 
-        Spacer(modifier = Modifier.height(YoinSpacing.sm))
-
-        // ホームインジケーター
+/**
+ * インスタントカメラコントロール
+ */
+@Composable
+private fun InstantCameraControls(
+    onShutterClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Black)
+            .padding(vertical = 32.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        // シャッターボタン（写るんです風）
         Box(
             modifier = Modifier
-                .width(134.dp)
-                .height(YoinSpacing.xs)
-                .background(Color(0xFF374151), RoundedCornerShape(100.dp))
+                .size(80.dp)
+                .clip(CircleShape)
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(
+                            Color.White,
+                            Color(0xFFE0E0E0)
+                        )
+                    )
+                )
+                .clickable(onClick = onShutterClick),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(70.dp)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                YoinColors.Primary,
+                                YoinColors.PrimaryVariant
+                            )
+                        ),
+                        CircleShape
+                    )
+            ) {
+                // 内側の円
+                Box(
+                    modifier = Modifier
+                        .size(70.dp)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.3f),
+                                    Color.Transparent
+                                )
+                            ),
+                            CircleShape
+                        )
+                )
+            }
+        }
+    }
+}
+
+/**
+ * フィルムカメラ風の注意書き
+ */
+@Composable
+private fun FilmCameraNotice() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Black)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Info,
+                contentDescription = null,
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(16.dp)
+            )
+            Text(
+                text = "撮り直しはできません",
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                letterSpacing = 0.3.sp
+            )
+        }
+
+        Text(
+            text = "フィルムカメラのように、一枚一枚を大切に",
+            fontSize = 12.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            textAlign = TextAlign.Center,
+            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
         )
     }
 }
@@ -405,83 +648,57 @@ private fun WarningMessage() {
  */
 @PhonePreview
 @Composable
-private fun CameraHeaderPreview() {
+private fun InstantCameraHeaderPreview() {
     MaterialTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF1F2937))
+                .background(Color.Black)
         ) {
-            CameraHeader(
-                remainingPhotos = 5,
-                onCloseClick = {}
+            InstantCameraHeader(
+                remainingPhotos = 24,
+                onBackClick = {}
             )
         }
     }
 }
 
 /**
- * プレビュー: 位置情報セクション
+ * プレビュー: フィルムカウンター
  */
 @PhonePreview
 @Composable
-private fun LocationSectionPreview() {
+private fun FilmCounterPreview() {
     MaterialTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF1F2937))
-        ) {
-            Column {
-                LocationSection(
-                    location = "東京都渋谷区",
-                    isLoading = false
-                )
-                LocationSection(
-                    location = null,
-                    isLoading = true
-                )
-            }
-        }
-    }
-}
-
-/**
- * プレビュー: シャッターボタン
- */
-@PhonePreview
-@Composable
-private fun ShutterButtonPreview() {
-    MaterialTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFF1F2937))
+                .background(Color.Black)
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            ShutterButton(onClick = {})
+            FilmCounter(remainingPhotos = 24)
         }
     }
 }
 
 /**
- * プレビュー: カメラコントロール
+ * プレビュー: フィルムプリセット選択
  */
 @PhonePreview
 @Composable
-private fun CameraControlsPreview() {
+private fun FilmPresetSelectorPreview() {
     MaterialTheme {
+        var selectedPreset by remember { mutableStateOf(FilmPreset.VELVIA) }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF1F2937))
+                .background(Color.Black)
         ) {
-            CameraControls(
-                flashMode = CameraContract.FlashMode.AUTO,
-                onFlashClick = {},
-                onShutterClick = {},
-                onSwitchClick = {}
+            FilmPresetSelector(
+                selectedPreset = selectedPreset,
+                onPresetChange = { selectedPreset = it }
             )
         }
     }
