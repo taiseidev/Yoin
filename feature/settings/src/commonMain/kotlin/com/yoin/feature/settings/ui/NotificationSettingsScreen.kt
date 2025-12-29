@@ -354,7 +354,7 @@ private fun InfoBanner(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
-        color = YoinColors.AccentPeach
+        color = YoinColors.Primary
     ) {
         Row(
             modifier = Modifier.padding(12.dp),

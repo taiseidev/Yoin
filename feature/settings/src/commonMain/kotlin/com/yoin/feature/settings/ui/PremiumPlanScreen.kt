@@ -251,7 +251,7 @@ private fun PremiumHeader(
                     text = yearlyPrice,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
-                    color = YoinColors.AccentCoral
+                    color = YoinColors.Primary
                 )
                 Text(
                     text = "/年",
@@ -371,7 +371,7 @@ private fun StartTrialButton(
             .padding(horizontal = 16.dp)
             .height(56.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = YoinColors.AccentCoral,
+            containerColor = YoinColors.Primary,
             contentColor = YoinColors.Surface
         ),
         shape = RoundedCornerShape(12.dp),

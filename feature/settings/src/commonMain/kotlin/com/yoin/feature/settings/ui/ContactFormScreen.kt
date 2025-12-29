@@ -329,7 +329,7 @@ fun ContactFormScreen(
                 // お知らせカード
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    color = YoinColors.AccentPeach,
+                    color = YoinColors.Primary,
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Column(

@@ -93,7 +93,7 @@ class OrderConfirmationViewModel(
                 kotlinx.coroutines.delay(1500) // ネットワーク遅延をシミュレート
 
                 // 注文IDを生成（本来はAPIから取得）
-                val orderId = "YN${System.currentTimeMillis() % 1000000}"
+                val orderId = "YN${(100000..999999).random()}"
 
                 _state.update { it.copy(isLoading = false) }
 
