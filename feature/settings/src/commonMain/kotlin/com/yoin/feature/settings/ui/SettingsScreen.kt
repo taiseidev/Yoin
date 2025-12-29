@@ -211,6 +211,11 @@ fun SettingsScreen(
                     }
                 )
 
+                Spacer(modifier = Modifier.height(YoinSpacing.lg))
+
+                // アプリ情報
+                AppInfoSection()
+
                 Spacer(modifier = Modifier.height(100.dp)) // ボトムナビゲーション用の余白
             }
         }
@@ -558,6 +563,39 @@ private fun SettingItem(
             contentDescription = "Navigate",
             tint = YoinColors.TextSecondary,
             modifier = Modifier.size(YoinSizes.iconSmall)
+        )
+    }
+}
+
+/**
+ * アプリ情報セクション
+ *
+ * アプリのバージョン情報とコピーライトを表示
+ */
+@Composable
+private fun AppInfoSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = YoinSpacing.lg),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(YoinSpacing.xs)
+    ) {
+        Text(
+            text = "Yoin",
+            fontSize = YoinFontSizes.bodySmall.value.sp,
+            fontWeight = FontWeight.Medium,
+            color = YoinColors.TextSecondary
+        )
+        Text(
+            text = "Version 1.0.0",
+            fontSize = YoinFontSizes.labelSmall.value.sp,
+            color = YoinColors.TextTertiary
+        )
+        Text(
+            text = "\u00a9 2024 Yoin Team",
+            fontSize = YoinFontSizes.labelSmall.value.sp,
+            color = YoinColors.TextTertiary
         )
     }
 }
