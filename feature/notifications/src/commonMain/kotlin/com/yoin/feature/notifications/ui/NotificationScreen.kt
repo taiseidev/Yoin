@@ -13,16 +13,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yoin.core.design.theme.YoinColors
-import com.yoin.core.design.theme.YoinSpacing
-import com.yoin.core.ui.component.YoinAppBar
 import com.yoin.core.ui.preview.PhonePreview
 import com.yoin.feature.notifications.model.Notification
-import com.yoin.feature.notifications.model.NotificationGroup
 import com.yoin.feature.notifications.model.NotificationSection
 import com.yoin.feature.notifications.model.NotificationType
 import com.yoin.feature.notifications.viewmodel.NotificationContract
@@ -30,12 +30,14 @@ import com.yoin.feature.notifications.viewmodel.NotificationViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 /**
- * 通知画面
+ * 通知画面 - Modern Cinematic Design
  *
- * 機能:
- * - 通知リスト表示（セクション分け）
- * - すべて既読機能
- * - 通知タップで詳細画面へ遷移
+ * デザインコンセプト:
+ * - 黒背景 + グラデーション
+ * - 半透明カード形式の通知アイテム
+ * - Material Iconsでタイプ別アイコン
+ * - グラデーション未読インジケーター
+ * - 空状態のイラストレーション
  *
  * @param viewModel NotificationViewModel
  * @param onNavigateBack 戻るボタンのコールバック
@@ -74,44 +76,27 @@ fun NotificationScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(YoinColors.Surface)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black,
+                        YoinColors.Primary.copy(alpha = 0.1f),
+                        Color.Black
+                    )
+                )
+            )
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // ヘッダー
-            YoinAppBar(
-                title = "通知",
-                navigationIcon = {
-                    IconButton(onClick = {
-                        viewModel.handleIntent(NotificationContract.Intent.OnBackPressed)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = YoinColors.TextPrimary
-                        )
-                    }
+            // カスタムヘッダー
+            CinematicNotificationHeader(
+                onBackPressed = {
+                    viewModel.handleIntent(NotificationContract.Intent.OnBackPressed)
                 },
-                actions = {
-                    // 設定アイコン
-                    IconButton(onClick = onNavigateToSettings) {
-                        Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings",
-                            tint = YoinColors.TextSecondary
-                        )
-                    }
-
-                    // すべて既読ボタン
-                    Text(
-                        text = "すべて既読",
-                        fontSize = 14.sp,
-                        color = YoinColors.Primary,
-                        modifier = Modifier.clickable {
-                            viewModel.handleIntent(NotificationContract.Intent.OnMarkAllAsRead)
-                        }
-                    )
+                onSettingsPressed = onNavigateToSettings,
+                onMarkAllAsRead = {
+                    viewModel.handleIntent(NotificationContract.Intent.OnMarkAllAsRead)
                 }
             )
 
@@ -123,14 +108,18 @@ fun NotificationScreen(
                 ) {
                     CircularProgressIndicator(color = YoinColors.Primary)
                 }
+            } else if (state.notificationGroups.isEmpty()) {
+                // 空状態
+                EmptyNotificationState()
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     state.notificationGroups.forEach { group ->
                         // セクションヘッダー
                         item {
-                            SectionHeader(section = group.section)
+                            CinematicSectionHeader(section = group.section)
                         }
 
                         // 通知アイテム
@@ -138,7 +127,7 @@ fun NotificationScreen(
                             items = group.notifications,
                             key = { it.id }
                         ) { notification ->
-                            NotificationItem(
+                            CinematicNotificationItem(
                                 notification = notification,
                                 onClick = {
                                     viewModel.handleIntent(
@@ -146,6 +135,7 @@ fun NotificationScreen(
                                     )
                                 }
                             )
+                            Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
 
@@ -157,16 +147,6 @@ fun NotificationScreen(
             }
         }
 
-        // ホームインジケーター
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 16.dp)
-                .width(134.dp)
-                .height(5.dp)
-                .background(Color.Black, RoundedCornerShape(100.dp))
-        )
-
         // スナックバー
         SnackbarHost(
             hostState = snackbarHostState,
@@ -176,10 +156,71 @@ fun NotificationScreen(
 }
 
 /**
- * セクションヘッダー
+ * シネマティックなヘッダー
  */
 @Composable
-private fun SectionHeader(section: NotificationSection) {
+private fun CinematicNotificationHeader(
+    onBackPressed: () -> Unit,
+    onSettingsPressed: () -> Unit,
+    onMarkAllAsRead: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // 戻るボタン
+        IconButton(onClick = onBackPressed) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White,
+                modifier = Modifier.size(28.dp)
+            )
+        }
+
+        // タイトル
+        Text(
+            text = "通知",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // すべて既読ボタン
+            TextButton(onClick = onMarkAllAsRead) {
+                Text(
+                    text = "既読",
+                    fontSize = 14.sp,
+                    color = YoinColors.Primary,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            // 設定アイコン
+            IconButton(onClick = onSettingsPressed) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = "Settings",
+                    tint = Color.White.copy(alpha = 0.7f),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    }
+}
+
+/**
+ * シネマティックなセクションヘッダー
+ */
+@Composable
+private fun CinematicSectionHeader(section: NotificationSection) {
     val sectionText = when (section) {
         NotificationSection.TODAY -> "今日"
         NotificationSection.YESTERDAY -> "昨日"
@@ -188,135 +229,216 @@ private fun SectionHeader(section: NotificationSection) {
 
     Text(
         text = sectionText,
-        fontSize = 13.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Bold,
-        color = YoinColors.TextSecondary,
+        color = Color.White.copy(alpha = 0.9f),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .padding(horizontal = 8.dp, vertical = 16.dp)
     )
 }
 
 /**
- * 通知アイテム
+ * シネマティックな通知アイテム
  */
 @Composable
-private fun NotificationItem(
+private fun CinematicNotificationItem(
     notification: Notification,
     onClick: () -> Unit
 ) {
-    val backgroundColor = when {
-        !notification.isRead && notification.type == NotificationType.PHOTO_DEVELOPED -> Color(0xFFF0F9EE)
-        !notification.isRead && notification.type == NotificationType.MEMBER_JOINED -> Color(0xFFFAF8F3)
-        else -> Color.Transparent
+    val backgroundModifier = if (notification.isRead) {
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White.copy(alpha = 0.05f))
+            .clickable(onClick = onClick)
+            .padding(16.dp)
+    } else {
+        Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        YoinColors.Primary.copy(alpha = 0.15f),
+                        YoinColors.PrimaryVariant.copy(alpha = 0.1f)
+                    )
+                )
+            )
+            .clickable(onClick = onClick)
+            .padding(16.dp)
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 24.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // 未読インジケーター
-        if (!notification.isRead) {
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .background(Color(0xFFFF6B35), CircleShape)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-        } else {
-            Spacer(modifier = Modifier.width(24.dp))
-        }
-
-        // アイコン or アバター
-        NotificationIcon(
-            icon = notification.icon,
-            avatarText = notification.avatarText,
-            type = notification.type
-        )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        // 通知内容
-        Column(
-            modifier = Modifier.weight(1f)
+    Box(modifier = backgroundModifier) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = notification.title,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = YoinColors.TextPrimary
+            // アイコン
+            CinematicNotificationIcon(
+                type = notification.type,
+                isRead = notification.isRead
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
-            notification.message.split("\n").forEach { line ->
-                Text(
-                    text = line,
-                    fontSize = if (line.contains("前") || line.contains("昨日")) 11.sp else 13.sp,
-                    color = if (line.contains("前") || line.contains("昨日")) YoinColors.TextSecondary else YoinColors.TextSecondary
+            // 通知内容
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // 未読インジケーター
+                    if (!notification.isRead) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    Brush.horizontalGradient(
+                                        colors = listOf(
+                                            YoinColors.Primary,
+                                            YoinColors.PrimaryVariant
+                                        )
+                                    )
+                                )
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+
+                    Text(
+                        text = notification.title,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                notification.message.split("\n").forEach { line ->
+                    Text(
+                        text = line,
+                        fontSize = 13.sp,
+                        color = Color.White.copy(alpha = 0.8f),
+                        lineHeight = 18.sp
+                    )
+                }
+            }
+
+            // 右矢印（未読の場合のみ）
+            if (!notification.isRead) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Filled.ChevronRight,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.5f),
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }
-
-        // 右矢印（未読の場合のみ）
-        if (!notification.isRead) {
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "〉",
-                fontSize = 14.sp,
-                color = YoinColors.TextSecondary
-            )
-        }
     }
-
-    HorizontalDivider(
-        color = YoinColors.SurfaceVariant,
-        modifier = Modifier.padding(start = 64.dp)
-    )
 }
 
 /**
- * 通知アイコン
+ * シネマティックな通知アイコン
  */
 @Composable
-private fun NotificationIcon(
-    icon: String?,
-    avatarText: String?,
-    type: NotificationType
+private fun CinematicNotificationIcon(
+    type: NotificationType,
+    isRead: Boolean
 ) {
-    val iconBackgroundColor = when (type) {
-        NotificationType.PHOTO_DEVELOPED -> YoinColors.Primary
-        NotificationType.MEMBER_JOINED -> Color(0xFFE5DCC8)
-        NotificationType.INVITATION -> Color(0xFFE5DCC8)
-        NotificationType.TRIP_REMINDER -> Color(0xFF3B82F6)
-        NotificationType.SYSTEM -> YoinColors.SurfaceVariant
+    val icon: ImageVector = when (type) {
+        NotificationType.PHOTO_DEVELOPED -> Icons.Filled.PhotoCamera
+        NotificationType.MEMBER_JOINED -> Icons.Filled.PersonAdd
+        NotificationType.INVITATION -> Icons.Filled.Mail
+        NotificationType.TRIP_REMINDER -> Icons.Filled.Event
+        NotificationType.SYSTEM -> Icons.Filled.Info
+    }
+
+    val iconBackgroundModifier = if (isRead) {
+        Modifier
+            .size(56.dp)
+            .clip(CircleShape)
+            .background(Color.White.copy(alpha = 0.1f))
+    } else {
+        Modifier
+            .size(56.dp)
+            .clip(CircleShape)
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        YoinColors.Primary,
+                        YoinColors.PrimaryVariant
+                    )
+                )
+            )
     }
 
     Box(
-        modifier = Modifier
-            .size(48.dp)
-            .background(iconBackgroundColor, CircleShape),
+        modifier = iconBackgroundModifier,
         contentAlignment = Alignment.Center
     ) {
-        when {
-            icon != null -> {
-                Text(
-                    text = icon,
-                    fontSize = 20.sp
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = if (isRead) Color.White.copy(alpha = 0.6f) else Color.White,
+            modifier = Modifier.size(28.dp)
+        )
+    }
+}
+
+/**
+ * 空状態
+ */
+@Composable
+private fun EmptyNotificationState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // アイコン
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                YoinColors.Primary.copy(alpha = 0.2f),
+                                YoinColors.PrimaryVariant.copy(alpha = 0.1f)
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Notifications,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.5f),
+                    modifier = Modifier.size(60.dp)
                 )
             }
-            avatarText != null -> {
-                Text(
-                    text = avatarText,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = YoinColors.TextPrimary
-                )
-            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "通知はありません",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "新しい通知が届くとここに表示されます",
+                fontSize = 14.sp,
+                color = Color.White.copy(alpha = 0.7f)
+            )
         }
     }
 }
@@ -331,9 +453,9 @@ private fun NotificationScreenPreview() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(YoinColors.Surface)
+                .background(Color.Black)
         ) {
-            Text("Notification Screen Preview")
+            Text("Notification Screen Preview", color = Color.White)
         }
     }
 }
