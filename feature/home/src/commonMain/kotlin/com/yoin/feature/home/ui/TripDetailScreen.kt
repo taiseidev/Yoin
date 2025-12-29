@@ -4,6 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -175,6 +179,7 @@ fun TripDetailScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
+                            .windowInsetsPadding(WindowInsets.navigationBars)
                     ) {
                         when (selectedTabIndex) {
                             0 -> OverviewTab(trip = trip, onMembersClick = {
@@ -239,7 +244,9 @@ private fun TripDetailHeader(
         shadowElevation = 4.dp
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.statusBars)
         ) {
             // ヘッダーコンテンツ
             Row(
