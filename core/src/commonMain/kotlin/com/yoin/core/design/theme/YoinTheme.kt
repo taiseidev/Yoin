@@ -38,6 +38,12 @@ object YoinColors {
     val OnError = Color(0xFFFFFFFF)
     val Success = Color(0xFF34C759)        // #34c759 - 成功
     val Warning = Color(0xFFFFCC00)        // #ffcc00 - 警告
+
+    // Modern Film Design colors
+    val ModernBackground = Color(0xFF000000)    // #000000 - モダン背景
+    val ModernTextPrimary = Color(0xFFFFFFFF)   // #ffffff - 選択中テキスト
+    val ModernTextSecondary = Color(0xFF8E8E93) // #8e8e93 - 非選択テキスト
+    val ModernAccentPrimary = Color(0xFFFF6B35) // #ff6b35 - アクセント（インジケーター）
 }
 
 /**
