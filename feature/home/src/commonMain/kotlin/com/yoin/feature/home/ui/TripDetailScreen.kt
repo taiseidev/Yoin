@@ -10,11 +10,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -188,7 +192,7 @@ fun TripDetailScreen(
 }
 
 /**
- * 旅行詳細ヘッダー
+ * 旅行詳細ヘッダー - Modern Cinematic Design
  */
 @Composable
 private fun TripDetailHeader(
@@ -199,122 +203,150 @@ private fun TripDetailHeader(
 ) {
     Surface(
         color = YoinColors.Surface,
-        shadowElevation = 1.dp
+        shadowElevation = 4.dp
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            // ステータスバー領域
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(YoinSpacing.xxl),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "9:41",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Italic,
-                    color = YoinColors.TextPrimary
-                )
-            }
-
             // ヘッダーコンテンツ
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = YoinSpacing.lg, vertical = YoinSpacing.md),
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 戻るボタン
-                Text(
-                    text = "←",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier.clickable(onClick = onBackPressed)
-                )
+                IconButton(
+                    onClick = onBackPressed,
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "戻る",
+                        tint = YoinColors.TextPrimary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
 
                 // タイトルと日付
                 Column(
-                    modifier = Modifier.weight(1f).padding(start = YoinSpacing.lg)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = trip.title,
-                        fontSize = YoinFontSizes.headingSmall.value.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = YoinColors.TextPrimary
+                        color = YoinColors.TextPrimary,
+                        letterSpacing = (-0.3).sp
                     )
                     Text(
                         text = "${trip.dateRange} • ${trip.location}",
-                        fontSize = YoinFontSizes.labelSmall.value.sp,
-                        color = YoinColors.TextSecondary
+                        fontSize = 13.sp,
+                        color = YoinColors.TextSecondary,
+                        fontWeight = FontWeight.Medium
                     )
                 }
 
-                // 設定ボタン
-                Text(
-                    text = "⚙",
-                    fontSize = YoinFontSizes.labelLarge.value.sp,
-                    color = YoinColors.TextPrimary,
-                    modifier = Modifier
-                        .clickable(onClick = onSettingsPressed)
-                        .padding(end = YoinSpacing.md)
-                )
-
-                // 招待ボタン
-                Button(
-                    onClick = onInvitePressed,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = YoinColors.Primary
-                    ),
-                    shape = RoundedCornerShape(YoinSpacing.sm),
-                    modifier = Modifier.height(YoinSizes.iconLarge),
-                    contentPadding = PaddingValues(horizontal = YoinSpacing.lg, vertical = YoinSpacing.xs + 2.dp)
+                // アクションボタン
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = "招待",
-                        fontSize = YoinFontSizes.labelSmall.value.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = YoinColors.OnPrimary
-                    )
+                    // 設定ボタン
+                    IconButton(
+                        onClick = onSettingsPressed,
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = "設定",
+                            tint = YoinColors.TextPrimary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+
+                    // 招待ボタン
+                    Box(
+                        modifier = Modifier
+                            .height(40.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(
+                                Brush.horizontalGradient(
+                                    colors = listOf(
+                                        YoinColors.Primary,
+                                        YoinColors.PrimaryVariant
+                                    )
+                                )
+                            )
+                            .clickable(onClick = onInvitePressed)
+                            .padding(horizontal = 16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.PersonAdd,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = "招待",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        }
+                    }
                 }
             }
-
-            HorizontalDivider(
-                color = YoinColors.SurfaceVariant,
-                thickness = 0.65.dp
-            )
         }
     }
 }
 
 /**
- * メンバーセクション
+ * メンバーセクション - Modern Cinematic Design
  */
 @Composable
 private fun MembersSection(
     members: List<TripDetailContract.Member>,
     onMembersClick: () -> Unit
 ) {
-    Column(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .background(YoinColors.Background)
-            .padding(vertical = YoinSpacing.md)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onMembersClick),
+        color = YoinColors.Surface,
+        shadowElevation = 2.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onMembersClick)
-                .padding(horizontal = YoinSpacing.lg),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            // アイコン
+            Icon(
+                imageVector = Icons.Filled.People,
+                contentDescription = null,
+                tint = YoinColors.Primary,
+                modifier = Modifier.size(24.dp)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // メンバーチップ
             LazyRow(
                 modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(members.take(5)) { member ->
                     MemberChip(
@@ -334,94 +366,176 @@ private fun MembersSection(
                 }
             }
 
-            Text(
-                text = "›",
-                fontSize = YoinFontSizes.bodyMedium.value.sp,
-                color = YoinColors.TextSecondary,
-                modifier = Modifier.padding(start = YoinSpacing.sm)
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // 矢印アイコン
+            Icon(
+                imageVector = Icons.Filled.ChevronRight,
+                contentDescription = null,
+                tint = YoinColors.TextSecondary,
+                modifier = Modifier.size(20.dp)
             )
         }
     }
 }
 
 /**
- * メンバーチップ
+ * メンバーチップ - Modern Cinematic Design
  */
 @Composable
 private fun MemberChip(
     name: String,
     isSelected: Boolean
 ) {
-    val backgroundColor = if (isSelected) YoinColors.Primary else YoinColors.Primary
-    val textColor = if (isSelected) YoinColors.Primary else YoinColors.TextPrimary
-
     Box(
         modifier = Modifier
-            .background(backgroundColor, CircleShape)
-            .padding(horizontal = YoinSpacing.md, vertical = YoinSpacing.xs + 2.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                if (isSelected) {
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            YoinColors.Primary,
+                            YoinColors.PrimaryVariant
+                        )
+                    )
+                } else {
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            YoinColors.SurfaceVariant,
+                            YoinColors.SurfaceVariant
+                        )
+                    )
+                }
+            )
+            .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
         Text(
             text = name,
-            fontSize = YoinFontSizes.caption.value.sp,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-            color = textColor
+            fontSize = 12.sp,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            color = if (isSelected) Color.White else YoinColors.TextPrimary
         )
     }
 }
 
 /**
- * カウントダウンセクション
+ * カウントダウンセクション - Modern Cinematic Design
  */
 @Composable
 private fun CountdownSection(
     daysUntil: Int,
     developmentDateTime: String
 ) {
-    Column(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = YoinSpacing.lg),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(20.dp),
+        color = YoinColors.Surface,
+        shadowElevation = 4.dp
     ) {
-        // フィルムアイコン
-        Text(
-            text = "🎞",
-            fontSize = 64.sp
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            YoinColors.Surface,
+                            YoinColors.SurfaceVariant.copy(alpha = 0.3f)
+                        )
+                    )
+                )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // フィルムアイコン → Material Icon
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Brush.linearGradient(
+                                colors = listOf(
+                                    YoinColors.Primary.copy(alpha = 0.2f),
+                                    YoinColors.PrimaryVariant.copy(alpha = 0.2f)
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Schedule,
+                        contentDescription = null,
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
 
-        Spacer(modifier = Modifier.height(YoinSpacing.lg))
+                Spacer(modifier = Modifier.height(16.dp))
 
-        // 現像まであと
-        Text(
-            text = "現像まであと",
-            fontSize = YoinFontSizes.bodyMedium.value.sp,
-            color = YoinColors.TextSecondary
-        )
+                // 現像まであと
+                Text(
+                    text = "現像まであと",
+                    fontSize = 14.sp,
+                    color = YoinColors.TextSecondary,
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = 1.sp
+                )
 
-        Spacer(modifier = Modifier.height(YoinSpacing.xs))
+                Spacer(modifier = Modifier.height(8.dp))
 
-        // 日数表示
-        Text(
-            text = "${daysUntil}日",
-            fontSize = 64.sp,
-            fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic,
-            color = YoinColors.Primary
-        )
+                // 日数表示（少し小さく）
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = daysUntil.toString(),
+                        fontSize = 48.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = YoinColors.Primary,
+                        letterSpacing = (-1).sp
+                    )
+                    Text(
+                        text = "日",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = YoinColors.Primary,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
 
-        Spacer(modifier = Modifier.height(YoinSpacing.sm))
+                Spacer(modifier = Modifier.height(12.dp))
 
-        // 現像日時
-        Text(
-            text = developmentDateTime,
-            fontSize = YoinFontSizes.labelLarge.value.sp,
-            color = YoinColors.TextSecondary
-        )
+                // 現像日時
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.CalendarMonth,
+                        contentDescription = null,
+                        tint = YoinColors.TextSecondary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        text = developmentDateTime,
+                        fontSize = 13.sp,
+                        color = YoinColors.TextSecondary,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        }
     }
 }
 
 /**
- * 今日の撮影セクション
+ * 今日の撮影セクション - Modern Cinematic Design
  */
 @Composable
 private fun TodayPhotosSection(
@@ -430,81 +544,98 @@ private fun TodayPhotosSection(
     progress: Float,
     remainingPhotos: Int
 ) {
-    Column(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = YoinSpacing.lg)
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(16.dp),
+        color = YoinColors.Surface,
+        shadowElevation = 2.dp
     ) {
-        HorizontalDivider(
-            color = YoinColors.SurfaceVariant,
-            thickness = 0.65.dp
-        )
-
-        Spacer(modifier = Modifier.height(YoinSpacing.lg))
-
-        // セクションタイトル
-        Text(
-            text = "今日の撮影",
-            fontSize = YoinFontSizes.headingSmall.value.sp,
-            fontWeight = FontWeight.Bold,
-            color = YoinColors.TextPrimary
-        )
-
-        Spacer(modifier = Modifier.height(YoinSpacing.lg))
-
-        // 撮影枚数カード
-        Surface(
-            color = YoinColors.Surface,
-            shape = RoundedCornerShape(YoinSpacing.md),
-            border = androidx.compose.foundation.BorderStroke(1.dp, YoinColors.SurfaceVariant),
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier.padding(20.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(YoinSpacing.lg)
+            // ヘッダー
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(YoinSpacing.sm)
+                // カメラアイコン
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(YoinColors.Primary.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "📸",
-                        fontSize = YoinFontSizes.displaySmall.value.sp
-                    )
-
-                    Text(
-                        text = currentPhotos.toString(),
-                        fontSize = YoinFontSizes.labelLarge.value.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontStyle = FontStyle.Italic,
-                        color = YoinColors.TextPrimary
-                    )
-
-                    Text(
-                        text = "/ $maxPhotos 枚",
-                        fontSize = YoinFontSizes.labelLarge.value.sp,
-                        color = YoinColors.TextSecondary
+                    Icon(
+                        imageVector = Icons.Filled.PhotoCamera,
+                        contentDescription = null,
+                        tint = YoinColors.Primary,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(YoinSpacing.md))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "今日の撮影",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = YoinColors.TextPrimary,
+                        letterSpacing = (-0.2).sp
+                    )
+                    Text(
+                        text = "残り${remainingPhotos}枚撮影できます",
+                        fontSize = 12.sp,
+                        color = YoinColors.TextSecondary,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
 
-                // プログレスバー
-                LinearProgressIndicator(
-                    progress = { progress },
+                // 撮影枚数
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        text = currentPhotos.toString(),
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = YoinColors.Primary,
+                        letterSpacing = (-0.5).sp
+                    )
+                    Text(
+                        text = "/ $maxPhotos",
+                        fontSize = 16.sp,
+                        color = YoinColors.TextSecondary,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // プログレスバー
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(YoinColors.SurfaceVariant)
+            ) {
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(YoinSizes.indicatorSmall)
-                        .clip(RoundedCornerShape(100.dp)),
-                    color = YoinColors.Primary,
-                    trackColor = YoinColors.SurfaceVariant
-                )
-
-                Spacer(modifier = Modifier.height(YoinSpacing.sm))
-
-                Text(
-                    text = "残り${remainingPhotos}枚撮影できます",
-                    fontSize = YoinFontSizes.labelSmall.value.sp,
-                    color = YoinColors.TextSecondary
+                        .fillMaxHeight()
+                        .fillMaxWidth(progress)
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(
+                                    YoinColors.Primary,
+                                    YoinColors.PrimaryVariant
+                                )
+                            )
+                        )
                 )
             }
         }
@@ -512,7 +643,7 @@ private fun TodayPhotosSection(
 }
 
 /**
- * アクションボタン（地図、撮影など）
+ * アクションボタン（地図、撮影など）- Modern Cinematic Design
  */
 @Composable
 private fun ActionButton(
@@ -520,28 +651,38 @@ private fun ActionButton(
     label: String,
     onClick: () -> Unit
 ) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = YoinColors.Primary
-        ),
-        shape = CircleShape,
-        modifier = Modifier.size(80.dp),
-        contentPadding = PaddingValues(YoinSpacing.none)
+    Box(
+        modifier = Modifier
+            .size(72.dp)
+            .clip(CircleShape)
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        YoinColors.Primary,
+                        YoinColors.PrimaryVariant
+                    )
+                )
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = icon,
-                fontSize = YoinFontSizes.labelLarge.value.sp
+            // Material Icon に置き換え
+            Icon(
+                imageVector = if (label == "地図") Icons.Filled.Map else Icons.Filled.CameraAlt,
+                contentDescription = label,
+                tint = Color.White,
+                modifier = Modifier.size(28.dp)
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = label,
-                fontSize = YoinFontSizes.caption.value.sp,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
-                color = YoinColors.OnPrimary
+                color = Color.White
             )
         }
     }
@@ -555,7 +696,7 @@ private fun CameraButton(
     onClick: () -> Unit
 ) {
     ActionButton(
-        icon = "📷",
+        icon = "",
         label = "撮影",
         onClick = onClick
     )
