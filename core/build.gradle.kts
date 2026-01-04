@@ -55,6 +55,10 @@ kotlin {
 
             // Koin
             implementation(libs.koin.core)
+
+            // Coil - Image Loading
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
         }
 
         androidMain.dependencies {
