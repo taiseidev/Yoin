@@ -6,6 +6,7 @@ import com.yoin.feature.room.viewmodel.MemberListViewModel
 import com.yoin.feature.room.viewmodel.QRScanViewModel
 import com.yoin.feature.room.viewmodel.RoomCreateViewModel
 import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
+import com.yoin.feature.room.viewmodel.RoomDetailBeforeViewModel
 import com.yoin.feature.room.viewmodel.RoomSettingsViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
@@ -21,4 +22,5 @@ val roomModule = module {
     factory { ManualInputViewModel() }
     factory { (roomId: String) -> RoomSettingsViewModel(roomId) }
     factory { (roomId: String) -> MemberListViewModel(roomId) }
+    factory { (roomId: String) -> RoomDetailBeforeViewModel(roomId) }
 }
