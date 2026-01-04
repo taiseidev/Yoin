@@ -563,7 +563,7 @@ private fun ProductCard(
                     text = product.priceFrom,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = YoinColors.Primary
+                    color = YoinColors.AccentGold
                 )
 
                 Icon(

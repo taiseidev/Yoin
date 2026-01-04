@@ -42,6 +42,7 @@ object YoinColors {
     val AccentRoseGold = Color(0xFFE8A598)    // #e8a598 - ローズゴールド（儚い余韻）
     val AccentSepia = Color(0xFFB87F6A)       // #b87f6a - セピア（記憶の色褪せ）
     val AccentGray = Color(0xFF48484A)        // #48484a - ミディアムグレー
+    val AccentGold = Color(0xFFF7B801)        // #f7b801 - ゴールド（プレミアム機能）
 
     // Additional colors - iOS準拠
     val Error = Color(0xFFFF453A)             // #ff453a - iOS準拠のレッド

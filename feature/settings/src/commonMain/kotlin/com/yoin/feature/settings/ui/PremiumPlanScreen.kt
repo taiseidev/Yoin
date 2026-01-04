@@ -166,8 +166,8 @@ private fun PremiumHeader(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        YoinColors.Primary,
-                        YoinColors.Primary
+                        YoinColors.AccentGold,
+                        YoinColors.AccentGold.copy(alpha = 0.8f)
                     )
                 )
             )
@@ -183,13 +183,13 @@ private fun PremiumHeader(
             Box(
                 modifier = Modifier
                     .size(100.dp)
-                    .background(YoinColors.Primary, CircleShape),
+                    .background(Color.Black.copy(alpha = 0.2f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Filled.Star,
                     contentDescription = "Premium",
-                    tint = YoinColors.Surface,
+                    tint = Color.Black,
                     modifier = Modifier.size(48.dp)
                 )
             }
@@ -201,7 +201,7 @@ private fun PremiumHeader(
                 text = "プレミアムプラン",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = YoinColors.Surface
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -210,7 +210,7 @@ private fun PremiumHeader(
             Text(
                 text = "もっと自由に、もっと楽しく",
                 fontSize = 14.sp,
-                color = YoinColors.Surface.copy(alpha = 0.9f)
+                color = Color.Black.copy(alpha = 0.8f)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -223,13 +223,13 @@ private fun PremiumHeader(
                     text = monthlyPrice,
                     fontSize = 48.sp,
                     fontWeight = FontWeight.Bold,
-                    color = YoinColors.Surface
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "/月",
                     fontSize = 18.sp,
-                    color = YoinColors.Surface.copy(alpha = 0.9f),
+                    color = Color.Black.copy(alpha = 0.8f),
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
@@ -244,19 +244,19 @@ private fun PremiumHeader(
                 Text(
                     text = "年払いで$yearlySavings！",
                     fontSize = 13.sp,
-                    color = YoinColors.Surface
+                    color = Color.Black.copy(alpha = 0.8f)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = yearlyPrice,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
-                    color = YoinColors.Primary
+                    color = Color.Black
                 )
                 Text(
                     text = "/年",
                     fontSize = 13.sp,
-                    color = YoinColors.Surface
+                    color = Color.Black.copy(alpha = 0.8f)
                 )
             }
         }
@@ -270,14 +270,14 @@ private fun PremiumHeader(
         ) {
             Surface(
                 shape = CircleShape,
-                color = YoinColors.Surface.copy(alpha = 0.2f),
+                color = Color.Black.copy(alpha = 0.2f),
                 modifier = Modifier.size(32.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = "Close",
-                        tint = YoinColors.Surface,
+                        tint = Color.Black,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -371,8 +371,8 @@ private fun StartTrialButton(
             .padding(horizontal = 16.dp)
             .height(56.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = YoinColors.Primary,
-            contentColor = YoinColors.Surface
+            containerColor = YoinColors.AccentGold,
+            contentColor = Color.Black
         ),
         shape = RoundedCornerShape(12.dp),
         enabled = !isLoading
@@ -380,7 +380,7 @@ private fun StartTrialButton(
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(24.dp),
-                color = YoinColors.Surface
+                color = Color.Black
             )
         } else {
             Text(
