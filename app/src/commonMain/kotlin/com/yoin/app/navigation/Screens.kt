@@ -58,6 +58,7 @@ import com.yoin.feature.room.ui.MemberListScreen
 import com.yoin.feature.room.ui.QRScanScreen
 import com.yoin.feature.room.ui.RoomCreateScreen
 import com.yoin.feature.room.ui.RoomCreatedScreen
+import com.yoin.feature.room.ui.RoomDetailBeforeScreen
 import com.yoin.feature.room.ui.RoomSettingsScreen
 import com.yoin.feature.room.viewmodel.JoinConfirmViewModel
 import com.yoin.feature.room.viewmodel.ManualInputViewModel
@@ -65,6 +66,7 @@ import com.yoin.feature.room.viewmodel.MemberListViewModel
 import com.yoin.feature.room.viewmodel.QRScanViewModel
 import com.yoin.feature.room.viewmodel.RoomCreateViewModel
 import com.yoin.feature.room.viewmodel.RoomCreatedViewModel
+import com.yoin.feature.room.viewmodel.RoomDetailBeforeViewModel
 import com.yoin.feature.room.viewmodel.RoomSettingsViewModel
 import com.yoin.feature.settings.ui.CategoryDetailScreen
 import com.yoin.feature.settings.ui.ChangePasswordScreen
@@ -294,6 +296,43 @@ data class TripDetailScreenVoyager(val tripId: String) : Screen {
             },
             onNavigateToMap = { tripId ->
                 navigator.push(MapFullscreenScreenVoyager(tripId))
+            }
+        )
+    }
+}
+
+/**
+ * ルーム詳細画面（現像前） - 旅行中のメイン画面
+ *
+ * 撮影進捗の確認、現像までのカウントダウン、カメラへの導線を提供
+ */
+data class RoomDetailBeforeScreenVoyager(val roomId: String) : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel: RoomDetailBeforeViewModel = koinScreenModel { parametersOf(roomId) }
+
+        RoomDetailBeforeScreen(
+            roomId = roomId,
+            viewModel = viewModel,
+            onNavigateBack = {
+                navigator.pop()
+            },
+            onNavigateToCamera = { roomId ->
+                navigator.push(CameraScreenVoyager(roomId))
+            },
+            onNavigateToSettings = { roomId ->
+                navigator.push(RoomSettingsScreenVoyager(roomId))
+            },
+            onNavigateToInvite = { roomId ->
+                // TODO: 招待画面への遷移（RoomCreatedScreenを一時的に使用）
+                navigator.push(RoomCreatedScreenVoyager(roomId))
+            },
+            onNavigateToMembers = { roomId ->
+                navigator.push(MemberListScreenVoyager(roomId))
+            },
+            onNavigateToMap = { roomId ->
+                navigator.push(MapFullscreenScreenVoyager(roomId))
             }
         )
     }
