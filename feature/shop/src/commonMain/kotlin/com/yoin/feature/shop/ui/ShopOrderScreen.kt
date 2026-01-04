@@ -570,7 +570,7 @@ private fun PriceCard(
                     text = "¥${totalPrice}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = YoinColors.Primary
+                    color = YoinColors.AccentGold
                 )
             }
         }

@@ -197,8 +197,8 @@ private fun PlanHeaderCard(
     Surface(
         modifier = modifier.height(80.dp),
         shape = RoundedCornerShape(12.dp),
-        color = if (highlight) YoinColors.Primary.copy(alpha = 0.1f) else YoinColors.Surface,
-        border = if (highlight) BorderStroke(2.dp, YoinColors.Primary) else null,
+        color = if (highlight) YoinColors.AccentGold.copy(alpha = 0.1f) else YoinColors.Surface,
+        border = if (highlight) BorderStroke(2.dp, YoinColors.AccentGold) else null,
         shadowElevation = if (highlight) 2.dp else 1.dp
     ) {
         Column(
@@ -212,14 +212,14 @@ private fun PlanHeaderCard(
                 text = planName,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (highlight) YoinColors.Primary else YoinColors.TextPrimary,
+                color = if (highlight) YoinColors.AccentGold else YoinColors.TextPrimary,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = price,
                 fontSize = 12.sp,
-                color = if (highlight) YoinColors.Primary else YoinColors.TextSecondary,
+                color = if (highlight) YoinColors.AccentGold else YoinColors.TextSecondary,
                 textAlign = TextAlign.Center
             )
         }
@@ -288,14 +288,14 @@ private fun ComparisonItem(
                     premiumValue != null -> Text(
                         text = premiumValue,
                         fontSize = 12.sp,
-                        color = YoinColors.Primary,
+                        color = YoinColors.AccentGold,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )
                     premiumAvailable != null -> Icon(
                         imageVector = if (premiumAvailable) Icons.Filled.Check else Icons.Filled.Close,
                         contentDescription = if (premiumAvailable) "Available" else "Not Available",
-                        tint = if (premiumAvailable) YoinColors.Primary else Color(0xFFE53935),
+                        tint = if (premiumAvailable) YoinColors.AccentGold else Color(0xFFE53935),
                         modifier = Modifier.size(20.dp)
                     )
                 }
